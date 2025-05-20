@@ -93,7 +93,7 @@
         self.checkAmountTextField = [[[UITextField alloc] initWithFrame: CGRectMake(15, 7, tableView.bounds.size.width - 30, 30)] autorelease];
         self.checkAmountTextField.placeholder = @"Enter Check Amount";
         self.checkAmountTextField.keyboardType = UIKeyboardTypeDecimalPad;
-        [self.checkAmountTextField addTarget: self action: @selector(update) forControlEvents: UIControlEventEditingChanged];
+        [self.checkAmountTextField addTarget: self action: @selector(updateTotal) forControlEvents: UIControlEventEditingChanged];
         [cell.contentView addSubview: self.checkAmountTextField];
         
     
@@ -104,7 +104,7 @@
         self.tipPercentageSlider.minimumValue = 0;
         self.tipPercentageSlider.maximumValue = 100;
         self.tipPercentageSlider.value = 20;
-        [self.tipPercentageSlider addTarget: self action:@selector(update) forControlEvents: UIControlEventValueChanged];
+        [self.tipPercentageSlider addTarget: self action:@selector(updateTotal) forControlEvents: UIControlEventValueChanged];
         [cell.contentView addSubview: self.tipPercentageSlider];
         
         
@@ -112,13 +112,28 @@
     } else if (indexPath.section == 1 && indexPath.row == 0) {
         self.checkTotalLabel = [[[UILabel alloc] initWithFrame: CGRectMake(15, 7, tableView.bounds.size.width -30, 30)] autorelease];
         
-        self.checkTotalLabel.font = [UIFont systemFontOfSize: 20 weight: UIFontWeightSemibold];
+        self.checkTotalLabel.font = [UIFont systemFontOfSize: 16 weight: UIFontWeightRegular];
         self.checkTotalLabel.text = @"Check Total: $0.00";
         [cell.contentView addSubview: self.checkTotalLabel];
     }
     
     return cell;
     
+}
+
+- (void)updateTotal {
+    double check = [self.checkAmountTextField.text doubleValue];
+    double tip = self.tipPercentageSlider.value;
+    double total = check + (check * (tip / 100.0));
+    self.checkTotalLabel.text = [NSString stringWithFormat: @"Total: $%.2f", total];
+}
+
+- (void)dealloc {
+    [_tableView release];
+    [_checkAmountTextField release];
+    [_tipPercentageSlider release];
+    [_checkTotalLabel release];
+    [super dealloc];
 }
 
 
