@@ -10,11 +10,13 @@
 
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource>
 
+@property (nonatomic, strong) TipCalculator *tipCalculator;
+
 @property (nonatomic, retain) UITableView *tableView;
 @property (nonatomic, retain) UITextField *checkAmountTextField;
 @property (nonatomic, retain) UISlider *tipPercentageSlider;
 @property (nonatomic, retain) UILabel *checkTotalLabel;
-@property (nonatomic, strong) TipCalculator *tipCalculator;
+
 
 @end
 
@@ -31,6 +33,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    // Initialize the Tip Calculator class
+    self.tipCalculator = [[TipCalculator alloc] init];
     
     self.view.backgroundColor = [UIColor systemGroupedBackgroundColor];
     
@@ -95,18 +100,18 @@
         self.checkAmountTextField = [[[UITextField alloc] initWithFrame: CGRectMake(15, 7, tableView.bounds.size.width - 30, 30)] autorelease];
         self.checkAmountTextField.placeholder = @"Enter Check Amount";
         self.checkAmountTextField.keyboardType = UIKeyboardTypeDecimalPad;
-        [self.checkAmountTextField addTarget: self action: @selector(updateTotal) forControlEvents: UIControlEventEditingChanged];
+        [self.checkAmountTextField addTarget: self action: @selector(inputChanged) forControlEvents: UIControlEventEditingChanged];
         [cell.contentView addSubview: self.checkAmountTextField];
         
     
     // Create slider
     } else if (indexPath.section == 0 && indexPath.row == 1) {
-        self.tipPercentageSlider = [[[UISlider alloc] initWithFrame: CGRectMake(15, 7, tableView.bounds.size.width -30, 30)] autorelease];
+        self.tipPercentageSlider = [[[UISlider alloc] initWithFrame: CGRectMake(15, 7, tableView.bounds.size.width -65, 30)] autorelease];
         
         self.tipPercentageSlider.minimumValue = 0;
         self.tipPercentageSlider.maximumValue = 100;
         self.tipPercentageSlider.value = 20;
-        [self.tipPercentageSlider addTarget: self action:@selector(updateTotal) forControlEvents: UIControlEventValueChanged];
+        [self.tipPercentageSlider addTarget: self action:@selector(inputChanged) forControlEvents: UIControlEventValueChanged];
         [cell.contentView addSubview: self.tipPercentageSlider];
         
         
@@ -123,11 +128,17 @@
     
 }
 
-- (void)updateTotal {
+- (void) inputChanged {
     double check = [self.checkAmountTextField.text doubleValue];
-    double tip = self.tipPercentageSlider.value;
-    double total = check + (check * (tip / 100.0));
-    self.checkTotalLabel.text = [NSString stringWithFormat: @"Total: $%.2f", total];
+    double tipPercentage = self.tipPercentageSlider.value;
+    
+    self.tipCalculator.checkAmount = check;
+    self.tipCalculator.tipPercentage = tipPercentage;
+    
+    //double tip = [self.tipCalculator calculateTip];
+    double total = [self.tipCalculator calculateTotal];
+    
+    self.checkTotalLabel.text = [NSString stringWithFormat:@"Total: $%.2f", total];
 }
 
 - (void)dealloc {
