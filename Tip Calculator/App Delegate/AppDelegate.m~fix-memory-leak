@@ -25,7 +25,7 @@
     // Create view controller
     ViewController *homeViewController = [[[ViewController alloc] init] autorelease];
     UINavigationController *navigationController = [[[UINavigationController alloc] initWithRootViewController: homeViewController] autorelease];
-
+    
     // Assign to root view controller
     self.window.rootViewController = navigationController;
     [self.window makeKeyAndVisible];
