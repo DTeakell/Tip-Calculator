@@ -6,6 +6,7 @@
 //
 
 #import "ViewController.h"
+#import "TipCalculator.h"
 
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -13,6 +14,7 @@
 @property (nonatomic, retain) UITextField *checkAmountTextField;
 @property (nonatomic, retain) UISlider *tipPercentageSlider;
 @property (nonatomic, retain) UILabel *checkTotalLabel;
+@property (nonatomic, strong) TipCalculator *tipCalculator;
 
 @end
 
@@ -112,8 +114,8 @@
     } else if (indexPath.section == 1 && indexPath.row == 0) {
         self.checkTotalLabel = [[[UILabel alloc] initWithFrame: CGRectMake(15, 7, tableView.bounds.size.width -30, 30)] autorelease];
         
-        self.checkTotalLabel.font = [UIFont systemFontOfSize: 16 weight: UIFontWeightRegular];
-        self.checkTotalLabel.text = @"Check Total: $0.00";
+        self.checkTotalLabel.font = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
+        self.checkTotalLabel.text = @"Total: $0.00";
         [cell.contentView addSubview: self.checkTotalLabel];
     }
     
