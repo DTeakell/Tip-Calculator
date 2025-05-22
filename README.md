@@ -8,3 +8,6 @@ A basic tip calculator app that lets a user input their bill and choose their ti
 - UITableView
 - Conforming a view controller to UITableViewDelegate & UITableViewDataSource
 - Programmatic UI
+- Basic Memory Management using `dealloc`, `retain`, and `release`
+- UISegmentedControl
+- NSArray
