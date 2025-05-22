@@ -6,6 +6,7 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "TipCalculator.h"
 
 @interface Tip_CalculatorTests : XCTestCase
 
@@ -14,23 +15,37 @@
 @implementation Tip_CalculatorTests
 
 - (void)setUp {
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+    [super setUp];
 }
 
 - (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
+    [super tearDown];
 }
 
-- (void)testExample {
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
+- (void) testCheckAmountZero {
+    TipCalculator *tipCalculator = [[TipCalculator alloc] init];
+    tipCalculator.checkAmount = 0;
+    tipCalculator.tipPercentage = 20;
+    double tip = [tipCalculator calculateTip];
+    double total = [tipCalculator calculateTotal];
+    XCTAssertEqualWithAccuracy(tip, 0, 0.0001);
+    XCTAssertEqualWithAccuracy(total, 0, 0.0001);
 }
 
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+- (void) testTotalCalculation {
+    TipCalculator *tipCalculator = [[TipCalculator alloc] init];
+    tipCalculator.checkAmount = 100;
+    tipCalculator.tipPercentage = 20;
+    double total = [tipCalculator calculateTotal];
+    XCTAssertEqualWithAccuracy(total, 120, 0.001);
+}
+
+- (void) testTipCalculation {
+    TipCalculator *tipCalculator = [[TipCalculator alloc] init];
+    tipCalculator.checkAmount = 100;
+    tipCalculator.tipPercentage = 20;
+    double tip = [tipCalculator calculateTip];
+    XCTAssertEqualWithAccuracy(tip, 20, 0.001);
 }
 
 @end
