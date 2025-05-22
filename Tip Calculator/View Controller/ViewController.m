@@ -14,6 +14,7 @@
 
 @property (nonatomic, retain) UITableView *tableView;
 @property (nonatomic, retain) UITextField *checkAmountTextField;
+@property (nonatomic, retain) UILabel *tipAmountLabel;
 @property (nonatomic, retain) UILabel *checkTotalLabel;
 @property (nonatomic, retain) UISegmentedControl *tipPercentageControl;
 
@@ -75,12 +76,12 @@
 #pragma mark - Table View Data Source
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 4;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
-        return 2;
+        return 1;
     } else {
         return 1;
     }
@@ -98,20 +99,21 @@
     // Set up TableView cells
     if (!cell) {
         cell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: cellID] autorelease];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     } else {
         while ([cell.contentView.subviews count] > 0) {
             [[[cell.contentView subviews] lastObject] removeFromSuperview];
         }
     }
     
-    // Create text field
-    if (indexPath.section == 0 && indexPath.row == 0) {
+    // Check Amount Text Field
+    if (indexPath.section == 0) {
         self.checkAmountTextField = [[[UITextField alloc] init] autorelease];
         self.checkAmountTextField.translatesAutoresizingMaskIntoConstraints = NO;
         
         self.checkAmountTextField.placeholder = @"Enter Check Amount";
         self.checkAmountTextField.keyboardType = UIKeyboardTypeDecimalPad;
-        self.checkAmountTextField.tintColor = [UIColor systemPinkColor];
+        self.checkAmountTextField.tintColor = [UIColor systemOrangeColor];
         
         [self.checkAmountTextField addTarget: self action: @selector(inputChanged) forControlEvents: UIControlEventEditingChanged];
         [cell.contentView addSubview: self.checkAmountTextField];
@@ -125,15 +127,15 @@
         ]];
     }
     
-    // Create slider
-    else if (indexPath.section == 0 && indexPath.row == 1) {
+    // Tip Percentage Segmented Control
+    else if (indexPath.section == 1 && indexPath.row == 0) {
         self.tipPercentageControl = [[[UISegmentedControl alloc] initWithItems:@[@"0%", @"10%", @"15%", @"20%", @"25%"]] autorelease];
         self.tipPercentageControl.translatesAutoresizingMaskIntoConstraints = NO;
         self.tipPercentageControl.selectedSegmentIndex = 1;
         
         [self.tipPercentageControl addTarget: self action: @selector(segmentChanged:) forControlEvents: UIControlEventValueChanged];
         
-        self.tipPercentageControl.tintColor = [UIColor systemPinkColor];
+        self.tipPercentageControl.selectedSegmentTintColor = [UIColor systemOrangeColor];
         
         [cell.contentView addSubview: self.tipPercentageControl];
         
@@ -141,19 +143,36 @@
         [NSLayoutConstraint activateConstraints: @[
             [self.tipPercentageControl.leadingAnchor constraintEqualToAnchor: cell.contentView.leadingAnchor constant: 20],
             [self.tipPercentageControl.trailingAnchor constraintEqualToAnchor: cell.contentView.trailingAnchor constant: -20],
-            [self.tipPercentageControl.topAnchor constraintEqualToAnchor: cell.contentView.topAnchor constant: 20],
-            [self.tipPercentageControl.bottomAnchor constraintEqualToAnchor: cell.contentView.bottomAnchor constant: -20]
+            [self.tipPercentageControl.topAnchor constraintEqualToAnchor: cell.contentView.topAnchor constant: 15],
+            [self.tipPercentageControl.bottomAnchor constraintEqualToAnchor: cell.contentView.bottomAnchor constant: -15]
+        ]];
+    }
+    
+    // Tip Amount Label
+    else if (indexPath.section == 2) {
+        self.tipAmountLabel = [[[UILabel alloc] init] autorelease];
+        self.tipAmountLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        
+        self.tipAmountLabel.font = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
+        self.tipAmountLabel.text = @"$0.00";
+        [cell.contentView addSubview: self.tipAmountLabel];
+        
+        // Constraints
+        [NSLayoutConstraint activateConstraints: @[
+            [self.tipAmountLabel.leadingAnchor constraintEqualToAnchor: cell.contentView.leadingAnchor constant: 20],
+            [self.tipAmountLabel.trailingAnchor constraintEqualToAnchor: cell.contentView.trailingAnchor constant: -20],
+            [self.tipAmountLabel.topAnchor constraintEqualToAnchor: cell.contentView.topAnchor constant: 15],
+            [self.tipAmountLabel.bottomAnchor constraintEqualToAnchor: cell.contentView.bottomAnchor constant: -15]
         ]];
         
-        
-        
-    // Create label
-    } else if (indexPath.section == 1 && indexPath.row == 0) {
+     
+    // Total Amount Label
+    } else if (indexPath.section == 3) {
         self.checkTotalLabel = [[[UILabel alloc] init] autorelease];
         self.checkTotalLabel.translatesAutoresizingMaskIntoConstraints = NO;
 
         self.checkTotalLabel.font = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
-        self.checkTotalLabel.text = @"Total: $0.00";
+        self.checkTotalLabel.text = @"$0.00";
         [cell.contentView addSubview: self.checkTotalLabel];
         
         // Constraints
@@ -169,8 +188,23 @@
     
 }
 
+// Customize headers
+- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if(section == 0) {
+        return @"Check Amount";
+    } else if (section == 1) {
+        return @"Tip Percentage";
+    } else if (section == 2) {
+        return @"Tip Amount";
+    } else if (section == 3) {
+        return @"Check Total";
+    }
+    return nil;
+}
+
 #pragma mark - Data Methods
 
+// Segment Control
 - (void) segmentChanged: (UISegmentedControl *)sender {
     NSArray *tipValues = self.tipPercentages;
     NSNumber *selectedTip = tipValues[sender.selectedSegmentIndex];
@@ -179,16 +213,17 @@
     [self inputChanged];
 }
 
-
+// Check Amount Input
 - (void) inputChanged {
     double check = [self.checkAmountTextField.text doubleValue];
     
     self.tipCalculator.checkAmount = check;
     
-    //double tip = [self.tipCalculator calculateTip];
+    double tip = [self.tipCalculator calculateTip];
     double total = [self.tipCalculator calculateTotal];
     
-    self.checkTotalLabel.text = [NSString stringWithFormat:@"Total: $%.2f", total];
+    self.tipAmountLabel.text = [NSString stringWithFormat: @"$%.2f", tip];
+    self.checkTotalLabel.text = [NSString stringWithFormat:@"$%.2f", total];
 }
 
 #pragma mark - Dealloc Method
@@ -198,6 +233,7 @@
     [_checkAmountTextField release];
     [_tipPercentageControl release];
     [_tipPercentages release];
+    [_tipAmountLabel release];
     [_checkTotalLabel release];
     [_tipCalculator release];
     [super dealloc];
