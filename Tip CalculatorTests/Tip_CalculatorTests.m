@@ -22,6 +22,16 @@
     [super tearDown];
 }
 
+- (void) testCheckAmountZero {
+    TipCalculator *tipCalculator = [[TipCalculator alloc] init];
+    tipCalculator.checkAmount = 0;
+    tipCalculator.tipPercentage = 20;
+    double tip = [tipCalculator calculateTip];
+    double total = [tipCalculator calculateTotal];
+    XCTAssertEqualWithAccuracy(tip, 0, 0.0001);
+    XCTAssertEqualWithAccuracy(total, 0, 0.0001);
+}
+
 - (void) testTotalCalculation {
     TipCalculator *tipCalculator = [[TipCalculator alloc] init];
     tipCalculator.checkAmount = 100;
