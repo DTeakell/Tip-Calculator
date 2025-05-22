@@ -130,7 +130,7 @@
     else if (indexPath.section == 1 && indexPath.row == 0) {
         self.tipPercentageControl = [[[UISegmentedControl alloc] initWithItems:@[@"0%", @"10%", @"15%", @"20%", @"25%"]] autorelease];
         self.tipPercentageControl.translatesAutoresizingMaskIntoConstraints = NO;
-        self.tipPercentageControl.selectedSegmentIndex = 1;
+        self.tipPercentageControl.selectedSegmentIndex = 0;
         
         [self.tipPercentageControl addTarget: self action: @selector(segmentChanged:) forControlEvents: UIControlEventValueChanged];
         
@@ -167,10 +167,18 @@
      
     // Total Amount Label
     } else if (indexPath.section == 3) {
+        
+        // Changes 'body' font to have a semibold style and supports Dynamic Type
+        UIFont *baseFont = [UIFont systemFontOfSize: UIFont.labelFontSize weight: UIFontWeightSemibold];
+        UIFont *scaledFont = [[UIFontMetrics metricsForTextStyle: UIFontTextStyleBody] scaledFontForFont: baseFont];
+        
+        
         self.checkTotalLabel = [[[UILabel alloc] init] autorelease];
         self.checkTotalLabel.translatesAutoresizingMaskIntoConstraints = NO;
 
-        self.checkTotalLabel.font = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
+        self.checkTotalLabel.font = scaledFont;
+        self.checkTotalLabel.adjustsFontForContentSizeCategory = YES;
+        self.checkTotalLabel.textColor = [UIColor systemOrangeColor];
         self.checkTotalLabel.text = @"$0.00";
         [cell.contentView addSubview: self.checkTotalLabel];
         
