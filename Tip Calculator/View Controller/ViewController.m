@@ -14,9 +14,10 @@
 
 @property (nonatomic, retain) UITableView *tableView;
 @property (nonatomic, retain) UITextField *checkAmountTextField;
-@property (nonatomic, retain) UISlider *tipPercentageSlider;
 @property (nonatomic, retain) UILabel *checkTotalLabel;
+@property (nonatomic, retain) UISegmentedControl *tipPercentageControl;
 
+@property (nonatomic, retain) NSArray<NSNumber *> *tipPercentages;
 
 @end
 
@@ -38,6 +39,11 @@
     TipCalculator *calculator = [[TipCalculator alloc] init];
     self.tipCalculator = calculator;
     [calculator release];
+    
+    NSArray *tipOptions = [[NSArray alloc] initWithObjects: @0, @10, @15, @20, @25, nil];
+    self.tipPercentages = tipOptions;
+    [tipOptions release];
+    
     
     self.view.backgroundColor = [UIColor systemGroupedBackgroundColor];
     
@@ -121,23 +127,22 @@
     
     // Create slider
     else if (indexPath.section == 0 && indexPath.row == 1) {
-        self.tipPercentageSlider = [[[UISlider alloc] init] autorelease];
-        self.tipPercentageSlider.translatesAutoresizingMaskIntoConstraints = NO;
+        self.tipPercentageControl = [[[UISegmentedControl alloc] initWithItems:@[@"0%", @"10%", @"15%", @"20%", @"25%"]] autorelease];
+        self.tipPercentageControl.translatesAutoresizingMaskIntoConstraints = NO;
+        self.tipPercentageControl.selectedSegmentIndex = 1;
         
-        self.tipPercentageSlider.minimumValue = 0;
-        self.tipPercentageSlider.maximumValue = 100;
-        self.tipPercentageSlider.value = 20;
-        self.tipPercentageSlider.tintColor = [UIColor systemPinkColor];
+        [self.tipPercentageControl addTarget: self action: @selector(segmentChanged:) forControlEvents: UIControlEventValueChanged];
         
-        [self.tipPercentageSlider addTarget: self action:@selector(inputChanged) forControlEvents: UIControlEventValueChanged];
-        [cell.contentView addSubview: self.tipPercentageSlider];
+        self.tipPercentageControl.tintColor = [UIColor systemPinkColor];
+        
+        [cell.contentView addSubview: self.tipPercentageControl];
         
         // Constraints
         [NSLayoutConstraint activateConstraints: @[
-            [self.tipPercentageSlider.leadingAnchor constraintEqualToAnchor: cell.contentView.leadingAnchor constant: 20],
-            [self.tipPercentageSlider.trailingAnchor constraintEqualToAnchor: cell.contentView.trailingAnchor constant: -20],
-            [self.tipPercentageSlider.topAnchor constraintEqualToAnchor: cell.contentView.topAnchor constant: 10],
-            [self.tipPercentageSlider.bottomAnchor constraintEqualToAnchor: cell.contentView.bottomAnchor constant: -10]
+            [self.tipPercentageControl.leadingAnchor constraintEqualToAnchor: cell.contentView.leadingAnchor constant: 20],
+            [self.tipPercentageControl.trailingAnchor constraintEqualToAnchor: cell.contentView.trailingAnchor constant: -20],
+            [self.tipPercentageControl.topAnchor constraintEqualToAnchor: cell.contentView.topAnchor constant: 20],
+            [self.tipPercentageControl.bottomAnchor constraintEqualToAnchor: cell.contentView.bottomAnchor constant: -20]
         ]];
         
         
@@ -164,12 +169,21 @@
     
 }
 
+#pragma mark - Data Methods
+
+- (void) segmentChanged: (UISegmentedControl *)sender {
+    NSArray *tipValues = self.tipPercentages;
+    NSNumber *selectedTip = tipValues[sender.selectedSegmentIndex];
+    
+    self.tipCalculator.tipPercentage = [selectedTip doubleValue];
+    [self inputChanged];
+}
+
+
 - (void) inputChanged {
     double check = [self.checkAmountTextField.text doubleValue];
-    double tipPercentage = self.tipPercentageSlider.value;
     
     self.tipCalculator.checkAmount = check;
-    self.tipCalculator.tipPercentage = tipPercentage;
     
     //double tip = [self.tipCalculator calculateTip];
     double total = [self.tipCalculator calculateTotal];
@@ -177,17 +191,16 @@
     self.checkTotalLabel.text = [NSString stringWithFormat:@"Total: $%.2f", total];
 }
 
+#pragma mark - Dealloc Method
 
 - (void)dealloc {
     [_tableView release];
     [_checkAmountTextField release];
-    [_tipPercentageSlider release];
+    [_tipPercentageControl release];
+    [_tipPercentages release];
     [_checkTotalLabel release];
     [_tipCalculator release];
     [super dealloc];
 }
-
-
-
 
 @end
