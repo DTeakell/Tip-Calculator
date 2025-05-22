@@ -12,3 +12,5 @@ A basic tip calculator app that lets a user input their bill and choose their ti
 - Utilizing Instruments to analyze memory utilization and leaks
 - UISegmentedControl
 - NSArray
+- Supporting Dynamic Type
+- Auto Layout & Constraints
