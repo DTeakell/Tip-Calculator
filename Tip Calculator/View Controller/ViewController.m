@@ -32,7 +32,6 @@
     [view release];
 }
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -202,6 +201,8 @@
     return nil;
 }
 
+
+
 #pragma mark - Data Methods
 
 // Segment Control
@@ -225,6 +226,8 @@
     self.tipAmountLabel.text = [NSString stringWithFormat: @"$%.2f", tip];
     self.checkTotalLabel.text = [NSString stringWithFormat:@"$%.2f", total];
 }
+
+
 
 #pragma mark - Dealloc Method
 
