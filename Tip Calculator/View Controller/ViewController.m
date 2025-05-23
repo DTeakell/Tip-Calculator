@@ -40,6 +40,13 @@
     self.tipCalculator = calculator;
     [calculator release];
     
+    
+    // Gesture to dismiss keyboard when screen is tapped
+    UITapGestureRecognizer *tapOutsideOfKeyboardGesture = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(dismissKeyboard)];
+    [self.view addGestureRecognizer: tapOutsideOfKeyboardGesture];
+    [tapOutsideOfKeyboardGesture release];
+    
+    
     NSArray *tipOptions = [[NSArray alloc] initWithObjects: @0, @10, @15, @20, @25, nil];
     self.tipPercentages = tipOptions;
     [tipOptions release];
@@ -79,11 +86,7 @@
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0) {
-        return 1;
-    } else {
-        return 1;
-    }
+    return 1;
 }
 
 
@@ -114,6 +117,11 @@
         self.checkAmountTextField.keyboardType = UIKeyboardTypeDecimalPad;
         self.checkAmountTextField.tintColor = [UIColor systemOrangeColor];
         
+        // Accessibility Labels
+        self.checkAmountTextField.accessibilityLabel = @"Check amount input field";
+        self.checkAmountTextField.accessibilityTraits = UIAccessibilityTraitKeyboardKey;
+        
+        
         [self.checkAmountTextField addTarget: self action: @selector(inputChanged) forControlEvents: UIControlEventEditingChanged];
         [cell.contentView addSubview: self.checkAmountTextField];
         
@@ -131,6 +139,10 @@
         self.tipPercentageControl = [[[UISegmentedControl alloc] initWithItems:@[@"0%", @"10%", @"15%", @"20%", @"25%"]] autorelease];
         self.tipPercentageControl.translatesAutoresizingMaskIntoConstraints = NO;
         self.tipPercentageControl.selectedSegmentIndex = 0;
+        
+        //Accessibility Labels
+        self.tipPercentageControl.accessibilityLabel = @"Tip Percentage selector";
+        self.tipPercentageControl.accessibilityTraits = UIAccessibilityTraitAdjustable;
         
         [self.tipPercentageControl addTarget: self action: @selector(segmentChanged:) forControlEvents: UIControlEventValueChanged];
         
@@ -156,6 +168,11 @@
         self.tipAmountLabel.text = @"$0.00";
         [cell.contentView addSubview: self.tipAmountLabel];
         
+        // Accessibility Labels
+        self.tipAmountLabel.accessibilityLabel = @"Tip amount";
+        self.tipAmountLabel.accessibilityValue = self.tipAmountLabel.text;
+        
+        
         // Constraints
         [NSLayoutConstraint activateConstraints: @[
             [self.tipAmountLabel.leadingAnchor constraintEqualToAnchor: cell.contentView.leadingAnchor constant: 20],
@@ -180,6 +197,11 @@
         self.checkTotalLabel.adjustsFontForContentSizeCategory = YES;
         self.checkTotalLabel.textColor = [UIColor systemOrangeColor];
         self.checkTotalLabel.text = @"$0.00";
+        
+        // Accessibility Label
+        self.checkTotalLabel.accessibilityLabel = @"Total amount with tip";
+        self.checkTotalLabel.accessibilityValue = self.checkTotalLabel.text;
+        
         [cell.contentView addSubview: self.checkTotalLabel];
         
         // Constraints
@@ -213,6 +235,11 @@
 
 #pragma mark - Data Methods
 
+// Dismiss keyboard
+- (void) dismissKeyboard {
+    [self.view endEditing: YES];
+}
+
 // Segment Control
 - (void) segmentChanged: (UISegmentedControl *)sender {
     NSArray *tipValues = self.tipPercentages;
@@ -232,7 +259,10 @@
     double total = [self.tipCalculator calculateTotal];
     
     self.tipAmountLabel.text = [NSString stringWithFormat: @"$%.2f", tip];
+    self.tipAmountLabel.accessibilityValue = [NSString stringWithFormat: @"$%.2f", tip];
+    
     self.checkTotalLabel.text = [NSString stringWithFormat:@"$%.2f", total];
+    self.checkTotalLabel.accessibilityValue = [NSString stringWithFormat: @"$%.2f", total];
 }
 
 
