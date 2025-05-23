@@ -114,6 +114,7 @@
         self.checkAmountTextField.translatesAutoresizingMaskIntoConstraints = NO;
         
         self.checkAmountTextField.placeholder = @"Enter Check Amount";
+        self.checkAmountTextField.font = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
         self.checkAmountTextField.keyboardType = UIKeyboardTypeDecimalPad;
         self.checkAmountTextField.tintColor = [UIColor systemOrangeColor];
         
