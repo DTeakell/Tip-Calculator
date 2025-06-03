@@ -12,19 +12,26 @@
 
 @property (nonatomic, retain) TipCalculator *tipCalculator;
 
+
 @property (nonatomic, retain) UITableView *tableView;
 @property (nonatomic, retain) UITextField *checkAmountTextField;
 @property (nonatomic, retain) UILabel *tipAmountLabel;
 @property (nonatomic, retain) UILabel *checkTotalLabel;
 @property (nonatomic, retain) UISegmentedControl *tipPercentageControl;
-
+@property (nonatomic, retain) UITextField *customTipPercentageTextField;
 @property (nonatomic, retain) NSArray<NSNumber *> *tipPercentages;
+
+
+@property (nonatomic, assign) NSInteger selectedTipIndex;
+@property (nonatomic, assign) BOOL isCustomTipEnabled;
+@property (nonatomic, retain) UISelectionFeedbackGenerator *tipPercentageFeedbackGenerator;
+
 
 @end
 
 @implementation ViewController
 
-#pragma mark - Lifecycle
+#pragma mark - Lifecycle Methods
 
 - (void) loadView {
     UIView *view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -41,14 +48,23 @@
     [calculator release];
     
     
+    // Initialize Feedback Generator
+    UISelectionFeedbackGenerator *feedbackGenerator = [[UISelectionFeedbackGenerator alloc] init];
+    self.tipPercentageFeedbackGenerator = feedbackGenerator;
+    [feedbackGenerator release];
+    
+    [self.tipPercentageFeedbackGenerator prepare];
+    
+    
     // Gesture to dismiss keyboard when screen is tapped
     UITapGestureRecognizer *tapOutsideOfKeyboardGesture = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(dismissKeyboard)];
     [self.view addGestureRecognizer: tapOutsideOfKeyboardGesture];
     [tapOutsideOfKeyboardGesture release];
     
     
-    NSArray *tipOptions = [[NSArray alloc] initWithObjects: @0, @10, @15, @20, @25, nil];
+    NSArray *tipOptions = [[NSArray alloc] initWithObjects: @0, @10, @15, @20, @0, nil];
     self.tipPercentages = tipOptions;
+    self.selectedTipIndex = 0;
     [tipOptions release];
     
     
@@ -79,19 +95,29 @@
 
 
 
-#pragma mark - Table View Data Source
+#pragma mark - Table View Data Source Methods
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
     return 4;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (section == 1) {
+        return 2;
+    }
     return 1;
 }
 
 
 
-#pragma mark - Table View Delegate
+#pragma mark - Table View Delegate Methods
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 1 && indexPath.row == 1 && !self.isCustomTipEnabled) {
+        return 0.0;
+    }
+    return UITableViewAutomaticDimension;
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellID = @"CellID";
@@ -108,6 +134,7 @@
         }
     }
     
+    #pragma mark - Check Amount Text Field
     // Check Amount Text Field
     if (indexPath.section == 0) {
         self.checkAmountTextField = [[[UITextField alloc] init] autorelease];
@@ -135,11 +162,12 @@
         ]];
     }
     
+    #pragma mark - Segmented Control
     // Tip Percentage Segmented Control
     else if (indexPath.section == 1 && indexPath.row == 0) {
-        self.tipPercentageControl = [[[UISegmentedControl alloc] initWithItems:@[@"0%", @"10%", @"15%", @"20%", @"25%"]] autorelease];
+        self.tipPercentageControl = [[[UISegmentedControl alloc] initWithItems:@[@"0%", @"10%", @"15%", @"20%", @"Any"]] autorelease];
         self.tipPercentageControl.translatesAutoresizingMaskIntoConstraints = NO;
-        self.tipPercentageControl.selectedSegmentIndex = 0;
+        self.tipPercentageControl.selectedSegmentIndex = self.selectedTipIndex;
         
         //Accessibility Labels
         self.tipPercentageControl.accessibilityLabel = @"Tip Percentage selector";
@@ -160,6 +188,33 @@
         ]];
     }
     
+    #pragma mark - Custom Tip Percentage Text Field
+    // Custom Tip Percentage Text Field
+    else if (indexPath.section == 1 && indexPath.row == 1) {
+        self.customTipPercentageTextField = [[[UITextField alloc] init] autorelease];
+        self.customTipPercentageTextField.translatesAutoresizingMaskIntoConstraints = NO;
+        self.customTipPercentageTextField.placeholder = @"Custom Tip";
+        self.customTipPercentageTextField.keyboardType = UIKeyboardTypeDecimalPad;
+        self.customTipPercentageTextField.tintColor = [UIColor systemOrangeColor];
+        
+        [self.customTipPercentageTextField addTarget: self action: @selector(customTipChanged) forControlEvents: UIControlEventEditingChanged];
+        
+        [cell.contentView addSubview: self.customTipPercentageTextField];
+        
+        // Constraints
+        [NSLayoutConstraint activateConstraints: @[
+            [self.customTipPercentageTextField.leadingAnchor constraintEqualToAnchor: cell.contentView.leadingAnchor constant: 20],
+            [self.customTipPercentageTextField.trailingAnchor constraintEqualToAnchor: cell.contentView.trailingAnchor constant: -20],
+            [self.customTipPercentageTextField.topAnchor constraintEqualToAnchor: cell.contentView.topAnchor constant: 15],
+            [self.customTipPercentageTextField.bottomAnchor constraintEqualToAnchor: cell.contentView.bottomAnchor constant: -15]
+        ]];
+        
+        // Hide if the tip isn't custom
+        cell.contentView.hidden = !self.isCustomTipEnabled;
+        
+    }
+    
+    #pragma mark - Tip Amount Label
     // Tip Amount Label
     else if (indexPath.section == 2) {
         self.tipAmountLabel = [[[UILabel alloc] init] autorelease];
@@ -182,7 +237,7 @@
             [self.tipAmountLabel.bottomAnchor constraintEqualToAnchor: cell.contentView.bottomAnchor constant: -15]
         ]];
         
-     
+    #pragma mark - Total Amount Label
     // Total Amount Label
     } else if (indexPath.section == 3) {
         
@@ -234,21 +289,62 @@
 
 
 
-#pragma mark - Data Methods
+#pragma mark - View Methods
 
 // Dismiss keyboard
 - (void) dismissKeyboard {
     [self.view endEditing: YES];
 }
 
+
 // Segment Control
 - (void) segmentChanged: (UISegmentedControl *)sender {
-    NSArray *tipValues = self.tipPercentages;
-    NSNumber *selectedTip = tipValues[sender.selectedSegmentIndex];
+    self.selectedTipIndex = sender.selectedSegmentIndex;
     
-    self.tipCalculator.tipPercentage = [selectedTip doubleValue];
+    // Trigger haptics on change
+    [self.tipPercentageFeedbackGenerator selectionChanged];
+    [self.tipPercentageFeedbackGenerator prepare];
+    
+    
+    // Stores the current state of 'isCustomTipEnabled' before it gets updated
+    BOOL wasCustom = self.isCustomTipEnabled;
+    
+    // Updates the flag when the selected tip is custom
+    self.isCustomTipEnabled = (self.selectedTipIndex == self.tipPercentages.count - 1);
+    
+    // Switch from non-custom to custom
+    if (!wasCustom && self.isCustomTipEnabled) {
+        [self.tableView beginUpdates];
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow: 1 inSection: 1]]
+                            withRowAnimation: UITableViewRowAnimationFade];
+        [self.tableView endUpdates];
+        
+    // Switch from custom to non-custom
+    } else if (wasCustom && !self.isCustomTipEnabled) {
+        [self.tableView beginUpdates];
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow: 1 inSection: 1]]
+                            withRowAnimation: UITableViewRowAnimationFade];
+        [self.tableView endUpdates];
+    }
+
+    // When the custom tip isn't enabled, carry out normal calculation
+    if (!self.isCustomTipEnabled) {
+        NSNumber *selectedTip = self.tipPercentages[self.selectedTipIndex];
+        self.tipCalculator.tipPercentage = [selectedTip doubleValue];
+        [self inputChanged];
+    }
+}
+
+
+# pragma mark - Tip Calculation Methods
+
+// Custom Tip Calculation Method
+- (void) customTipChanged {
+    double customTip = [self.customTipPercentageTextField.text doubleValue];
+    self.tipCalculator.tipPercentage = customTip;
     [self inputChanged];
 }
+
 
 // Check Amount Input
 - (void) inputChanged {
@@ -268,13 +364,15 @@
 
 
 
-#pragma mark - Dealloc Method
+#pragma mark - Dealloc
 
 - (void)dealloc {
     [_tableView release];
     [_checkAmountTextField release];
     [_tipPercentageControl release];
     [_tipPercentages release];
+    [_customTipPercentageTextField release];
+    [_tipPercentageFeedbackGenerator release];
     [_tipAmountLabel release];
     [_checkTotalLabel release];
     [_tipCalculator release];
