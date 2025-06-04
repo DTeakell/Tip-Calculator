@@ -7,6 +7,11 @@
 
 #import "ViewController.h"
 #import "TipCalculator.h"
+#import "CheckAmountCell.h"
+#import "TipPercentageSelectorCell.h"
+#import "CustomTipPercentageCell.h"
+#import "TipAmountCell.h"
+#import "TotalAmountCell.h"
 
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -17,7 +22,7 @@
 @property (nonatomic, retain) UITextField *checkAmountTextField;
 @property (nonatomic, retain) UILabel *tipAmountLabel;
 @property (nonatomic, retain) UILabel *checkTotalLabel;
-@property (nonatomic, retain) UISegmentedControl *tipPercentageControl;
+@property (nonatomic, retain) UISegmentedControl *tipPercentageSelector;
 @property (nonatomic, retain) UITextField *customTipPercentageTextField;
 @property (nonatomic, retain) NSArray<NSNumber *> *tipPercentages;
 
@@ -31,51 +36,19 @@
 
 @implementation ViewController
 
-#pragma mark - Lifecycle Methods
 
-- (void) loadView {
-    UIView *view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.view = view;
-    [view release];
-}
+#pragma mark - UI Setup Methods
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    // Initialize the Tip Calculator class
-    TipCalculator *calculator = [[TipCalculator alloc] init];
-    self.tipCalculator = calculator;
-    [calculator release];
-    
-    
-    // Initialize Feedback Generator
-    UISelectionFeedbackGenerator *feedbackGenerator = [[UISelectionFeedbackGenerator alloc] init];
-    self.tipPercentageFeedbackGenerator = feedbackGenerator;
-    [feedbackGenerator release];
-    
-    [self.tipPercentageFeedbackGenerator prepare];
-    
-    
-    // Gesture to dismiss keyboard when screen is tapped
-    UITapGestureRecognizer *tapOutsideOfKeyboardGesture = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(dismissKeyboard)];
-    [self.view addGestureRecognizer: tapOutsideOfKeyboardGesture];
-    [tapOutsideOfKeyboardGesture release];
-    
-    
-    NSArray *tipOptions = [[NSArray alloc] initWithObjects: @0, @10, @15, @20, @0, nil];
-    self.tipPercentages = tipOptions;
-    self.selectedTipIndex = 0;
-    [tipOptions release];
-    
-    
+- (void) setupNavigationController {
     self.view.backgroundColor = [UIColor systemGroupedBackgroundColor];
     
     // Set up large navigation title
     self.title = @"Tip Calculator";
     self.navigationController.navigationBar.prefersLargeTitles = YES;
     self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeAlways;
-    
-    
+}
+
+- (void) setupTableViewUI {
     // Set up table view
     self.tableView = [[[UITableView alloc] initWithFrame: self.view.bounds style: UITableViewStyleInsetGrouped] autorelease];
     
@@ -91,6 +64,74 @@
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     [self.view addSubview: self.tableView];
+    
+    [self.tableView registerClass:[CheckAmountCell class] forCellReuseIdentifier: @"CheckAmountCell"];
+    [self.tableView registerClass: [TipPercentageSelectorCell class] forCellReuseIdentifier: @"TipPercentageSelectorCell"];
+    [self.tableView registerClass: [CustomTipPercentageCell class] forCellReuseIdentifier: @"CustomTipPercentageCell"];
+    [self.tableView registerClass: [TipAmountCell class] forCellReuseIdentifier: @"TipAmountCell"];
+    [self.tableView registerClass: [TotalAmountCell class] forCellReuseIdentifier: @"TotalAmountCell"];
+}
+
+- (void) setupUI {
+    [self setupTableViewUI];
+    [self setupNavigationController];
+}
+
+
+#pragma mark - Utility Setup Methods
+
+- (void) setupTipCalculator {
+    // Initialize the Tip Calculator class
+    TipCalculator *calculator = [[TipCalculator alloc] init];
+    self.tipCalculator = calculator;
+    [calculator release];
+}
+
+- (void) setupTipPercentages {
+    // Setup the array for tip percentages
+    NSArray *tipOptions = [[NSArray alloc] initWithObjects: @0, @10, @15, @20, @0, nil];
+    self.tipPercentages = tipOptions;
+    self.selectedTipIndex = 0;
+    [tipOptions release];
+}
+
+- (void) setupHaptics {
+    // Initialize Feedback Generator
+    UISelectionFeedbackGenerator *feedbackGenerator = [[UISelectionFeedbackGenerator alloc] init];
+    self.tipPercentageFeedbackGenerator = feedbackGenerator;
+    [feedbackGenerator release];
+    
+    [self.tipPercentageFeedbackGenerator prepare];
+}
+
+- (void) setupGestures {
+    // Gesture to dismiss keyboard when screen is tapped
+    UITapGestureRecognizer *tapOutsideOfKeyboardGesture = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(dismissKeyboard)];
+    [self.view addGestureRecognizer: tapOutsideOfKeyboardGesture];
+    [tapOutsideOfKeyboardGesture release];
+}
+
+
+#pragma mark - Lifecycle Methods
+
+- (void) loadView {
+    UIView *view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.view = view;
+    [view release];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [self setupTipCalculator];
+    
+    [self setupTipPercentages];
+    
+    [self setupHaptics];
+    
+    [self setupGestures];
+    
+    [self setupUI];
 }
 
 
@@ -137,136 +178,49 @@
     #pragma mark - Check Amount Text Field
     // Check Amount Text Field
     if (indexPath.section == 0) {
-        self.checkAmountTextField = [[[UITextField alloc] init] autorelease];
-        self.checkAmountTextField.translatesAutoresizingMaskIntoConstraints = NO;
-        
-        self.checkAmountTextField.placeholder = @"Enter Check Amount";
-        self.checkAmountTextField.font = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
-        self.checkAmountTextField.keyboardType = UIKeyboardTypeDecimalPad;
-        self.checkAmountTextField.tintColor = [UIColor systemOrangeColor];
-        
-        // Accessibility Labels
-        self.checkAmountTextField.accessibilityLabel = @"Check amount input field";
-        self.checkAmountTextField.accessibilityTraits = UIAccessibilityTraitKeyboardKey;
-        
-        
+        CheckAmountCell *cell = [tableView dequeueReusableCellWithIdentifier: @"CheckAmountCell"];
+        self.checkAmountTextField = cell.checkAmountTextField;
         [self.checkAmountTextField addTarget: self action: @selector(inputChanged) forControlEvents: UIControlEventEditingChanged];
-        [cell.contentView addSubview: self.checkAmountTextField];
-        
-        // Constraints
-        [NSLayoutConstraint activateConstraints: @[
-            [self.checkAmountTextField.leadingAnchor constraintEqualToAnchor: cell.contentView.leadingAnchor constant: 20],
-            [self.checkAmountTextField.trailingAnchor constraintEqualToAnchor: cell.contentView.trailingAnchor constant: -20],
-            [self.checkAmountTextField.topAnchor constraintEqualToAnchor: cell.contentView.topAnchor constant: 15],
-            [self.checkAmountTextField.bottomAnchor constraintEqualToAnchor: cell.contentView.bottomAnchor constant: -15]
-        ]];
+        return cell;
     }
     
     #pragma mark - Segmented Control
     // Tip Percentage Segmented Control
     else if (indexPath.section == 1 && indexPath.row == 0) {
-        self.tipPercentageControl = [[[UISegmentedControl alloc] initWithItems:@[@"0%", @"10%", @"15%", @"20%", @"Any"]] autorelease];
-        self.tipPercentageControl.translatesAutoresizingMaskIntoConstraints = NO;
-        self.tipPercentageControl.selectedSegmentIndex = self.selectedTipIndex;
-        
-        //Accessibility Labels
-        self.tipPercentageControl.accessibilityLabel = @"Tip Percentage selector";
-        self.tipPercentageControl.accessibilityTraits = UIAccessibilityTraitAdjustable;
-        
-        [self.tipPercentageControl addTarget: self action: @selector(segmentChanged:) forControlEvents: UIControlEventValueChanged];
-        
-        self.tipPercentageControl.selectedSegmentTintColor = [UIColor systemOrangeColor];
-        
-        [cell.contentView addSubview: self.tipPercentageControl];
-        
-        // Constraints
-        [NSLayoutConstraint activateConstraints: @[
-            [self.tipPercentageControl.leadingAnchor constraintEqualToAnchor: cell.contentView.leadingAnchor constant: 20],
-            [self.tipPercentageControl.trailingAnchor constraintEqualToAnchor: cell.contentView.trailingAnchor constant: -20],
-            [self.tipPercentageControl.topAnchor constraintEqualToAnchor: cell.contentView.topAnchor constant: 15],
-            [self.tipPercentageControl.bottomAnchor constraintEqualToAnchor: cell.contentView.bottomAnchor constant: -15]
-        ]];
+        TipPercentageSelectorCell *cell = [tableView dequeueReusableCellWithIdentifier: @"TipPercentageSelectorCell"];
+        self.tipPercentageSelector = cell.tipPercentageSelector;
+        self.tipPercentageSelector.selectedSegmentIndex = self.selectedTipIndex;
+        [self.tipPercentageSelector addTarget: self action: @selector(segmentChanged:) forControlEvents: UIControlEventValueChanged];
+        return cell;
     }
     
     #pragma mark - Custom Tip Percentage Text Field
     // Custom Tip Percentage Text Field
     else if (indexPath.section == 1 && indexPath.row == 1) {
-        self.customTipPercentageTextField = [[[UITextField alloc] init] autorelease];
-        self.customTipPercentageTextField.translatesAutoresizingMaskIntoConstraints = NO;
-        self.customTipPercentageTextField.placeholder = @"Custom Tip";
-        self.customTipPercentageTextField.keyboardType = UIKeyboardTypeDecimalPad;
-        self.customTipPercentageTextField.tintColor = [UIColor systemOrangeColor];
+        CustomTipPercentageCell *cell = [tableView dequeueReusableCellWithIdentifier: @"CustomTipPercentageCell"];
+        self.customTipPercentageTextField = cell.customTipPercentageTextField;
         
         [self.customTipPercentageTextField addTarget: self action: @selector(customTipChanged) forControlEvents: UIControlEventEditingChanged];
-        
-        [cell.contentView addSubview: self.customTipPercentageTextField];
-        
-        // Constraints
-        [NSLayoutConstraint activateConstraints: @[
-            [self.customTipPercentageTextField.leadingAnchor constraintEqualToAnchor: cell.contentView.leadingAnchor constant: 20],
-            [self.customTipPercentageTextField.trailingAnchor constraintEqualToAnchor: cell.contentView.trailingAnchor constant: -20],
-            [self.customTipPercentageTextField.topAnchor constraintEqualToAnchor: cell.contentView.topAnchor constant: 15],
-            [self.customTipPercentageTextField.bottomAnchor constraintEqualToAnchor: cell.contentView.bottomAnchor constant: -15]
-        ]];
-        
         // Hide if the tip isn't custom
         cell.contentView.hidden = !self.isCustomTipEnabled;
+        
+        return cell;
         
     }
     
     #pragma mark - Tip Amount Label
     // Tip Amount Label
     else if (indexPath.section == 2) {
-        self.tipAmountLabel = [[[UILabel alloc] init] autorelease];
-        self.tipAmountLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        
-        self.tipAmountLabel.font = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
-        self.tipAmountLabel.text = @"$0.00";
-        [cell.contentView addSubview: self.tipAmountLabel];
-        
-        // Accessibility Labels
-        self.tipAmountLabel.accessibilityLabel = @"Tip amount";
-        self.tipAmountLabel.accessibilityValue = self.tipAmountLabel.text;
-        
-        
-        // Constraints
-        [NSLayoutConstraint activateConstraints: @[
-            [self.tipAmountLabel.leadingAnchor constraintEqualToAnchor: cell.contentView.leadingAnchor constant: 20],
-            [self.tipAmountLabel.trailingAnchor constraintEqualToAnchor: cell.contentView.trailingAnchor constant: -20],
-            [self.tipAmountLabel.topAnchor constraintEqualToAnchor: cell.contentView.topAnchor constant: 15],
-            [self.tipAmountLabel.bottomAnchor constraintEqualToAnchor: cell.contentView.bottomAnchor constant: -15]
-        ]];
+        TipAmountCell *cell = [tableView dequeueReusableCellWithIdentifier: @"TipAmountCell"];
+        self.tipAmountLabel = cell.tipAmountLabel;
+        return cell;
         
     #pragma mark - Total Amount Label
     // Total Amount Label
     } else if (indexPath.section == 3) {
-        
-        // Changes 'body' font to have a semibold style and supports Dynamic Type
-        UIFont *baseFont = [UIFont systemFontOfSize: UIFont.labelFontSize weight: UIFontWeightSemibold];
-        UIFont *scaledFont = [[UIFontMetrics metricsForTextStyle: UIFontTextStyleBody] scaledFontForFont: baseFont];
-        
-        
-        self.checkTotalLabel = [[[UILabel alloc] init] autorelease];
-        self.checkTotalLabel.translatesAutoresizingMaskIntoConstraints = NO;
-
-        self.checkTotalLabel.font = scaledFont;
-        self.checkTotalLabel.adjustsFontForContentSizeCategory = YES;
-        self.checkTotalLabel.textColor = [UIColor systemOrangeColor];
-        self.checkTotalLabel.text = @"$0.00";
-        
-        // Accessibility Label
-        self.checkTotalLabel.accessibilityLabel = @"Total amount with tip";
-        self.checkTotalLabel.accessibilityValue = self.checkTotalLabel.text;
-        
-        [cell.contentView addSubview: self.checkTotalLabel];
-        
-        // Constraints
-        [NSLayoutConstraint activateConstraints: @[
-            [self.checkTotalLabel.leadingAnchor constraintEqualToAnchor: cell.contentView.leadingAnchor constant: 20],
-            [self.checkTotalLabel.trailingAnchor constraintEqualToAnchor: cell.contentView.trailingAnchor constant: -20],
-            [self.checkTotalLabel.topAnchor constraintEqualToAnchor: cell.contentView.topAnchor constant: 15],
-            [self.checkTotalLabel.bottomAnchor constraintEqualToAnchor: cell.contentView.bottomAnchor constant: -15]
-        ]];
+        TotalAmountCell *cell = [tableView dequeueReusableCellWithIdentifier: @"TotalAmountCell"];
+        self.checkTotalLabel = cell.checkTotalLabel;
+        return cell;
     }
     
     return cell;
@@ -369,7 +323,7 @@
 - (void)dealloc {
     [_tableView release];
     [_checkAmountTextField release];
-    [_tipPercentageControl release];
+    [_tipPercentageSelector release];
     [_tipPercentages release];
     [_customTipPercentageTextField release];
     [_tipPercentageFeedbackGenerator release];
