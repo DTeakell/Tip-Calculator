@@ -23,7 +23,7 @@
 - (void) setupView {
     self.customTipPercentageTextField = [[[UITextField alloc] init] autorelease];
     self.customTipPercentageTextField.translatesAutoresizingMaskIntoConstraints = NO;
-    self.customTipPercentageTextField.placeholder = @"Custom Tip";
+    self.customTipPercentageTextField.placeholder = @"Enter Custom Tip Percentage";
     self.customTipPercentageTextField.keyboardType = UIKeyboardTypeDecimalPad;
     self.customTipPercentageTextField.tintColor = [UIColor systemOrangeColor];
     

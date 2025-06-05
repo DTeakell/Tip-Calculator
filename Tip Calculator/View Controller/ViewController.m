@@ -150,8 +150,8 @@
 }
 
 
-
 #pragma mark - Table View Delegate Methods
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 1 && indexPath.row == 1 && !self.isCustomTipEnabled) {
@@ -161,6 +161,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     static NSString *cellID = @"CellID";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: cellID];
@@ -272,6 +273,9 @@
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow: 1 inSection: 1]]
                             withRowAnimation: UITableViewRowAnimationFade];
         [self.tableView endUpdates];
+        
+        // Recalculate tip
+        [self customTipChanged];
         
     // Switch from custom to non-custom
     } else if (wasCustom && !self.isCustomTipEnabled) {
