@@ -202,6 +202,7 @@
         self.customTipPercentageTextField = cell.customTipPercentageTextField;
         
         [self.customTipPercentageTextField addTarget: self action: @selector(customTipChanged) forControlEvents: UIControlEventEditingChanged];
+    
         // Hide if the tip isn't custom
         cell.contentView.hidden = !self.isCustomTipEnabled;
         
@@ -241,7 +242,6 @@
     }
     return nil;
 }
-
 
 
 #pragma mark - View Methods
@@ -312,6 +312,7 @@
     
     double tip = [self.tipCalculator calculateTip];
     double total = [self.tipCalculator calculateTotal];
+    
     
     self.tipAmountLabel.text = [NSString stringWithFormat: @"$%.2f", tip];
     self.tipAmountLabel.accessibilityValue = [NSString stringWithFormat: @"$%.2f", tip];
