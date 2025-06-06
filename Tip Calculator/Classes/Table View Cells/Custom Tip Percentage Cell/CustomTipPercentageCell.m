@@ -28,6 +28,9 @@
     self.customTipPercentageTextField.keyboardType = UIKeyboardTypeDecimalPad;
     self.customTipPercentageTextField.tintColor = [UIColor systemOrangeColor];
     
+    self.customTipPercentageTextField.accessibilityLabel = @"Check amount input field";
+    self.customTipPercentageTextField.accessibilityTraits = UIAccessibilityTraitKeyboardKey;
+    
     [self.contentView addSubview: self.customTipPercentageTextField];
 }
 
