@@ -41,31 +41,22 @@
 
 - (void) setupNavigationController {
     self.view.backgroundColor = [UIColor systemGroupedBackgroundColor];
-    
-    // Set up large navigation title
     self.title = @"Tip Calculator";
     self.navigationController.navigationBar.prefersLargeTitles = YES;
     self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeAlways;
 }
 
 - (void) setupTableViewUI {
-    // Set up table view
     self.tableView = [[[UITableView alloc] initWithFrame: self.view.bounds style: UITableViewStyleInsetGrouped] autorelease];
-    
-    // Assigns the current view controller as the table view delegate
-    // This handles the behaviors and actions for the table view
+
     self.tableView.delegate = self;
-    
-    // Assigns the current view controller as the table view data source
-    // This handles the data that goes into the table view (number of rows, what each row should look like, etc)
     self.tableView.dataSource = self;
     
-    // This configures how the table is resized if the parent view controller is resized
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     [self.view addSubview: self.tableView];
     
-    [self.tableView registerClass:[CheckAmountCell class] forCellReuseIdentifier: @"CheckAmountCell"];
+    [self.tableView registerClass: [CheckAmountCell class] forCellReuseIdentifier: @"CheckAmountCell"];
     [self.tableView registerClass: [TipPercentageSelectorCell class] forCellReuseIdentifier: @"TipPercentageSelectorCell"];
     [self.tableView registerClass: [CustomTipPercentageCell class] forCellReuseIdentifier: @"CustomTipPercentageCell"];
     [self.tableView registerClass: [TipAmountCell class] forCellReuseIdentifier: @"TipAmountCell"];
@@ -139,24 +130,17 @@
 #pragma mark - Table View Data Source Methods
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 4;
+    return self.isCustomTipEnabled ? 5 : 4;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 1) {
-        return 2;
-    }
     return 1;
 }
 
 
 #pragma mark - Table View Delegate Methods
 
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 1 && indexPath.row == 1 && !self.isCustomTipEnabled) {
-        return 0.0;
-    }
     return UITableViewAutomaticDimension;
 }
 
@@ -187,7 +171,7 @@
     
     #pragma mark - Segmented Control
     // Tip Percentage Segmented Control
-    else if (indexPath.section == 1 && indexPath.row == 0) {
+    else if (indexPath.section == 1) {
         TipPercentageSelectorCell *cell = [tableView dequeueReusableCellWithIdentifier: @"TipPercentageSelectorCell"];
         self.tipPercentageSelector = cell.tipPercentageSelector;
         self.tipPercentageSelector.selectedSegmentIndex = self.selectedTipIndex;
@@ -197,29 +181,27 @@
     
     #pragma mark - Custom Tip Percentage Text Field
     // Custom Tip Percentage Text Field
-    else if (indexPath.section == 1 && indexPath.row == 1) {
+    else if (self.isCustomTipEnabled && indexPath.section == 2) {
         CustomTipPercentageCell *cell = [tableView dequeueReusableCellWithIdentifier: @"CustomTipPercentageCell"];
         self.customTipPercentageTextField = cell.customTipPercentageTextField;
         
         [self.customTipPercentageTextField addTarget: self action: @selector(customTipChanged) forControlEvents: UIControlEventEditingChanged];
-    
-        // Hide if the tip isn't custom
-        cell.contentView.hidden = !self.isCustomTipEnabled;
         
         return cell;
         
     }
     
+    
     #pragma mark - Tip Amount Label
     // Tip Amount Label
-    else if (indexPath.section == 2) {
+    else if (indexPath.section == 2 || (indexPath.section == 3 && self.isCustomTipEnabled)) {
         TipAmountCell *cell = [tableView dequeueReusableCellWithIdentifier: @"TipAmountCell"];
         self.tipAmountLabel = cell.tipAmountLabel;
         return cell;
         
     #pragma mark - Total Amount Label
     // Total Amount Label
-    } else if (indexPath.section == 3) {
+    } else if (indexPath.section == 3 || (self.isCustomTipEnabled && indexPath.section == 4)) {
         TotalAmountCell *cell = [tableView dequeueReusableCellWithIdentifier: @"TotalAmountCell"];
         self.checkTotalLabel = cell.checkTotalLabel;
         return cell;
@@ -235,9 +217,11 @@
         return @"Check Amount";
     } else if (section == 1) {
         return @"Tip Percentage";
-    } else if (section == 2) {
+    }else if (self.isCustomTipEnabled && section == 2) {
+        return @"Custom Tip Percentage";
+    } else if (section == 2 || (self.isCustomTipEnabled && section == 3)) {
         return @"Tip Amount";
-    } else if (section == 3) {
+    } else if (section == 3 || (self.isCustomTipEnabled && section == 4)) {
         return @"Check Total";
     }
     return nil;
@@ -267,23 +251,19 @@
     // Updates the flag when the selected tip is custom
     self.isCustomTipEnabled = (self.selectedTipIndex == self.tipPercentages.count - 1);
     
-    // Switch from non-custom to custom
+    // Instead of using a different row, make a completely new section to avoid clipping.
     if (!wasCustom && self.isCustomTipEnabled) {
         [self.tableView beginUpdates];
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow: 1 inSection: 1]]
-                            withRowAnimation: UITableViewRowAnimationFade];
+        [self.tableView insertSections: [NSIndexSet indexSetWithIndex: 2] withRowAnimation: UITableViewRowAnimationFade];
         [self.tableView endUpdates];
-        
-        // Recalculate tip
-        [self customTipChanged];
-        
-    // Switch from custom to non-custom
     } else if (wasCustom && !self.isCustomTipEnabled) {
         [self.tableView beginUpdates];
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow: 1 inSection: 1]]
-                            withRowAnimation: UITableViewRowAnimationFade];
+        [self.tableView deleteSections: [NSIndexSet indexSetWithIndex: 2] withRowAnimation: UITableViewRowAnimationFade];
         [self.tableView endUpdates];
     }
+        
+    // Recalculate tip
+    [self customTipChanged];
 
     // When the custom tip isn't enabled, carry out normal calculation
     if (!self.isCustomTipEnabled) {
@@ -294,7 +274,7 @@
 }
 
 
-# pragma mark - Tip Calculation Methods
+# pragma mark - Input Handling Methods
 
 // Custom Tip Calculation Method
 - (void) customTipChanged {
@@ -313,14 +293,12 @@
     double tip = [self.tipCalculator calculateTip];
     double total = [self.tipCalculator calculateTotal];
     
-    
     self.tipAmountLabel.text = [NSString stringWithFormat: @"$%.2f", tip];
     self.tipAmountLabel.accessibilityValue = [NSString stringWithFormat: @"$%.2f", tip];
     
     self.checkTotalLabel.text = [NSString stringWithFormat:@"$%.2f", total];
     self.checkTotalLabel.accessibilityValue = [NSString stringWithFormat: @"$%.2f", total];
 }
-
 
 
 #pragma mark - Dealloc
