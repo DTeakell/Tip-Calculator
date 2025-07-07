@@ -11,9 +11,14 @@
 
 @property (nonatomic) double checkAmount;
 @property (nonatomic) double tipPercentage;
+@property (nonatomic) int numberOfPeopleOnCheck;
+
+- (double) calculateTip;
 
 - (double) calculateTotal;
 
-- (double) calculateTip;
+- (double) calculateTipWithMultiplePeople;
+
+- (double) calculateTotalWithMultiplePeople;
 
 @end

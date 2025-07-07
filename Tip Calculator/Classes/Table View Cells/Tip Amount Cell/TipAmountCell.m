@@ -6,6 +6,7 @@
 //
 
 #import "TipAmountCell.h"
+#import "NSNumber+Currency.h"
 
 @implementation TipAmountCell
 
@@ -26,7 +27,7 @@
     self.tipAmountLabel.translatesAutoresizingMaskIntoConstraints = NO;
     
     self.tipAmountLabel.font = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
-    self.tipAmountLabel.text = @"$0.00";
+    self.tipAmountLabel.text = [@(0) localizedCurrencyString];
     
     // Accessibility Labels
     self.tipAmountLabel.accessibilityLabel = @"Tip amount";

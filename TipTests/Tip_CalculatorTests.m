@@ -48,4 +48,22 @@
     XCTAssertEqualWithAccuracy(tip, 20, 0.001);
 }
 
+- (void) testTipCalculationWithMultiplePeople {
+    TipCalculator *tipCalculator = [[TipCalculator alloc] init];
+    tipCalculator.checkAmount = 100;
+    tipCalculator.tipPercentage = 20;
+    tipCalculator.numberOfPeopleOnCheck = 2;
+    double tip = [tipCalculator calculateTip];
+    XCTAssertEqualWithAccuracy(tip, 10, 0.001);
+}
+
+- (void) testTotalCalculationWithMultiplePeople {
+    TipCalculator *tipCalculator = [[TipCalculator alloc] init];
+    tipCalculator.checkAmount = 200;
+    tipCalculator.tipPercentage = 10;
+    tipCalculator.numberOfPeopleOnCheck = 2;
+    double total = [tipCalculator calculateTotal];
+    XCTAssertEqualWithAccuracy(total, 110, 0.001);
+}
+
 @end

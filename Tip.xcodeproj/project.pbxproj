@@ -195,6 +195,17 @@
 			knownRegions = (
 				en,
 				Base,
+				ar,
+				"zh-Hans",
+				"zh-Hant",
+				fr,
+				de,
+				hi,
+				ja,
+				ko,
+				"pt-BR",
+				ru,
+				it,
 			);
 			mainGroup = D154E2822DDCCA6D007851BD;
 			minimizedProjectReferenceProxies = 1;
@@ -385,6 +396,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 			};
 			name = Debug;
 		};
@@ -440,6 +452,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

@@ -24,9 +24,9 @@
     self.customTipPercentageTextField = [[[UITextField alloc] init] autorelease];
     self.customTipPercentageTextField.translatesAutoresizingMaskIntoConstraints = NO;
     self.customTipPercentageTextField.font = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
-    self.customTipPercentageTextField.placeholder = @"Enter Custom Tip Percentage";
+    self.customTipPercentageTextField.placeholder = NSLocalizedString(@"Enter Custom Tip Percentage", @"Custom tip percentage text field");
     self.customTipPercentageTextField.keyboardType = UIKeyboardTypeDecimalPad;
-    self.customTipPercentageTextField.tintColor = [UIColor systemOrangeColor];
+    self.customTipPercentageTextField.tintColor = [UIColor colorNamed: @"AccentColor"];
     
     self.customTipPercentageTextField.accessibilityLabel = @"Custom tip percentage field";
     self.customTipPercentageTextField.accessibilityTraits = UIAccessibilityTraitKeyboardKey;

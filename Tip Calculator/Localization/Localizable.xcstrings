@@ -1,0 +1,42 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Check Amount" : {
+      "comment" : "Check Amount Title"
+    },
+    "Custom Tip Percentage" : {
+      "comment" : "Custom Tip Percentage Title"
+    },
+    "Enter Check Amount" : {
+      "comment" : "Check Amount Text Field Placeholder"
+    },
+    "Enter Custom Tip Percentage" : {
+      "comment" : "Custom tip percentage text field"
+    },
+    "Enter Number of People" : {
+      "comment" : "Number of People Text Field"
+    },
+    "Number of People" : {
+      "comment" : "Number of People on Check"
+    },
+    "Number of People Text Field" : {
+      "comment" : "Number of People Text Field"
+    },
+    "per person" : {
+      "comment" : "Label for amount per person"
+    },
+    "Tip Amount" : {
+      "comment" : "Tip Amount Title"
+    },
+    "Tip Calculator" : {
+      "comment" : "Title"
+    },
+    "Tip Percentage" : {
+      "comment" : "Tip Percentage Title"
+    },
+    "Total Amount" : {
+      "comment" : "Total Amount Title"
+    }
+  },
+  "version" : "1.1"
+}

@@ -28,7 +28,7 @@
     self.tipPercentageSelector.accessibilityLabel = @"Tip Percentage selector";
     self.tipPercentageSelector.accessibilityTraits = UIAccessibilityTraitAdjustable;
     
-    self.tipPercentageSelector.selectedSegmentTintColor = [UIColor systemOrangeColor];
+    self.tipPercentageSelector.selectedSegmentTintColor = [UIColor colorNamed: @"AccentColor"];
     
     [self.contentView addSubview: self.tipPercentageSelector];
 }
