@@ -206,6 +206,7 @@
 				"pt-BR",
 				ru,
 				it,
+				es,
 			);
 			mainGroup = D154E2822DDCCA6D007851BD;
 			minimizedProjectReferenceProxies = 1;

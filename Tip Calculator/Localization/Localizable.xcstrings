@@ -2,40 +2,208 @@
   "sourceLanguage" : "en",
   "strings" : {
     "Check Amount" : {
-      "comment" : "Check Amount Title"
+      "comment" : "Check Amount Title",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مبلغ الفاتورة"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant de la Facture"
+          }
+        }
+      }
     },
     "Custom Tip Percentage" : {
-      "comment" : "Custom Tip Percentage Title"
+      "comment" : "Custom Tip Percentage Title",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نسبة الإكرامية المخصصة"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pourcentage de Pourboire Personnalisé"
+          }
+        }
+      }
     },
     "Enter Check Amount" : {
-      "comment" : "Check Amount Text Field Placeholder"
+      "comment" : "Check Amount Text Field Placeholder",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أدخل مبلغ الفاتورة"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrez le Montant de la Facture"
+          }
+        }
+      }
     },
     "Enter Custom Tip Percentage" : {
-      "comment" : "Custom tip percentage text field"
+      "comment" : "Custom tip percentage text field",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أدخل نسبة البقشيش المخصصة"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrez Pourcentage de Pourboire Perso"
+          }
+        }
+      }
     },
     "Enter Number of People" : {
-      "comment" : "Number of People Text Field"
+      "comment" : "Number of People Text Field",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أدخل عدد الأشخاص"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrez le Nombre de Personnes"
+          }
+        }
+      }
     },
     "Number of People" : {
-      "comment" : "Number of People on Check"
+      "comment" : "Number of People on Check",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عدد الأشخاص"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nombre de Personnes"
+          }
+        }
+      }
     },
     "Number of People Text Field" : {
-      "comment" : "Number of People Text Field"
+      "comment" : "Number of People Text Field",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حقل نص عدد الأشخاص"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nombre de Personnes Champ de Texte"
+          }
+        }
+      }
     },
     "per person" : {
-      "comment" : "Label for amount per person"
+      "comment" : "Label for amount per person",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لكل شخص"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "par personne"
+          }
+        }
+      }
     },
     "Tip Amount" : {
-      "comment" : "Tip Amount Title"
+      "comment" : "Tip Amount Title",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مبلغ الإكرامية"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant du Pourboire"
+          }
+        }
+      }
     },
     "Tip Calculator" : {
-      "comment" : "Title"
+      "comment" : "Title",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حاسبة الإكرامية"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pourboire"
+          }
+        }
+      }
     },
     "Tip Percentage" : {
-      "comment" : "Tip Percentage Title"
+      "comment" : "Tip Percentage Title",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نسبة الإكرامية"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pourcentage de Pourboire"
+          }
+        }
+      }
     },
     "Total Amount" : {
-      "comment" : "Total Amount Title"
+      "comment" : "Total Amount Title",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إجمالي مبلغ الفاتورة"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Montant Total"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

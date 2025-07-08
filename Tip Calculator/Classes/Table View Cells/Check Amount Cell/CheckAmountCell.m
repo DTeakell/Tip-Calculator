@@ -22,6 +22,15 @@
     self.checkAmountTextField = [[[UITextField alloc] init] autorelease];
     self.checkAmountTextField.translatesAutoresizingMaskIntoConstraints = NO;
     
+    // Set text alignment for placeholder and text
+    if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute: self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft) {
+        self.checkAmountTextField.textAlignment = NSTextAlignmentRight;
+        self.checkAmountTextField.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
+    } else {
+        self.checkAmountTextField.textAlignment = NSTextAlignmentLeft;
+        self.checkAmountTextField.semanticContentAttribute = UISemanticContentAttributeForceLeftToRight;
+    }
+    
     self.checkAmountTextField.placeholder = NSLocalizedString(@"Enter Check Amount", @"Check Amount Text Field Placeholder");
     self.checkAmountTextField.font = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
     self.checkAmountTextField.keyboardType = UIKeyboardTypeDecimalPad;

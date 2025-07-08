@@ -25,6 +25,15 @@
     self.numberOfPeopleTextField = [[[UITextField alloc] init] autorelease];
     self.numberOfPeopleTextField.translatesAutoresizingMaskIntoConstraints = NO;
     
+    // Set text alignment for placeholder and text
+    if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute: self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft) {
+        self.numberOfPeopleTextField.textAlignment = NSTextAlignmentRight;
+        self.numberOfPeopleTextField.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
+    } else {
+        self.numberOfPeopleTextField.textAlignment = NSTextAlignmentLeft;
+        self.numberOfPeopleTextField.semanticContentAttribute = UISemanticContentAttributeForceLeftToRight;
+    }
+    
     self.numberOfPeopleTextField.placeholder = NSLocalizedString(@"Enter Number of People", @"Number of People Text Field");
     self.numberOfPeopleTextField.font = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
     self.numberOfPeopleTextField.keyboardType = UIKeyboardTypeNumberPad;

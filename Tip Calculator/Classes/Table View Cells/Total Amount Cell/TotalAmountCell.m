@@ -8,6 +8,7 @@
 #import "TotalAmountCell.h"
 #import <UIKit/UIKit.h>
 #import "NSNumber+Currency.h"
+#import "CurrencyFormatter.h"
 
 @implementation TotalAmountCell
 
@@ -37,7 +38,7 @@
     self.checkTotalLabel.font = [self setCustomFont];
     self.checkTotalLabel.adjustsFontForContentSizeCategory = YES;
     self.checkTotalLabel.textColor = [UIColor colorNamed: @"AccentColor"];
-    self.checkTotalLabel.text = [@(0) localizedCurrencyString];
+    self.checkTotalLabel.text = [CurrencyFormatter localizedCurrencyStringFromDouble: 0];
     
     // Accessibility Label
     self.checkTotalLabel.accessibilityLabel = @"Total amount with tip";

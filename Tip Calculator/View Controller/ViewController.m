@@ -20,6 +20,7 @@
 // Utilities
 @property (nonatomic, retain) TipCalculator *tipCalculator;
 @property (nonatomic, retain) UISelectionFeedbackGenerator *tipPercentageFeedbackGenerator;
+@property (nonatomic, retain) NSNumberFormatter *numberFormatter;
 
 // UI Properties
 @property (nonatomic, retain) UITableView *tableView;
@@ -86,6 +87,15 @@
     [calculator release];
 }
 
+/// Initializes a new NSNumberFormatter
+- (void) setupNumberFormatter {
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    formatter.locale = [NSLocale currentLocale];
+    formatter.numberStyle = NSNumberFormatterDecimalStyle;
+    self.numberFormatter = formatter;
+    [formatter release];
+}
+
 /// Initializes a new array of tip percentages
 - (void) setupTipPercentages {
     // Setup the array for tip percentages
@@ -126,6 +136,8 @@
     [super viewDidLoad];
     
     [self setupTipCalculator];
+    
+    [self setupNumberFormatter];
     
     [self setupTipPercentages];
     
@@ -308,7 +320,8 @@
 
 ///  Calculates the tip and total of the check when any input changes (eg. Check amount changes, tip percentage changes, etc.)
 - (void) inputChanged {
-    double check = [self.checkAmountTextField.text doubleValue];
+    NSNumber *checkNumber = [self.numberFormatter numberFromString: self.checkAmountTextField.text];
+    double check = [checkNumber doubleValue];
     double numberOfPeople = [self.numberOfPeopleTextField.text doubleValue];
     
     self.tipCalculator.checkAmount = check;
@@ -342,6 +355,7 @@
     [_tipAmountLabel release];
     [_checkTotalLabel release];
     [_tipCalculator release];
+    [_numberFormatter release];
     [super dealloc];
 }
 
