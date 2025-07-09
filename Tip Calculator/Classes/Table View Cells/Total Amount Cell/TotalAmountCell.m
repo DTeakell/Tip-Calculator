@@ -7,7 +7,6 @@
 
 #import "TotalAmountCell.h"
 #import <UIKit/UIKit.h>
-#import "NSNumber+Currency.h"
 #import "CurrencyFormatter.h"
 
 @implementation TotalAmountCell

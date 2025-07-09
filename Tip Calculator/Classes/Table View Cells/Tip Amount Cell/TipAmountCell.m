@@ -6,7 +6,6 @@
 //
 
 #import "TipAmountCell.h"
-#import "NSNumber+Currency.h"
 #import "CurrencyFormatter.h"
 
 @implementation TipAmountCell
