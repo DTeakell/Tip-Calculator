@@ -46,6 +46,7 @@
 
 #pragma mark - UI Setup Methods
 
+/// Sets up the view background and navigation title
 - (void) setupNavigationController {
     self.view.backgroundColor = [UIColor systemGroupedBackgroundColor];
     self.title = NSLocalizedString(@"Tip Calculator", "Title");
@@ -53,12 +54,12 @@
     self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeAlways;
 }
 
+/// Initializes a TableView and sets up the table view cells
 - (void) setupTableViewUI {
     self.tableView = [[[UITableView alloc] initWithFrame: self.view.bounds style: UITableViewStyleInsetGrouped] autorelease];
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    
     
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
@@ -72,6 +73,7 @@
     [self.tableView registerClass: [TotalAmountCell class] forCellReuseIdentifier: @"TotalAmountCell"];
 }
 
+/// Combines the setup methods for the TableView and NavigationController into one
 - (void) setupUI {
     [self setupTableViewUI];
     [self setupNavigationController];
@@ -214,7 +216,7 @@
     }
     
 #pragma mark - Person Selection Text Field
-    
+    // Person Selection Text Field
     else if (indexPath.section == 2 || (self.isCustomTipEnabled && indexPath.section == 3 )) {
         PersonSelectionCell *cell = [tableView dequeueReusableCellWithIdentifier: @"PersonSelectionCell"];
         self.numberOfPeopleTextField = cell.numberOfPeopleTextField;
@@ -304,9 +306,6 @@
     }
 }
 
-// Picker
-
-
 
 # pragma mark - Input Handling Methods
 
@@ -327,18 +326,34 @@
     self.tipCalculator.checkAmount = check;
     self.tipCalculator.numberOfPeopleOnCheck = numberOfPeople;
     
-    double tip = [self.tipCalculator calculateTip];
-    double tipSplit = [self.tipCalculator calculateTipWithMultiplePeople];
-    
-    double total = [self.tipCalculator calculateTotal];
-    double totalSplit = [self.tipCalculator calculateTotalWithMultiplePeople];
-    
-    self.tipAmountLabel.text = numberOfPeople > 1 ? [CurrencyFormatter localizedPerPersonStringFromDouble: tipSplit] : [CurrencyFormatter localizedCurrencyStringFromDouble: tip];
-    
-    self.tipAmountLabel.accessibilityValue = [NSString stringWithFormat: @"$%.2f", tip];
-    
-    self.checkTotalLabel.text = numberOfPeople > 1 ? [CurrencyFormatter localizedPerPersonStringFromDouble: totalSplit] : [CurrencyFormatter localizedCurrencyStringFromDouble: total];
-    self.checkTotalLabel.accessibilityValue = [NSString stringWithFormat: @"$%.2f", total];
+    if (numberOfPeople > 1) {
+        double tipPerPerson = [self.tipCalculator calculateTipWithMultiplePeople];
+        double totalPerPerson = [self.tipCalculator calculateTotalWithMultiplePeople];
+        
+        self.tipAmountLabel.text = [CurrencyFormatter localizedPerPersonStringFromDouble: tipPerPerson];
+        self.checkTotalLabel.text = [CurrencyFormatter localizedPerPersonStringFromDouble: totalPerPerson];
+        
+        // Accessibility Labels
+        self.tipAmountLabel.accessibilityLabel = NSLocalizedString(@"Tip Amount", @"Accessibility Label for Tip");
+        self.tipAmountLabel.accessibilityValue = [CurrencyFormatter localizedPerPersonStringFromDouble: tipPerPerson];
+        
+        self.checkTotalLabel.accessibilityLabel = NSLocalizedString(@"Total Amount", @"Accessibility Label for Total");
+        self.checkTotalLabel.accessibilityValue = [CurrencyFormatter localizedPerPersonStringFromDouble: totalPerPerson];
+        
+    } else {
+        double tip = [self.tipCalculator calculateTip];
+        double total = [self.tipCalculator calculateTotal];
+        
+        self.tipAmountLabel.text = [CurrencyFormatter localizedCurrencyStringFromDouble: tip];
+        self.checkTotalLabel.text = [CurrencyFormatter localizedCurrencyStringFromDouble: total];
+        
+        self.tipAmountLabel.accessibilityLabel = NSLocalizedString(@"Tip Amount", @"Accessibility Label for Tip");
+        self.tipAmountLabel.accessibilityValue = [CurrencyFormatter localizedCurrencyStringFromDouble: tip];
+        
+        self.checkTotalLabel.accessibilityLabel = NSLocalizedString(@"Total Amount", @"Accessibility Label for Total");
+        self.checkTotalLabel.accessibilityValue = [CurrencyFormatter localizedCurrencyStringFromDouble: total];
+        
+    }
 }
 
 

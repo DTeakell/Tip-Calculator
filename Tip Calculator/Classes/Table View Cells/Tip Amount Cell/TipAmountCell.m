@@ -30,8 +30,6 @@
     self.tipAmountLabel.text = [CurrencyFormatter localizedCurrencyStringFromDouble: 0];
     
     // Accessibility Labels
-    self.tipAmountLabel.accessibilityLabel = @"Tip amount";
-    self.tipAmountLabel.accessibilityValue = self.tipAmountLabel.text;
     
     [self.contentView addSubview: self.tipAmountLabel];
 }

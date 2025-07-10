@@ -4,6 +4,12 @@
     "Any" : {
       "comment" : "Custom Tip Percentage",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "آخر"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16,16 +22,52 @@
             "value" : "Otro"
           }
         },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autre"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Altro"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "その他"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기타"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Outro"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Другое"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "其他"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "其他"
           }
         }
       }
@@ -599,7 +641,7 @@
       }
     },
     "Tip Amount" : {
-      "comment" : "Tip Amount Title",
+      "comment" : "Accessibility Label for Tip\nTip Amount Title",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -668,6 +710,9 @@
           }
         }
       }
+    },
+    "Tip Amount: %@" : {
+      "comment" : "Accessibility Label for Tip"
     },
     "Tip Calculator" : {
       "comment" : "Title",
@@ -812,7 +857,7 @@
       }
     },
     "Total Amount" : {
-      "comment" : "Total Amount Title",
+      "comment" : "Accessibility Label for Total\nTotal Amount Title",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
