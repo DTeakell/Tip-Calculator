@@ -22,10 +22,19 @@
     self.checkAmountTextField = [[[UITextField alloc] init] autorelease];
     self.checkAmountTextField.translatesAutoresizingMaskIntoConstraints = NO;
     
-    self.checkAmountTextField.placeholder = @"Enter Check Amount";
+    // Set text alignment for placeholder and text
+    if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute: self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft) {
+        self.checkAmountTextField.textAlignment = NSTextAlignmentRight;
+        self.checkAmountTextField.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
+    } else {
+        self.checkAmountTextField.textAlignment = NSTextAlignmentLeft;
+        self.checkAmountTextField.semanticContentAttribute = UISemanticContentAttributeForceLeftToRight;
+    }
+    
+    self.checkAmountTextField.placeholder = NSLocalizedString(@"Enter Check Amount", @"Check Amount Text Field Placeholder");
     self.checkAmountTextField.font = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
     self.checkAmountTextField.keyboardType = UIKeyboardTypeDecimalPad;
-    self.checkAmountTextField.tintColor = [UIColor systemOrangeColor];
+    self.checkAmountTextField.tintColor = [UIColor colorNamed: @"AccentColor"];
     
     // Accessibility Labels
     self.checkAmountTextField.accessibilityLabel = @"Check amount input field";

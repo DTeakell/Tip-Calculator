@@ -10,26 +10,33 @@
 #import "CheckAmountCell.h"
 #import "TipPercentageSelectorCell.h"
 #import "CustomTipPercentageCell.h"
+#import "PersonSelectionCell.h"
 #import "TipAmountCell.h"
+#import "CurrencyFormatter.h"
 #import "TotalAmountCell.h"
 
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource>
 
+// Utilities
 @property (nonatomic, retain) TipCalculator *tipCalculator;
+@property (nonatomic, retain) UISelectionFeedbackGenerator *tipPercentageFeedbackGenerator;
+@property (nonatomic, retain) NSNumberFormatter *numberFormatter;
 
-
+// UI Properties
 @property (nonatomic, retain) UITableView *tableView;
 @property (nonatomic, retain) UITextField *checkAmountTextField;
 @property (nonatomic, retain) UILabel *tipAmountLabel;
 @property (nonatomic, retain) UILabel *checkTotalLabel;
 @property (nonatomic, retain) UISegmentedControl *tipPercentageSelector;
 @property (nonatomic, retain) UITextField *customTipPercentageTextField;
+@property (nonatomic, retain) UITextField *numberOfPeopleTextField;
+
+// Arrays
 @property (nonatomic, retain) NSArray<NSNumber *> *tipPercentages;
 
-
+// Index Property and Custom Tip Boolean
 @property (nonatomic, assign) NSInteger selectedTipIndex;
 @property (nonatomic, assign) BOOL isCustomTipEnabled;
-@property (nonatomic, retain) UISelectionFeedbackGenerator *tipPercentageFeedbackGenerator;
 
 
 @end
@@ -39,39 +46,34 @@
 
 #pragma mark - UI Setup Methods
 
+/// Sets up the view background and navigation title
 - (void) setupNavigationController {
     self.view.backgroundColor = [UIColor systemGroupedBackgroundColor];
-    
-    // Set up large navigation title
-    self.title = @"Tip Calculator";
+    self.title = NSLocalizedString(@"Tip Calculator", "Title");
     self.navigationController.navigationBar.prefersLargeTitles = YES;
     self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeAlways;
 }
 
+/// Initializes a TableView and sets up the table view cells
 - (void) setupTableViewUI {
-    // Set up table view
     self.tableView = [[[UITableView alloc] initWithFrame: self.view.bounds style: UITableViewStyleInsetGrouped] autorelease];
     
-    // Assigns the current view controller as the table view delegate
-    // This handles the behaviors and actions for the table view
     self.tableView.delegate = self;
-    
-    // Assigns the current view controller as the table view data source
-    // This handles the data that goes into the table view (number of rows, what each row should look like, etc)
     self.tableView.dataSource = self;
     
-    // This configures how the table is resized if the parent view controller is resized
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     [self.view addSubview: self.tableView];
     
-    [self.tableView registerClass:[CheckAmountCell class] forCellReuseIdentifier: @"CheckAmountCell"];
+    [self.tableView registerClass: [CheckAmountCell class] forCellReuseIdentifier: @"CheckAmountCell"];
     [self.tableView registerClass: [TipPercentageSelectorCell class] forCellReuseIdentifier: @"TipPercentageSelectorCell"];
     [self.tableView registerClass: [CustomTipPercentageCell class] forCellReuseIdentifier: @"CustomTipPercentageCell"];
+    [self.tableView registerClass: [PersonSelectionCell class] forCellReuseIdentifier: @"PersonSelectionCell"];
     [self.tableView registerClass: [TipAmountCell class] forCellReuseIdentifier: @"TipAmountCell"];
     [self.tableView registerClass: [TotalAmountCell class] forCellReuseIdentifier: @"TotalAmountCell"];
 }
 
+/// Combines the setup methods for the TableView and NavigationController into one
 - (void) setupUI {
     [self setupTableViewUI];
     [self setupNavigationController];
@@ -80,13 +82,23 @@
 
 #pragma mark - Utility Setup Methods
 
+/// Initializes a new Tip Calculator class instance
 - (void) setupTipCalculator {
-    // Initialize the Tip Calculator class
     TipCalculator *calculator = [[TipCalculator alloc] init];
     self.tipCalculator = calculator;
     [calculator release];
 }
 
+/// Initializes a new NSNumberFormatter
+- (void) setupNumberFormatter {
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    formatter.locale = [NSLocale currentLocale];
+    formatter.numberStyle = NSNumberFormatterDecimalStyle;
+    self.numberFormatter = formatter;
+    [formatter release];
+}
+
+/// Initializes a new array of tip percentages
 - (void) setupTipPercentages {
     // Setup the array for tip percentages
     NSArray *tipOptions = [[NSArray alloc] initWithObjects: @0, @10, @15, @20, @0, nil];
@@ -95,6 +107,7 @@
     [tipOptions release];
 }
 
+/// Creates a feedback generator to generate haptics for the tip percentage picker
 - (void) setupHaptics {
     // Initialize Feedback Generator
     UISelectionFeedbackGenerator *feedbackGenerator = [[UISelectionFeedbackGenerator alloc] init];
@@ -104,6 +117,7 @@
     [self.tipPercentageFeedbackGenerator prepare];
 }
 
+/// Creates a gesture recognizer to recognize when the user taps outside of the keyboard and dismisses the keyboard
 - (void) setupGestures {
     // Gesture to dismiss keyboard when screen is tapped
     UITapGestureRecognizer *tapOutsideOfKeyboardGesture = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(dismissKeyboard)];
@@ -125,6 +139,8 @@
     
     [self setupTipCalculator];
     
+    [self setupNumberFormatter];
+    
     [self setupTipPercentages];
     
     [self setupHaptics];
@@ -139,24 +155,17 @@
 #pragma mark - Table View Data Source Methods
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 4;
+    return self.isCustomTipEnabled ? 6 : 5;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 1) {
-        return 2;
-    }
     return 1;
 }
 
 
 #pragma mark - Table View Delegate Methods
 
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 1 && indexPath.row == 1 && !self.isCustomTipEnabled) {
-        return 0.0;
-    }
     return UITableViewAutomaticDimension;
 }
 
@@ -176,7 +185,7 @@
         }
     }
     
-    #pragma mark - Check Amount Text Field
+#pragma mark - Check Amount Text Field
     // Check Amount Text Field
     if (indexPath.section == 0) {
         CheckAmountCell *cell = [tableView dequeueReusableCellWithIdentifier: @"CheckAmountCell"];
@@ -185,9 +194,9 @@
         return cell;
     }
     
-    #pragma mark - Segmented Control
+#pragma mark - Segmented Control
     // Tip Percentage Segmented Control
-    else if (indexPath.section == 1 && indexPath.row == 0) {
+    else if (indexPath.section == 1) {
         TipPercentageSelectorCell *cell = [tableView dequeueReusableCellWithIdentifier: @"TipPercentageSelectorCell"];
         self.tipPercentageSelector = cell.tipPercentageSelector;
         self.tipPercentageSelector.selectedSegmentIndex = self.selectedTipIndex;
@@ -195,31 +204,37 @@
         return cell;
     }
     
-    #pragma mark - Custom Tip Percentage Text Field
+#pragma mark - Custom Tip Percentage Text Field
     // Custom Tip Percentage Text Field
-    else if (indexPath.section == 1 && indexPath.row == 1) {
+    else if (self.isCustomTipEnabled && indexPath.section == 2) {
         CustomTipPercentageCell *cell = [tableView dequeueReusableCellWithIdentifier: @"CustomTipPercentageCell"];
         self.customTipPercentageTextField = cell.customTipPercentageTextField;
         
         [self.customTipPercentageTextField addTarget: self action: @selector(customTipChanged) forControlEvents: UIControlEventEditingChanged];
-    
-        // Hide if the tip isn't custom
-        cell.contentView.hidden = !self.isCustomTipEnabled;
         
         return cell;
-        
     }
     
-    #pragma mark - Tip Amount Label
+#pragma mark - Person Selection Text Field
+    // Person Selection Text Field
+    else if (indexPath.section == 2 || (self.isCustomTipEnabled && indexPath.section == 3 )) {
+        PersonSelectionCell *cell = [tableView dequeueReusableCellWithIdentifier: @"PersonSelectionCell"];
+        self.numberOfPeopleTextField = cell.numberOfPeopleTextField;
+        [self.numberOfPeopleTextField addTarget: self action: @selector(inputChanged) forControlEvents: UIControlEventEditingChanged];
+        return cell;
+    }
+    
+#pragma mark - Tip Amount Label
     // Tip Amount Label
-    else if (indexPath.section == 2) {
+    else if (indexPath.section == 3 || (self.isCustomTipEnabled && indexPath.section == 4)) {
         TipAmountCell *cell = [tableView dequeueReusableCellWithIdentifier: @"TipAmountCell"];
         self.tipAmountLabel = cell.tipAmountLabel;
         return cell;
         
-    #pragma mark - Total Amount Label
-    // Total Amount Label
-    } else if (indexPath.section == 3) {
+        
+#pragma mark - Total Amount Label
+        // Total Amount Label
+    } else if (indexPath.section == 4 || (self.isCustomTipEnabled && indexPath.section == 5)) {
         TotalAmountCell *cell = [tableView dequeueReusableCellWithIdentifier: @"TotalAmountCell"];
         self.checkTotalLabel = cell.checkTotalLabel;
         return cell;
@@ -232,13 +247,17 @@
 // Customize headers
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if(section == 0) {
-        return @"Check Amount";
+        return NSLocalizedString(@"Check Amount", @"Check Amount Title");
     } else if (section == 1) {
-        return @"Tip Percentage";
-    } else if (section == 2) {
-        return @"Tip Amount";
-    } else if (section == 3) {
-        return @"Check Total";
+        return NSLocalizedString(@"Tip Percentage", @"Tip Percentage Title");
+    } else if (self.isCustomTipEnabled && section == 2) {
+        return NSLocalizedString(@"Custom Tip Percentage", @"Custom Tip Percentage Title");
+    } else if (section == 2 || (self.isCustomTipEnabled && section == 3)) {
+        return NSLocalizedString(@"Number of People", @"Number of People on Check");
+    } else if (section == 3 || (self.isCustomTipEnabled && section == 4)) {
+        return NSLocalizedString(@"Tip Amount", @"Tip Amount Title");
+    } else if (section == 4 || (self.isCustomTipEnabled && section == 5)) {
+        return NSLocalizedString(@"Total Amount", @"Total Amount Title");
     }
     return nil;
 }
@@ -246,13 +265,12 @@
 
 #pragma mark - View Methods
 
-// Dismiss keyboard
+/// Dismisses the keyboard when the user taps off of the keyboard.
 - (void) dismissKeyboard {
     [self.view endEditing: YES];
 }
 
-
-// Segment Control
+/// Updates the tip value based on the selected tip percentage segment
 - (void) segmentChanged: (UISegmentedControl *)sender {
     self.selectedTipIndex = sender.selectedSegmentIndex;
     
@@ -260,31 +278,26 @@
     [self.tipPercentageFeedbackGenerator selectionChanged];
     [self.tipPercentageFeedbackGenerator prepare];
     
-    
     // Stores the current state of 'isCustomTipEnabled' before it gets updated
     BOOL wasCustom = self.isCustomTipEnabled;
     
     // Updates the flag when the selected tip is custom
     self.isCustomTipEnabled = (self.selectedTipIndex == self.tipPercentages.count - 1);
     
-    // Switch from non-custom to custom
+    // Instead of using a different row, make a completely new section to avoid clipping.
     if (!wasCustom && self.isCustomTipEnabled) {
         [self.tableView beginUpdates];
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow: 1 inSection: 1]]
-                            withRowAnimation: UITableViewRowAnimationFade];
+        [self.tableView insertSections: [NSIndexSet indexSetWithIndex: 2] withRowAnimation: UITableViewRowAnimationFade];
         [self.tableView endUpdates];
-        
-        // Recalculate tip
-        [self customTipChanged];
-        
-    // Switch from custom to non-custom
     } else if (wasCustom && !self.isCustomTipEnabled) {
         [self.tableView beginUpdates];
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow: 1 inSection: 1]]
-                            withRowAnimation: UITableViewRowAnimationFade];
+        [self.tableView deleteSections: [NSIndexSet indexSetWithIndex: 2] withRowAnimation: UITableViewRowAnimationFade];
         [self.tableView endUpdates];
     }
-
+    
+    // Recalculate tip
+    [self customTipChanged];
+    
     // When the custom tip isn't enabled, carry out normal calculation
     if (!self.isCustomTipEnabled) {
         NSNumber *selectedTip = self.tipPercentages[self.selectedTipIndex];
@@ -294,9 +307,9 @@
 }
 
 
-# pragma mark - Tip Calculation Methods
+# pragma mark - Input Handling Methods
 
-// Custom Tip Calculation Method
+/// Calculates the tip of the check with a custom tip percentage
 - (void) customTipChanged {
     double customTip = [self.customTipPercentageTextField.text doubleValue];
     self.tipCalculator.tipPercentage = customTip;
@@ -304,23 +317,43 @@
 }
 
 
-// Check Amount Input
+///  Calculates the tip and total of the check when any input changes (eg. Check amount changes, tip percentage changes, etc.)
 - (void) inputChanged {
-    double check = [self.checkAmountTextField.text doubleValue];
+    NSNumber *checkNumber = [self.numberFormatter numberFromString: self.checkAmountTextField.text];
+    double check = [checkNumber doubleValue];
+    double numberOfPeople = [self.numberOfPeopleTextField.text doubleValue];
     
     self.tipCalculator.checkAmount = check;
+    self.tipCalculator.numberOfPeopleOnCheck = numberOfPeople;
     
-    double tip = [self.tipCalculator calculateTip];
-    double total = [self.tipCalculator calculateTotal];
-    
-    
-    self.tipAmountLabel.text = [NSString stringWithFormat: @"$%.2f", tip];
-    self.tipAmountLabel.accessibilityValue = [NSString stringWithFormat: @"$%.2f", tip];
-    
-    self.checkTotalLabel.text = [NSString stringWithFormat:@"$%.2f", total];
-    self.checkTotalLabel.accessibilityValue = [NSString stringWithFormat: @"$%.2f", total];
+    if (numberOfPeople > 1) {
+        double tipPerPerson = [self.tipCalculator calculateTipWithMultiplePeople];
+        double totalPerPerson = [self.tipCalculator calculateTotalWithMultiplePeople];
+        
+        self.tipAmountLabel.text = [CurrencyFormatter localizedPerPersonStringFromDouble: tipPerPerson];
+        self.checkTotalLabel.text = [CurrencyFormatter localizedPerPersonStringFromDouble: totalPerPerson];
+        
+        // Accessibility Labels
+        self.tipAmountLabel.accessibilityLabel = NSLocalizedString(@"Tip Amount", @"Accessibility Label for Tip");
+        self.tipAmountLabel.accessibilityValue = [CurrencyFormatter localizedPerPersonStringFromDouble: tipPerPerson];
+        
+        self.checkTotalLabel.accessibilityLabel = NSLocalizedString(@"Total Amount", @"Accessibility Label for Total");
+        self.checkTotalLabel.accessibilityValue = [CurrencyFormatter localizedPerPersonStringFromDouble: totalPerPerson];
+        
+    } else {
+        double tip = [self.tipCalculator calculateTip];
+        double total = [self.tipCalculator calculateTotal];
+        
+        self.tipAmountLabel.text = [CurrencyFormatter localizedCurrencyStringFromDouble: tip];
+        self.checkTotalLabel.text = [CurrencyFormatter localizedCurrencyStringFromDouble: total];
+        
+        self.tipAmountLabel.accessibilityLabel = NSLocalizedString(@"Tip Amount", @"Accessibility Label for Tip");
+        self.tipAmountLabel.accessibilityValue = [CurrencyFormatter localizedCurrencyStringFromDouble: tip];
+        
+        self.checkTotalLabel.accessibilityLabel = NSLocalizedString(@"Total Amount", @"Accessibility Label for Total");
+        self.checkTotalLabel.accessibilityValue = [CurrencyFormatter localizedCurrencyStringFromDouble: total];
+    }
 }
-
 
 
 #pragma mark - Dealloc
@@ -332,9 +365,11 @@
     [_tipPercentages release];
     [_customTipPercentageTextField release];
     [_tipPercentageFeedbackGenerator release];
+    [_numberOfPeopleTextField release];
     [_tipAmountLabel release];
     [_checkTotalLabel release];
     [_tipCalculator release];
+    [_numberFormatter release];
     [super dealloc];
 }
 
