@@ -352,7 +352,6 @@
         
         self.checkTotalLabel.accessibilityLabel = NSLocalizedString(@"Total Amount", @"Accessibility Label for Total");
         self.checkTotalLabel.accessibilityValue = [CurrencyFormatter localizedCurrencyStringFromDouble: total];
-        
     }
 }
 

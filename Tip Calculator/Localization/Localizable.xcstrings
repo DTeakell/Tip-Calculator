@@ -711,9 +711,6 @@
         }
       }
     },
-    "Tip Amount: %@" : {
-      "comment" : "Accessibility Label for Tip"
-    },
     "Tip Calculator" : {
       "comment" : "Title",
       "localizations" : {
