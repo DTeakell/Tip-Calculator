@@ -143,6 +143,9 @@
         }
       }
     },
+    "Clear" : {
+      "comment" : "Clear Button"
+    },
     "Custom Tip Percentage" : {
       "comment" : "Custom Tip Percentage Title",
       "localizations" : {
