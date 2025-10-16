@@ -58,17 +58,20 @@
 
 /// Sets up the buttons on the navigation bar.
 - (void) setupNavigationBarButtons {
-    UIBarButtonItem *clearScreenButtonItem = [[UIBarButtonItem alloc] initWithTitle: NSLocalizedString(@"Clear", @"Clear Button") style: UIBarButtonItemStylePlain target: self action: @selector(clearScreenTapped)];
-    self.clearScreenButton = clearScreenButtonItem;
-    [clearScreenButtonItem release];
-    self.navigationItem.rightBarButtonItem = self.clearScreenButton;
     
-    // Sets the UI button tint if the iOS version is below iOS 26.0
+    // iOS 26 Liquid Glass style
     if (@available(iOS 26.0, *)) {
-        // No tint color since navigation bar buttons don't require tint
+        UIBarButtonItem *clearScreenButtonItem = [[UIBarButtonItem alloc] initWithTitle: NSLocalizedString(@"Clear", @"Clear Button") style: UIBarButtonItemStyleProminent target: self action: @selector(clearScreenTapped)];
+        self.clearScreenButton = clearScreenButtonItem;
+        [clearScreenButtonItem release];
     } else {
+        UIBarButtonItem *clearScreenButtonItem = [[UIBarButtonItem alloc] initWithTitle: NSLocalizedString(@"Clear", @"Clear Button") style: UIBarButtonItemStylePlain target: self action: @selector(clearScreenTapped)];
+        self.clearScreenButton = clearScreenButtonItem;
+        [clearScreenButtonItem release];
         self.clearScreenButton.tintColor = [UIColor colorNamed: @"AccentColor"];
     }
+    
+    self.navigationItem.rightBarButtonItem = self.clearScreenButton;
 }
 
 /// Initializes a TableView and sets up the table view cells
@@ -291,13 +294,23 @@
     self.checkAmountTextField.text = @"";
     self.customTipPercentageTextField.text = @"";
     self.numberOfPeopleTextField.text = @"";
+    
+    BOOL wasCustom = self.isCustomTipEnabled;
 
     // Reset calculator values
-    self.selectedTipIndex = 0;
+    [self.tableView beginUpdates];
     self.tipPercentageSelector.selectedSegmentIndex = 0;
+    self.selectedTipIndex = 0;
+    self.isCustomTipEnabled = NO;
     self.tipCalculator.checkAmount = 0.0;
     self.tipCalculator.tipPercentage = 0.0;
     self.tipCalculator.numberOfPeopleOnCheck = 0.0;
+    
+    if (wasCustom && !self.isCustomTipEnabled) {
+        [self.tableView deleteSections: [NSIndexSet indexSetWithIndex: 2] withRowAnimation: UITableViewRowAnimationFade];
+    }
+    
+    [self.tableView endUpdates];
     
     [self inputChanged];
     
