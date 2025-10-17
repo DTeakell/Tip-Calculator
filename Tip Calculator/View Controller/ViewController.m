@@ -25,6 +25,7 @@
 // UI Properties
 @property (nonatomic, retain) UITableView *tableView;
 @property (nonatomic, retain) UITextField *checkAmountTextField;
+@property (nonatomic, retain) UIBarButtonItem *clearScreenButton;
 @property (nonatomic, retain) UILabel *tipAmountLabel;
 @property (nonatomic, retain) UILabel *checkTotalLabel;
 @property (nonatomic, retain) UISegmentedControl *tipPercentageSelector;
@@ -37,7 +38,7 @@
 // Index Property and Custom Tip Boolean
 @property (nonatomic, assign) NSInteger selectedTipIndex;
 @property (nonatomic, assign) BOOL isCustomTipEnabled;
-
+@property (nonatomic, assign) BOOL clearButtonHasBeenTapped;
 
 @end
 
@@ -46,12 +47,31 @@
 
 #pragma mark - UI Setup Methods
 
-/// Sets up the view background and navigation title
+/// Sets up the view background, navigation title, and bar buttons
 - (void) setupNavigationController {
     self.view.backgroundColor = [UIColor systemGroupedBackgroundColor];
     self.title = NSLocalizedString(@"Tip Calculator", "Title");
     self.navigationController.navigationBar.prefersLargeTitles = YES;
     self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeAlways;
+    [self setupNavigationBarButtons];
+}
+
+/// Sets up the buttons on the navigation bar.
+- (void) setupNavigationBarButtons {
+    
+    // iOS 26 Liquid Glass style
+    if (@available(iOS 26.0, *)) {
+        UIBarButtonItem *clearScreenButtonItem = [[UIBarButtonItem alloc] initWithTitle: NSLocalizedString(@"Clear", @"Clear Button") style: UIBarButtonItemStyleProminent target: self action: @selector(clearScreenTapped)];
+        self.clearScreenButton = clearScreenButtonItem;
+        [clearScreenButtonItem release];
+    } else {
+        UIBarButtonItem *clearScreenButtonItem = [[UIBarButtonItem alloc] initWithTitle: NSLocalizedString(@"Clear", @"Clear Button") style: UIBarButtonItemStylePlain target: self action: @selector(clearScreenTapped)];
+        self.clearScreenButton = clearScreenButtonItem;
+        [clearScreenButtonItem release];
+        self.clearScreenButton.tintColor = [UIColor colorNamed: @"AccentColor"];
+    }
+    
+    self.navigationItem.rightBarButtonItem = self.clearScreenButton;
 }
 
 /// Initializes a TableView and sets up the table view cells
@@ -73,7 +93,7 @@
     [self.tableView registerClass: [TotalAmountCell class] forCellReuseIdentifier: @"TotalAmountCell"];
 }
 
-/// Combines the setup methods for the TableView and NavigationController into one
+/// Sets up the entire UI using a collection of UI setup methods.
 - (void) setupUI {
     [self setupTableViewUI];
     [self setupNavigationController];
@@ -265,6 +285,43 @@
 
 #pragma mark - View Methods
 
+/// Clears inputs and resets calculated labels
+- (void) clearScreenTapped {
+    
+    self.clearButtonHasBeenTapped = YES;
+    
+    // Clear text fields
+    self.checkAmountTextField.text = @"";
+    self.customTipPercentageTextField.text = @"";
+    self.numberOfPeopleTextField.text = @"";
+    
+    BOOL wasCustom = self.isCustomTipEnabled;
+
+    // Reset calculator values
+    [self.tableView beginUpdates];
+    self.tipPercentageSelector.selectedSegmentIndex = 0;
+    self.selectedTipIndex = 0;
+    self.isCustomTipEnabled = NO;
+    self.tipCalculator.checkAmount = 0.0;
+    self.tipCalculator.tipPercentage = 0.0;
+    self.tipCalculator.numberOfPeopleOnCheck = 0.0;
+    
+    if (wasCustom && !self.isCustomTipEnabled) {
+        [self.tableView deleteSections: [NSIndexSet indexSetWithIndex: 2] withRowAnimation: UITableViewRowAnimationFade];
+    }
+    
+    [self.tableView endUpdates];
+    
+    [self inputChanged];
+    
+    // Clear the tip and check labels
+    self.tipAmountLabel.text = [CurrencyFormatter localizedCurrencyStringFromDouble: 0];
+    self.checkTotalLabel.text = [CurrencyFormatter localizedCurrencyStringFromDouble: 0];
+    
+    // Reset flag
+    self.clearButtonHasBeenTapped = NO;
+}
+
 /// Dismisses the keyboard when the user taps off of the keyboard.
 - (void) dismissKeyboard {
     [self.view endEditing: YES];
@@ -284,7 +341,7 @@
     // Updates the flag when the selected tip is custom
     self.isCustomTipEnabled = (self.selectedTipIndex == self.tipPercentages.count - 1);
     
-    // Instead of using a different row, make a completely new section to avoid clipping.
+    // Create or delete row based on if the custom tip is enabled.
     if (!wasCustom && self.isCustomTipEnabled) {
         [self.tableView beginUpdates];
         [self.tableView insertSections: [NSIndexSet indexSetWithIndex: 2] withRowAnimation: UITableViewRowAnimationFade];
@@ -319,7 +376,11 @@
 
 ///  Calculates the tip and total of the check when any input changes (eg. Check amount changes, tip percentage changes, etc.)
 - (void) inputChanged {
+    
+    // Creates an NSNumber from the string and sets it equal to the user input value
     NSNumber *checkNumber = [self.numberFormatter numberFromString: self.checkAmountTextField.text];
+    
+    // Sets the check value based on the NSNumber and gets the double value from it
     double check = [checkNumber doubleValue];
     double numberOfPeople = [self.numberOfPeopleTextField.text doubleValue];
     
@@ -370,6 +431,7 @@
     [_checkTotalLabel release];
     [_tipCalculator release];
     [_numberFormatter release];
+    [_clearScreenButton release];
     [super dealloc];
 }
 
