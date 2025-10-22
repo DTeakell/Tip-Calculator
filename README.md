@@ -5,13 +5,12 @@ A basic tip calculator app that lets a user input their bill and choose their ti
 ## Screenshots
 
 <p align="left">
-  <img src="/Screenshots/Main-Light.png" alt="Main View" width="250"/>
-  <img src="/Screenshots/Main-Dark.png" alt="Main View" width="250"/>
+  <img src="/Screenshots/iOS/English/Simulator Screenshot - iPhone 17 Pro Max - 2025-10-17 at 11.35.57.png" alt="Main View" width="250"/>
+  <img src="/Screenshots/iOS/English/Simulator Screenshot - iPhone 17 Pro Max - 2025-10-17 at 11.36.35.png" alt="Main View" width="250"/>
 </p>
 
 ## Things Learned
 - UINavigationController
-- UISlider
 - UITableView
 - Conforming a view controller to UITableViewDelegate & UITableViewDataSource
 - Programmatic UI
@@ -21,3 +20,8 @@ A basic tip calculator app that lets a user input their bill and choose their ti
 - NSArray
 - Supporting Dynamic Type
 - Auto Layout & Constraints
+- UIWindowScene and UIWindowSceneDelegate
+- Reading Documentation
+- Translating Swift to Objective-C
+- SceneDelegate
+- Runtime Availability Checks
