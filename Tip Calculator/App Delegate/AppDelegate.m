@@ -15,26 +15,26 @@
 @implementation AppDelegate
 
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
-    // Make window
-    UIWindow *window = [[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]];
-    self.window = window;
-    [window release];
-    
-    // Create view controller
-    ViewController *homeViewController = [[[ViewController alloc] init] autorelease];
-    UINavigationController *navigationController = [[[UINavigationController alloc] initWithRootViewController: homeViewController] autorelease];
+#pragma mark - Application Configuration
 
-    // Assign to root view controller
-    self.window.rootViewController = navigationController;
-    [self.window makeKeyAndVisible];
-    
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     return YES;
 }
 
+#pragma mark - UISceneSession Configuration
+
+- (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options {
+    
+    // Create a name for the configuration
+    NSString *configurationName = @"Default Configuration";
+    
+    // Make a new configuration
+    UISceneConfiguration *configuration = [[[UISceneConfiguration alloc] initWithName: configurationName sessionRole: connectingSceneSession.role] autorelease];
+    
+    return configuration;
+}
+
 - (void) dealloc {
-    [_window release];
     [super dealloc];
 }
 

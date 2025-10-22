@@ -210,6 +210,7 @@
     if (indexPath.section == 0) {
         CheckAmountCell *cell = [tableView dequeueReusableCellWithIdentifier: @"CheckAmountCell"];
         self.checkAmountTextField = cell.checkAmountTextField;
+        self.checkAmountTextField.enabled = YES;
         [self.checkAmountTextField addTarget: self action: @selector(inputChanged) forControlEvents: UIControlEventEditingChanged];
         return cell;
     }
