@@ -711,6 +711,9 @@
         }
       }
     },
+    "Settings" : {
+      "comment" : "Settings Button\nSettings Title"
+    },
     "Tip Amount" : {
       "comment" : "Accessibility Label for Tip\nTip Amount Title",
       "localizations" : {

@@ -5,7 +5,8 @@
 //  Created by Dillon Teakell on 5/20/25.
 //
 
-#import "ViewController.h"
+#import "HomeViewController.h"
+#import "SettingsViewController/SettingsViewController.h"
 #import "TipCalculator.h"
 #import "CheckAmountCell.h"
 #import "TipPercentageSelectorCell.h"
@@ -15,51 +16,34 @@
 #import "CurrencyFormatter.h"
 #import "TotalAmountCell.h"
 
-@interface ViewController () <UITableViewDelegate, UITableViewDataSource>
-
-// Utilities
-@property (nonatomic, retain) TipCalculator *tipCalculator;
-@property (nonatomic, retain) UISelectionFeedbackGenerator *tipPercentageFeedbackGenerator;
-@property (nonatomic, retain) NSNumberFormatter *numberFormatter;
-
-// UI Properties
-@property (nonatomic, retain) UITableView *tableView;
-@property (nonatomic, retain) UITextField *checkAmountTextField;
-@property (nonatomic, retain) UIBarButtonItem *clearScreenButton;
-@property (nonatomic, retain) UILabel *tipAmountLabel;
-@property (nonatomic, retain) UILabel *checkTotalLabel;
-@property (nonatomic, retain) UISegmentedControl *tipPercentageSelector;
-@property (nonatomic, retain) UITextField *customTipPercentageTextField;
-@property (nonatomic, retain) UITextField *numberOfPeopleTextField;
-
-// Arrays
-@property (nonatomic, retain) NSArray<NSNumber *> *tipPercentages;
-
-// Index Property and Custom Tip Boolean
-@property (nonatomic, assign) NSInteger selectedTipIndex;
-@property (nonatomic, assign) BOOL isCustomTipEnabled;
-@property (nonatomic, assign) BOOL clearButtonHasBeenTapped;
+@interface HomeViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
 
-@implementation ViewController
+@implementation HomeViewController
 
 
 #pragma mark - UI Setup Methods
 
 /// Sets up the view background, navigation title, and bar buttons
 - (void) setupNavigationController {
+    [self setupHomeViewController];
+    [self setupNavigationBarButtons];
+}
+
+
+- (void) setupHomeViewController {
     self.view.backgroundColor = [UIColor systemGroupedBackgroundColor];
     self.title = NSLocalizedString(@"Tip Calculator", "Title");
     self.navigationController.navigationBar.prefersLargeTitles = YES;
     self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeAlways;
-    [self setupNavigationBarButtons];
 }
 
 /// Sets up the buttons on the navigation bar.
 - (void) setupNavigationBarButtons {
     
     // iOS 26 Liquid Glass style
+    // Sets up 'Clear' button
     if (@available(iOS 26.0, *)) {
         UIBarButtonItem *clearScreenButtonItem = [[UIBarButtonItem alloc] initWithTitle: NSLocalizedString(@"Clear", @"Clear Button") style: UIBarButtonItemStyleProminent target: self action: @selector(clearScreenTapped)];
         self.clearScreenButton = clearScreenButtonItem;
@@ -71,7 +55,15 @@
         self.clearScreenButton.tintColor = [UIColor colorNamed: @"AccentColor"];
     }
     
-    self.navigationItem.rightBarButtonItem = self.clearScreenButton;
+    // Sets up 'Settings' button
+    UIBarButtonItem *settingsButtonItem = [[UIBarButtonItem alloc] initWithTitle: NSLocalizedString(@"Settings", @"Settings Button") image: [UIImage systemImageNamed: @"gear"] target: self action: @selector(presentSettingsModal) menu: nil];
+    
+    self.settingsButton = settingsButtonItem;
+    [settingsButtonItem release];
+    
+    self.additionalTrailingNavigationBarButtonItems = [[NSArray alloc] initWithObjects: self.clearScreenButton, self.settingsButton, nil];
+    
+    self.navigationItem.rightBarButtonItems = self.additionalTrailingNavigationBarButtonItems;
 }
 
 /// Initializes a TableView and sets up the table view cells
@@ -286,6 +278,16 @@
 
 #pragma mark - View Methods
 
+/// Shows the 'Settings' screen to the user when settings button is tapped
+- (void) presentSettingsModal {
+    SettingsViewController *settingsModalViewController = [[[SettingsViewController alloc] init] autorelease];
+    
+    [self.navigationController presentViewController: settingsModalViewController animated: YES completion: nil];
+    settingsModalViewController.modalPresentationStyle = UIModalPresentationOverFullScreen;
+    
+}
+
+
 /// Clears inputs and resets calculated labels
 - (void) clearScreenTapped {
     
@@ -322,6 +324,7 @@
     // Reset flag
     self.clearButtonHasBeenTapped = NO;
 }
+
 
 /// Dismisses the keyboard when the user taps off of the keyboard.
 - (void) dismissKeyboard {
@@ -433,6 +436,7 @@
     [_tipCalculator release];
     [_numberFormatter release];
     [_clearScreenButton release];
+    [_settingsButton release];
     [super dealloc];
 }
 
