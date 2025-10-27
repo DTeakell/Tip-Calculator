@@ -21,4 +21,6 @@
 
 - (double) calculateTotalWithMultiplePeople;
 
+- (void) reset;
+
 @end

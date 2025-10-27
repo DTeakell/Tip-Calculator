@@ -29,4 +29,10 @@
     return totalSplit;
 }
 
+- (void) reset {
+    self.checkAmount = 0;
+    self.numberOfPeopleOnCheck = 0;
+    self.tipPercentage = 0;
+}
+
 @end

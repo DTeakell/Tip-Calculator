@@ -17,7 +17,6 @@
 
 // UI Properties
 @property (nonatomic, strong) UIViewController *settingsViewController;
-@property (nonatomic, strong) NSArray<UIBarButtonItem *> * additionalTrailingNavigationBarButtonItems;
 @property (nonatomic, retain) UITableView *tableView;
 @property (nonatomic, retain) UITextField *checkAmountTextField;
 @property (nonatomic, retain) UIBarButtonItem *clearScreenButton;

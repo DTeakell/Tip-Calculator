@@ -6,7 +6,7 @@
 //
 
 #import "HomeViewController.h"
-#import "SettingsViewController/SettingsViewController.h"
+#import "SettingsViewController.h"
 #import "TipCalculator.h"
 #import "CheckAmountCell.h"
 #import "TipPercentageSelectorCell.h"
@@ -45,11 +45,11 @@
     // iOS 26 Liquid Glass style
     // Sets up 'Clear' button
     if (@available(iOS 26.0, *)) {
-        UIBarButtonItem *clearScreenButtonItem = [[UIBarButtonItem alloc] initWithTitle: NSLocalizedString(@"Clear", @"Clear Button") style: UIBarButtonItemStyleProminent target: self action: @selector(clearScreenTapped)];
+        UIBarButtonItem *clearScreenButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage systemImageNamed: @"arrow.counterclockwise"] style: UIBarButtonItemStyleProminent target: self action: @selector(clearScreenTapped)];
         self.clearScreenButton = clearScreenButtonItem;
         [clearScreenButtonItem release];
     } else {
-        UIBarButtonItem *clearScreenButtonItem = [[UIBarButtonItem alloc] initWithTitle: NSLocalizedString(@"Clear", @"Clear Button") style: UIBarButtonItemStylePlain target: self action: @selector(clearScreenTapped)];
+        UIBarButtonItem *clearScreenButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage systemImageNamed: @"arrow.counterclockwise"] style: UIBarButtonItemStylePlain target: self action: @selector(clearScreenTapped)];
         self.clearScreenButton = clearScreenButtonItem;
         [clearScreenButtonItem release];
         self.clearScreenButton.tintColor = [UIColor colorNamed: @"AccentColor"];
@@ -58,12 +58,18 @@
     // Sets up 'Settings' button
     UIBarButtonItem *settingsButtonItem = [[UIBarButtonItem alloc] initWithTitle: NSLocalizedString(@"Settings", @"Settings Button") image: [UIImage systemImageNamed: @"gear"] target: self action: @selector(presentSettingsModal) menu: nil];
     
-    self.settingsButton = settingsButtonItem;
-    [settingsButtonItem release];
+    if (@available(iOS 26.0, *)) {
+        self.settingsButton = settingsButtonItem;
+        [settingsButtonItem release];
+    } else {
+        self.settingsButton = settingsButtonItem;
+        [settingsButtonItem release];
+        self.settingsButton.tintColor = [UIColor labelColor];
+    }
     
-    self.additionalTrailingNavigationBarButtonItems = [[NSArray alloc] initWithObjects: self.clearScreenButton, self.settingsButton, nil];
     
-    self.navigationItem.rightBarButtonItems = self.additionalTrailingNavigationBarButtonItems;
+    self.navigationItem.rightBarButtonItem = self.clearScreenButton;
+    self.navigationItem.leftBarButtonItem = self.settingsButton;
 }
 
 /// Initializes a TableView and sets up the table view cells
@@ -291,7 +297,7 @@
 /// Clears inputs and resets calculated labels
 - (void) clearScreenTapped {
     
-    self.clearButtonHasBeenTapped = YES;
+    [self.tipCalculator reset];
     
     // Clear text fields
     self.checkAmountTextField.text = @"";
@@ -320,9 +326,6 @@
     // Clear the tip and check labels
     self.tipAmountLabel.text = [CurrencyFormatter localizedCurrencyStringFromDouble: 0];
     self.checkTotalLabel.text = [CurrencyFormatter localizedCurrencyStringFromDouble: 0];
-    
-    // Reset flag
-    self.clearButtonHasBeenTapped = NO;
 }
 
 

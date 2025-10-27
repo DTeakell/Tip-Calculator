@@ -7,6 +7,9 @@
 
 #import <XCTest/XCTest.h>
 #import "TipCalculator.h"
+#import "HomeViewController.h"
+#import "SettingsViewController.h"
+
 
 @interface Tip_CalculatorTests : XCTestCase
 

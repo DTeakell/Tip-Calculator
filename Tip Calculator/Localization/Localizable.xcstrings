@@ -145,6 +145,7 @@
     },
     "Clear" : {
       "comment" : "Clear Button",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
