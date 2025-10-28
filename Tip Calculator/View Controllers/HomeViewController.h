@@ -17,7 +17,7 @@
 
 // UI Properties
 @property (nonatomic, strong) UIViewController *settingsViewController;
-@property (nonatomic, retain) UITableView *tableView;
+@property (nonatomic, retain) UITableView *homeTableView;
 @property (nonatomic, retain) UITextField *checkAmountTextField;
 @property (nonatomic, retain) UIBarButtonItem *clearScreenButton;
 @property (nonatomic, retain) UIBarButtonItem *settingsButton;
@@ -33,7 +33,6 @@
 // Index Property and Custom Tip Boolean
 @property (nonatomic, assign) NSInteger selectedTipIndex;
 @property (nonatomic, assign) BOOL isCustomTipEnabled;
-@property (nonatomic, assign) BOOL clearButtonHasBeenTapped;
 
 
 @end

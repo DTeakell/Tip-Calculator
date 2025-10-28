@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Accent Color" : {
+      "comment" : "Accent Color Label"
+    },
     "Any" : {
       "comment" : "Custom Tip Percentage",
       "localizations" : {

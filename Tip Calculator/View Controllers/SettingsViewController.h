@@ -12,14 +12,25 @@
 @interface SettingsViewController : UIViewController
 
 // UI Properties
+// Accent Color UI
+@property (nonatomic, retain) UILabel *accentColorMenuLabel;
 @property (nonatomic, retain) UIMenu *accentColorMenu;
+
+// Navigation Bar
 @property (nonatomic, strong) UINavigationBar *navigationBar;
 
-//TODO: Property for choosing app icon
+// App Icon UI
+@property (nonatomic, retain) UILabel *appIconMenuLabel;
 @property (nonatomic, retain) NSString *appIcon;
 
+// Show Rounded Values UI
+@property (nonatomic, retain) UILabel *showRoundedValuesLabel;
 @property (nonatomic, retain) UISwitch *showRoundedValuesSwitch;
 
+// Table View
+@property (nonatomic, retain) UITableView *settingsTableView;
+
+// Data Properties
 @property (nonatomic, assign) NSArray <UIColor *> *accentColors;
 @property (nonatomic, assign) BOOL *isRoundedValuesSwitchOn;
 
