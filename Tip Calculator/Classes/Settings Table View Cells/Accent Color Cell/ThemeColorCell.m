@@ -5,22 +5,22 @@
 //  Created by Dillon Teakell on 10/28/25.
 //
 
-#import "AccentColorCell.h"
+#import "ThemeColorCell.h"
 
-@implementation AccentColorCell
+@implementation ThemeColorCell
 
 - (instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle: style reuseIdentifier: reuseIdentifier];
     
     if (self) {
-        [self setupView];
+        [self setupLabelView];
         [self setConstraints];
     }
     
     return self;
 }
 
-- (void) setupView {
+- (void) setupLabelView {
     self.accentColorLabel = [[[UILabel alloc] init] autorelease];
     self.accentColorLabel.translatesAutoresizingMaskIntoConstraints = NO;
     
@@ -40,7 +40,7 @@
 }
 
 - (void) dealloc {
-    [_accentColorLabel release];
+    [_themeColorLabel release];
     [super dealloc];
 }
 
