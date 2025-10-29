@@ -6,14 +6,12 @@
 //
 
 #import "SettingsViewController.h"
-#import "AccentColorCell.h"
+#import "ThemeColorCell.h"
 #import <UIKit/UIKit.h>
 
 @interface SettingsViewController () <UITableViewDelegate, UITableViewDataSource>
 
-
 @end
-
 
 @implementation SettingsViewController
 
@@ -25,20 +23,38 @@
     [modalView release];
 }
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor systemGroupedBackgroundColor];
+    [self setupSettingsViewController];
+    [self setupNavigationBarButtons];
     [self setupTableViewUI];
-    [self setupNavigationBar];
-    
-    
 }
 
 
 
 #pragma mark - UI Setup Methods
 
+/// Sets up the background color and title of the Settings View Controller
+- (void) setupSettingsViewController {
+    self.view.backgroundColor = [UIColor systemGroupedBackgroundColor];
+    self.title = NSLocalizedString(@"Settings", "Settings Title");
+    self.navigationController.navigationBar.prefersLargeTitles = NO;
+}
+
+/// Sets up the buttons in the navigation controller
+- (void) setupNavigationBarButtons {
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone  target: self action: @selector(doneButtonPressed)];
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemCancel target: self action: @selector(cancelButtonPressed)];
+    
+    self.navigationItem.leftBarButtonItem = cancelButton;
+    self.navigationItem.rightBarButtonItem = doneButton;
+    
+    [cancelButton release];
+    [doneButton release];
+}
+
+
+/// Sets up the table view and sets constraints
 - (void) setupTableViewUI {
     UITableView *tableView = [[UITableView alloc] initWithFrame: CGRectZero style: UITableViewStyleInsetGrouped];
     self.settingsTableView = tableView;
@@ -53,54 +69,14 @@
     
     [self.view addSubview: self.settingsTableView];
     
-    [self.settingsTableView registerClass: [AccentColorCell class] forCellReuseIdentifier: @"AccentColorCell"];
+    [self.settingsTableView registerClass: [ThemeColorCell class] forCellReuseIdentifier: @"AccentColorCell"];
     
-    UILayoutGuide *layoutGuide = self.view.safeAreaLayoutGuide;
     [NSLayoutConstraint activateConstraints:@[
-        [tableView.topAnchor constraintEqualToAnchor: layoutGuide.topAnchor constant: 100],
+        [tableView.topAnchor constraintEqualToAnchor: self.view.topAnchor],
         [tableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
         [tableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
         [tableView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor]
     ]];
-}
-
-/// Sets up the navigation bar for the modal view
-- (void) setupNavigationBar {
-    self.navigationBar = [[[UINavigationBar alloc] init] autorelease];
-    self.navigationBar.translatesAutoresizingMaskIntoConstraints = NO;
-    self.navigationBar.prefersLargeTitles = YES;
-    self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeAlways;
-    
-    // Set up navigation bar and buttons
-    UINavigationItem *navigationItem = [[[UINavigationItem alloc] initWithTitle: NSLocalizedString(@"Settings", @"Settings Title")] autorelease];
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone  target: self action: @selector(doneButtonPressed)];
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemCancel target: self action: @selector(cancelButtonPressed)];
-    
-    navigationItem.leftBarButtonItem = cancelButton;
-    navigationItem.rightBarButtonItem = doneButton;
-    [cancelButton release];
-    [doneButton release];
-    
-    [self.navigationBar setItems: @[navigationItem]];
-    
-    [self.view addSubview: self.navigationBar];
-    
-    // Set constraints for both iOS versions
-    if (@available(iOS 26.0, *)) {
-        UILayoutGuide *layoutGuide = self.view.safeAreaLayoutGuide;
-        [NSLayoutConstraint activateConstraints: @[
-            [self.navigationBar.topAnchor constraintEqualToAnchor: layoutGuide.topAnchor constant: 12.5],
-            [self.navigationBar.leadingAnchor constraintEqualToAnchor: layoutGuide.leadingAnchor],
-            [self.navigationBar.trailingAnchor constraintEqualToAnchor: layoutGuide.trailingAnchor]
-        ]];
-    } else {
-        UILayoutGuide *layoutGuide = self.view.safeAreaLayoutGuide;
-        [NSLayoutConstraint activateConstraints: @[
-            [self.navigationBar.topAnchor constraintEqualToAnchor: layoutGuide.topAnchor constant: 12.5],
-            [self.navigationBar.leadingAnchor constraintEqualToAnchor: layoutGuide.leadingAnchor constant: 7.5],
-            [self.navigationBar.trailingAnchor constraintEqualToAnchor: layoutGuide.trailingAnchor]
-        ]];
-    }
 }
 
 
@@ -134,8 +110,8 @@
     }
     
     if (indexPath.section == 0) {
-        AccentColorCell *cell = [tableView dequeueReusableCellWithIdentifier: @"AccentColorCell"];
-        self.accentColorMenuLabel = cell.accentColorLabel;
+        ThemeColorCell *cell = [tableView dequeueReusableCellWithIdentifier: @"AccentColorCell"];
+        self.themeColorLabel = cell.themeColorLabel;
         return cell;
     }
     
@@ -160,8 +136,8 @@
 
 #pragma mark - Dealloc
 - (void) dealloc {
-    [_accentColorMenu release];
-    [_accentColorMenuLabel release];
+    [_themeColorPicker release];
+    [_themeColorLabel release];
     [_appIcon release];
     [_appIconMenuLabel release];
     [_navigationBar release];

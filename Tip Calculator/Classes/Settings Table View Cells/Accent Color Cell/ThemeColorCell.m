@@ -21,21 +21,21 @@
 }
 
 - (void) setupLabelView {
-    self.accentColorLabel = [[[UILabel alloc] init] autorelease];
-    self.accentColorLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    self.themeColorLabel = [[[UILabel alloc] init] autorelease];
+    self.themeColorLabel.translatesAutoresizingMaskIntoConstraints = NO;
     
-    self.accentColorLabel.adjustsFontForContentSizeCategory = YES;
-    self.accentColorLabel.text = NSLocalizedString(@"Accent Color", @"Accent Color Label");
+    self.themeColorLabel.adjustsFontForContentSizeCategory = YES;
+    self.themeColorLabel.text = NSLocalizedString(@"Accent Color", @"Accent Color Label");
     
-    [self.contentView addSubview: self.accentColorLabel];
+    [self.contentView addSubview: self.themeColorLabel];
 }
 
 - (void) setConstraints {
     [NSLayoutConstraint activateConstraints: @[
-       [self.accentColorLabel.leadingAnchor constraintEqualToAnchor: self.contentView.leadingAnchor constant: 20],
-       [self.accentColorLabel.trailingAnchor constraintEqualToAnchor: self.contentView.trailingAnchor constant: -20],
-       [self.accentColorLabel.topAnchor constraintEqualToAnchor: self.contentView.topAnchor constant: 15],
-       [self.accentColorLabel.bottomAnchor constraintEqualToAnchor: self.contentView.bottomAnchor constant: -15]
+       [self.themeColorLabel.leadingAnchor constraintEqualToAnchor: self.contentView.leadingAnchor constant: 20],
+       [self.themeColorLabel.trailingAnchor constraintEqualToAnchor: self.contentView.trailingAnchor constant: -20],
+       [self.themeColorLabel.topAnchor constraintEqualToAnchor: self.contentView.topAnchor constant: 15],
+       [self.themeColorLabel.bottomAnchor constraintEqualToAnchor: self.contentView.bottomAnchor constant: -15]
     ]];
 }
 

@@ -286,10 +286,10 @@
 /// Shows the 'Settings' screen to the user when settings button is tapped
 - (void) presentSettingsModal {
     SettingsViewController *settingsModalViewController = [[[SettingsViewController alloc] init] autorelease];
+    UINavigationController *settingsNavigationController = [[[UINavigationController alloc] initWithRootViewController: settingsModalViewController] autorelease];
     
-    [self.navigationController presentViewController: settingsModalViewController animated: YES completion: nil];
-    settingsModalViewController.modalPresentationStyle = UIModalPresentationOverFullScreen;
-    
+    settingsNavigationController.modalPresentationStyle = UIModalPresentationAutomatic;
+    [self.navigationController presentViewController: settingsNavigationController animated: YES completion: nil];
 }
 
 

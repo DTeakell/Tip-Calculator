@@ -13,8 +13,8 @@
 
 // UI Properties
 // Accent Color UI
-@property (nonatomic, retain) UILabel *accentColorMenuLabel;
-@property (nonatomic, retain) UIMenu *accentColorMenu;
+@property (nonatomic, retain) UILabel *themeColorLabel;
+@property (nonatomic, retain) UIPickerView *themeColorPicker;
 
 // Navigation Bar
 @property (nonatomic, strong) UINavigationBar *navigationBar;
@@ -31,7 +31,7 @@
 @property (nonatomic, retain) UITableView *settingsTableView;
 
 // Data Properties
-@property (nonatomic, assign) NSArray <UIColor *> *accentColors;
+@property (nonatomic, assign) NSArray <UIColor *> *themeColors;
 @property (nonatomic, assign) BOOL *isRoundedValuesSwitchOn;
 
 @end
