@@ -1,9 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "Accent Color" : {
-      "comment" : "Accent Color Label"
-    },
     "Any" : {
       "comment" : "Custom Tip Percentage",
       "localizations" : {
@@ -717,6 +714,9 @@
     },
     "Settings" : {
       "comment" : "Settings Button\nSettings Title"
+    },
+    "Theme Color" : {
+      "comment" : "Theme Color Title"
     },
     "Tip Amount" : {
       "comment" : "Accessibility Label for Tip\nTip Amount Title",

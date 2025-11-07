@@ -36,10 +36,10 @@
 
 - (void) setConstraints {
     [NSLayoutConstraint activateConstraints: @[
-        [self.tipPercentageSelector.leadingAnchor constraintEqualToAnchor: self.contentView.leadingAnchor constant: 20],
-        [self.tipPercentageSelector.trailingAnchor constraintEqualToAnchor: self.contentView.trailingAnchor constant: -20],
-        [self.tipPercentageSelector.topAnchor constraintEqualToAnchor: self.contentView.topAnchor constant: 15],
-        [self.tipPercentageSelector.bottomAnchor constraintEqualToAnchor: self.contentView.bottomAnchor constant: -15]
+        [self.tipPercentageSelector.leadingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.leadingAnchor],
+        [self.tipPercentageSelector.trailingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.trailingAnchor],
+        [self.tipPercentageSelector.topAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.topAnchor],
+        [self.tipPercentageSelector.bottomAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.bottomAnchor]
     ]];
 }
 

@@ -46,10 +46,10 @@
 
 - (void) setConstraints {
     [NSLayoutConstraint activateConstraints: @[
-        [self.customTipPercentageTextField.leadingAnchor constraintEqualToAnchor: self.contentView.leadingAnchor constant: 20],
-        [self.customTipPercentageTextField.trailingAnchor constraintEqualToAnchor: self.contentView.trailingAnchor constant: -20],
-        [self.customTipPercentageTextField.topAnchor constraintEqualToAnchor: self.contentView.topAnchor constant: 15],
-        [self.customTipPercentageTextField.bottomAnchor constraintEqualToAnchor: self.contentView.bottomAnchor constant: -15]
+        [self.customTipPercentageTextField.leadingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.leadingAnchor],
+        [self.customTipPercentageTextField.trailingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.trailingAnchor],
+        [self.customTipPercentageTextField.topAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.topAnchor],
+        [self.customTipPercentageTextField.bottomAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.bottomAnchor]
     ]];
 }
 

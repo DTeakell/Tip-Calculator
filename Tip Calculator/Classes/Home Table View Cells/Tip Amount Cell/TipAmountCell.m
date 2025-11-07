@@ -36,10 +36,10 @@
 
 - (void) setConstraints {
     [NSLayoutConstraint activateConstraints: @[
-        [self.tipAmountLabel.leadingAnchor constraintEqualToAnchor: self.contentView.leadingAnchor constant: 20],
-        [self.tipAmountLabel.trailingAnchor constraintEqualToAnchor: self.contentView.trailingAnchor constant: -20],
-        [self.tipAmountLabel.topAnchor constraintEqualToAnchor: self.contentView.topAnchor constant: 15],
-        [self.tipAmountLabel.bottomAnchor constraintEqualToAnchor: self.contentView.bottomAnchor constant: -15]
+        [self.tipAmountLabel.leadingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.leadingAnchor],
+        [self.tipAmountLabel.trailingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.trailingAnchor],
+        [self.tipAmountLabel.topAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.topAnchor],
+        [self.tipAmountLabel.bottomAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.bottomAnchor]
     ]];
 }
 

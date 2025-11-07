@@ -7,6 +7,12 @@
 
 #import "SettingsViewController.h"
 #import "ThemeColorCell.h"
+#import "ThemeSelectionViewController.h"
+#import "AppIconCell.h"
+#import "AppIconViewController.h"
+#import "ShowRoundedTotalsCell.h"
+#import "SaveTipPercentageCell.h"
+
 #import <UIKit/UIKit.h>
 
 @interface SettingsViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -69,7 +75,10 @@
     
     [self.view addSubview: self.settingsTableView];
     
-    [self.settingsTableView registerClass: [ThemeColorCell class] forCellReuseIdentifier: @"AccentColorCell"];
+    [self.settingsTableView registerClass: [ThemeColorCell class] forCellReuseIdentifier: @"ThemeColorCell"];
+    [self.settingsTableView registerClass: [AppIconCell class] forCellReuseIdentifier: @"AppIconCell"];
+    [self.settingsTableView registerClass: [ShowRoundedTotalsCell class] forCellReuseIdentifier: @"ShowRoundedTotalsCell"];
+    [self.settingsTableView registerClass: [SaveTipPercentageCell class] forCellReuseIdentifier: @"SaveTipPercentageCell"];
     
     [NSLayoutConstraint activateConstraints:@[
         [tableView.topAnchor constraintEqualToAnchor: self.view.topAnchor],
@@ -84,16 +93,24 @@
 # pragma mark - Table View Methods
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    tableView.estimatedRowHeight = 85;
     return UITableViewAutomaticDimension;
 }
 
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 3;
 }
 
+
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
+    if (section == 0) {
+        return 2;
+    } else {
+        return 1;
+    }
 }
+
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     static NSString *cellID = @"CellID";
@@ -109,15 +126,61 @@
         }
     }
     
-    if (indexPath.section == 0) {
-        ThemeColorCell *cell = [tableView dequeueReusableCellWithIdentifier: @"AccentColorCell"];
+    //MARK: Theme Color Cell
+    if (indexPath.section == 0 && indexPath.row == 0) {
+        ThemeColorCell *cell = [tableView dequeueReusableCellWithIdentifier: @"ThemeColorCell"];
         self.themeColorLabel = cell.themeColorLabel;
         return cell;
     }
     
+    //MARK: App Icon Selection Cell
+    if (indexPath.section == 0 && indexPath.row == 1) {
+        AppIconCell *cell = [tableView dequeueReusableCellWithIdentifier: @"AppIconCell"];
+        self.appIconMenuLabel = cell.appIconLabel;
+        return cell;
+    }
+    
+    //MARK: Show Rounded Totals Cell
+    if (indexPath.section == 1) {
+        ShowRoundedTotalsCell *cell = [tableView dequeueReusableCellWithIdentifier: @"ShowRoundedTotalsCell"];
+        self.showRoundedValuesLabel = cell.showRoundedTotalsLabel;
+        return cell;
+    }
+    
+    //MARK: Save Tip Percentage Selection Cell
+    if (indexPath.section == 2) {
+        SaveTipPercentageCell *cell = [tableView dequeueReusableCellWithIdentifier: @"SaveTipPercentageCell"];
+        self.saveTipPercentageLabel = cell.savePercentageLabel;
+        return cell;
+    }
+    
+    
     return cell;
 }
 
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath: indexPath animated: YES];
+    
+    if (indexPath.section == 0 && indexPath.row == 0) {
+        ThemeSelectionViewController *themeSelectionViewController = [[ThemeSelectionViewController alloc] init];
+        [self.navigationController pushViewController: themeSelectionViewController animated: YES];
+        [themeSelectionViewController release];
+    }
+    
+    if (indexPath.section == 0 && indexPath.row == 1) {
+        AppIconViewController *appIconViewController = [[AppIconViewController alloc] init];
+        [self.navigationController pushViewController: appIconViewController animated: YES];
+        [appIconViewController release];
+    }
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        return @"App Customization";
+    }
+    return nil;
+}
 
 
 #pragma mark - Logic Methods
@@ -133,17 +196,19 @@
 }
 
 
-
 #pragma mark - Dealloc
 - (void) dealloc {
-    [_themeColorPicker release];
+    [_themeSelectionViewController release];
     [_themeColorLabel release];
     [_appIcon release];
     [_appIconMenuLabel release];
+    [_appIconSelectionViewController release];
     [_navigationBar release];
     [_settingsTableView release];
     [_showRoundedValuesLabel release];
     [_showRoundedValuesSwitch release];
+    [_saveTipPercentageLabel release];
+    [_saveTipPercentageSwitch release];
     [super dealloc];
 }
 

@@ -43,10 +43,10 @@
 
 - (void) setConstraints {
     [NSLayoutConstraint activateConstraints: @[
-        [self.checkTotalLabel.leadingAnchor constraintEqualToAnchor: self.contentView.leadingAnchor constant: 20],
-        [self.checkTotalLabel.trailingAnchor constraintEqualToAnchor: self.contentView.trailingAnchor constant: -20],
-        [self.checkTotalLabel.topAnchor constraintEqualToAnchor: self.contentView.topAnchor constant: 15],
-        [self.checkTotalLabel.bottomAnchor constraintEqualToAnchor: self.contentView.bottomAnchor constant: -15]
+        [self.checkTotalLabel.leadingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.leadingAnchor],
+        [self.checkTotalLabel.trailingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.trailingAnchor],
+        [self.checkTotalLabel.topAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.topAnchor],
+        [self.checkTotalLabel.bottomAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.bottomAnchor]
     ]];
 }
 

@@ -49,10 +49,10 @@
 
 - (void) setConstraints {
     [NSLayoutConstraint activateConstraints: @[
-        [self.numberOfPeopleTextField.leadingAnchor constraintEqualToAnchor: self.contentView.leadingAnchor constant: 20],
-        [self.numberOfPeopleTextField.trailingAnchor constraintEqualToAnchor: self.contentView.trailingAnchor constant: -20],
-        [self.numberOfPeopleTextField.topAnchor constraintEqualToAnchor: self.contentView.topAnchor constant: 15],
-        [self.numberOfPeopleTextField.bottomAnchor constraintEqualToAnchor: self.contentView.bottomAnchor constant: -15]
+        [self.numberOfPeopleTextField.leadingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.leadingAnchor],
+        [self.numberOfPeopleTextField.trailingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.trailingAnchor],
+        [self.numberOfPeopleTextField.topAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.topAnchor],
+        [self.numberOfPeopleTextField.bottomAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.bottomAnchor]
     ]];
 }
 
