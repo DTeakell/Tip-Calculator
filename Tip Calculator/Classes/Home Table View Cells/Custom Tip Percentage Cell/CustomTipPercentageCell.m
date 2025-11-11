@@ -6,6 +6,7 @@
 //
 
 #import "CustomTipPercentageCell.h"
+#import "SettingsManager.h"
 
 @implementation CustomTipPercentageCell
 
@@ -21,6 +22,7 @@
 
 
 - (void) setupView {
+    
     self.customTipPercentageTextField = [[[UITextField alloc] init] autorelease];
     self.customTipPercentageTextField.translatesAutoresizingMaskIntoConstraints = NO;
     self.customTipPercentageTextField.font = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
@@ -36,7 +38,6 @@
     
     self.customTipPercentageTextField.placeholder = NSLocalizedString(@"Enter Custom Tip Percentage", @"Custom tip percentage text field");
     self.customTipPercentageTextField.keyboardType = UIKeyboardTypeNumberPad;
-    self.customTipPercentageTextField.tintColor = [UIColor colorNamed: @"AccentColor"];
     
     self.customTipPercentageTextField.accessibilityLabel = @"Custom tip percentage field";
     self.customTipPercentageTextField.accessibilityTraits = UIAccessibilityTraitKeyboardKey;

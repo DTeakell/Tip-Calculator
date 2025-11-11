@@ -5,6 +5,7 @@
 //  Created by Dillon Teakell on 5/20/25.
 //
 
+#import <Foundation/Foundation.h>
 #import "HomeViewController.h"
 #import "SettingsViewController.h"
 #import "TipCalculator.h"
@@ -295,7 +296,6 @@
 
 /// Clears inputs and resets calculated labels
 - (void) clearScreenTapped {
-    
     [self.tipCalculator reset];
     
     // Clear text fields

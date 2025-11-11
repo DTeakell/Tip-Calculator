@@ -34,7 +34,6 @@
     self.checkAmountTextField.placeholder = NSLocalizedString(@"Enter Check Amount", @"Check Amount Text Field Placeholder");
     self.checkAmountTextField.font = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
     self.checkAmountTextField.keyboardType = UIKeyboardTypeDecimalPad;
-    self.checkAmountTextField.tintColor = [UIColor colorNamed: @"AccentColor"];
     
     // Accessibility Labels
     self.checkAmountTextField.accessibilityLabel = @"Check amount input field";

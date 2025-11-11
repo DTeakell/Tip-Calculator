@@ -72,6 +72,9 @@
         }
       }
     },
+    "Blue" : {
+      "comment" : "Theme Name Blue"
+    },
     "Check Amount" : {
       "comment" : "Check Amount Title",
       "localizations" : {
@@ -285,6 +288,9 @@
           }
         }
       }
+    },
+    "Cyan" : {
+      "comment" : "Theme Name Cyan"
     },
     "Enter Check Amount" : {
       "comment" : "Check Amount Text Field Placeholder",
@@ -641,6 +647,9 @@
         }
       }
     },
+    "Orange" : {
+      "comment" : "Theme Name Orange"
+    },
     "per person" : {
       "comment" : "Label for amount per person",
       "localizations" : {
@@ -711,6 +720,15 @@
           }
         }
       }
+    },
+    "Pink" : {
+      "comment" : "Theme Name Pink"
+    },
+    "Purple" : {
+      "comment" : "Theme Name Purple"
+    },
+    "Red" : {
+      "comment" : "Theme Name Red"
     },
     "Settings" : {
       "comment" : "Settings Button\nSettings Title"

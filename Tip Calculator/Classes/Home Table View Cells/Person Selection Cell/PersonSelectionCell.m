@@ -37,7 +37,6 @@
     self.numberOfPeopleTextField.placeholder = NSLocalizedString(@"Enter Number of People", @"Number of People Text Field");
     self.numberOfPeopleTextField.font = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
     self.numberOfPeopleTextField.keyboardType = UIKeyboardTypeNumberPad;
-    self.numberOfPeopleTextField.tintColor = [UIColor colorNamed: @"AccentColor"];
     
     // Accessibility Labels
     self.numberOfPeopleTextField.accessibilityLabel = NSLocalizedString(@"Number of People Text Field",@"Number of People Text Field");

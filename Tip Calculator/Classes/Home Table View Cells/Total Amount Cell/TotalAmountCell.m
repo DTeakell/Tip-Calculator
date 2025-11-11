@@ -7,6 +7,7 @@
 
 #import "TotalAmountCell.h"
 #import "CurrencyFormatter.h"
+#import "SettingsManager.h"
 
 @implementation TotalAmountCell
 
@@ -30,12 +31,14 @@
 }
 
 - (void) setupView {
+    UIColor *accentColor = [[SettingsManager sharedManager] colorForTheme: [SettingsManager sharedManager].currentTheme];
+    
     self.checkTotalLabel = [[[UILabel alloc] init] autorelease];
     self.checkTotalLabel.translatesAutoresizingMaskIntoConstraints = NO;
 
     self.checkTotalLabel.font = [self setCustomFont];
     self.checkTotalLabel.adjustsFontForContentSizeCategory = YES;
-    self.checkTotalLabel.textColor = [UIColor colorNamed: @"AccentColor"];
+    self.checkTotalLabel.textColor = accentColor;
     self.checkTotalLabel.text = [CurrencyFormatter localizedCurrencyStringFromDouble: 0];
     
     [self.contentView addSubview: self.checkTotalLabel];

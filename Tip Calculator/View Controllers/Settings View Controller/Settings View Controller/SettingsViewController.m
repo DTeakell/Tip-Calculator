@@ -99,16 +99,12 @@
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 3;
+    return 2;
 }
 
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0) {
-        return 2;
-    } else {
-        return 1;
-    }
+    return 2;
 }
 
 
@@ -141,16 +137,18 @@
     }
     
     //MARK: Show Rounded Totals Cell
-    if (indexPath.section == 1) {
+    if (indexPath.section == 1 && indexPath.row == 0) {
         ShowRoundedTotalsCell *cell = [tableView dequeueReusableCellWithIdentifier: @"ShowRoundedTotalsCell"];
         self.showRoundedValuesLabel = cell.showRoundedTotalsLabel;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
     
     //MARK: Save Tip Percentage Selection Cell
-    if (indexPath.section == 2) {
+    if (indexPath.section == 1 && indexPath.row == 1) {
         SaveTipPercentageCell *cell = [tableView dequeueReusableCellWithIdentifier: @"SaveTipPercentageCell"];
         self.saveTipPercentageLabel = cell.savePercentageLabel;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
     
@@ -177,8 +175,24 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        return @"App Customization";
+        return @"App Appearance";
+    } else if (section == 1) {
+        return @"Calculation Settings";
     }
+    return nil;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    if (section == 2) {
+        UILabel *footerLabel = [[[UILabel alloc] init] autorelease];
+        footerLabel.text = @"This is a footer view. Please insert any text you want into it. This is supposed to be the main one";
+        footerLabel.numberOfLines = 0;
+        footerLabel.font = [UIFont preferredFontForTextStyle: UIFontTextStyleFootnote];
+        footerLabel.textColor = [UIColor systemGrayColor];
+        footerLabel.textAlignment = NSTextAlignmentLeft;
+        return footerLabel;
+    }
+    
     return nil;
 }
 

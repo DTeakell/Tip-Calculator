@@ -53,8 +53,12 @@
        // Spacing
        [self.savePercentageLabel.trailingAnchor constraintLessThanOrEqualToAnchor: self.saveTipPercentageSwitch.leadingAnchor constant: -20]
     ]];
-    
-    
+}
+
+- (void) dealloc {
+    [_savePercentageLabel release];
+    [_saveTipPercentageSwitch release];
+    [super dealloc];
 }
 
 

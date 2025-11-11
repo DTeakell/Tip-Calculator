@@ -6,6 +6,7 @@
 //
 
 #import "TipPercentageSelectorCell.h"
+#import "SettingsManager.h"
 
 @implementation TipPercentageSelectorCell
 
@@ -21,15 +22,17 @@
 }
 
 - (void) setupView {
+    
+    UIColor *accentColor = [[SettingsManager sharedManager] colorForTheme: [SettingsManager sharedManager].currentTheme];
+    
     self.tipPercentageSelector = [[[UISegmentedControl alloc] initWithItems:@[@"0%", @"10%", @"15%", @"20%",
                                                                               NSLocalizedString(@"Any", @"Custom Tip Percentage")]] autorelease];
+    self.tipPercentageSelector.selectedSegmentTintColor = accentColor;
     self.tipPercentageSelector.translatesAutoresizingMaskIntoConstraints = NO;
     
     //Accessibility Labels
     self.tipPercentageSelector.accessibilityLabel = @"Tip Percentage selector";
     self.tipPercentageSelector.accessibilityTraits = UIAccessibilityTraitAdjustable;
-    
-    self.tipPercentageSelector.selectedSegmentTintColor = [UIColor colorNamed: @"AccentColor"];
     
     [self.contentView addSubview: self.tipPercentageSelector];
 }
