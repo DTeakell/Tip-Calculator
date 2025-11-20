@@ -16,6 +16,7 @@
 #import "TipAmountCell.h"
 #import "CurrencyFormatter.h"
 #import "TotalAmountCell.h"
+#import "SettingsManager.h"
 
 @interface HomeViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -43,17 +44,21 @@
 /// Sets up the buttons on the navigation bar.
 - (void) setupNavigationBarButtons {
     
+    // Get color from Settings Manager
+    UIColor *color = [[SettingsManager sharedManager] colorForTheme: [SettingsManager sharedManager].currentTheme];
+    
     // iOS 26 Liquid Glass style
     // Sets up 'Clear' button
     if (@available(iOS 26.0, *)) {
         UIBarButtonItem *clearScreenButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage systemImageNamed: @"arrow.counterclockwise"] style: UIBarButtonItemStyleProminent target: self action: @selector(clearScreenTapped)];
         self.clearScreenButton = clearScreenButtonItem;
         [clearScreenButtonItem release];
+        self.clearScreenButton.tintColor = color;
     } else {
         UIBarButtonItem *clearScreenButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage systemImageNamed: @"arrow.counterclockwise"] style: UIBarButtonItemStylePlain target: self action: @selector(clearScreenTapped)];
         self.clearScreenButton = clearScreenButtonItem;
         [clearScreenButtonItem release];
-        self.clearScreenButton.tintColor = [UIColor colorNamed: @"AccentColor"];
+        self.clearScreenButton.tintColor = color;
     }
     
     // Sets up 'Settings' button
@@ -158,6 +163,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(applyTheme:) name: @"ThemeDidChangeNotification" object: nil];
+    
     [self setupTipCalculator];
     
     [self setupNumberFormatter];
@@ -211,6 +218,7 @@
         self.checkAmountTextField = cell.checkAmountTextField;
         self.checkAmountTextField.enabled = YES;
         [self.checkAmountTextField addTarget: self action: @selector(inputChanged) forControlEvents: UIControlEventEditingChanged];
+        [cell applyTheme];
         return cell;
     }
     
@@ -221,6 +229,7 @@
         self.tipPercentageSelector = cell.tipPercentageSelector;
         self.tipPercentageSelector.selectedSegmentIndex = self.selectedTipIndex;
         [self.tipPercentageSelector addTarget: self action: @selector(segmentChanged:) forControlEvents: UIControlEventValueChanged];
+        [cell applyTheme];
         return cell;
     }
     
@@ -232,6 +241,8 @@
         
         [self.customTipPercentageTextField addTarget: self action: @selector(customTipChanged) forControlEvents: UIControlEventEditingChanged];
         
+        [cell applyTheme];
+        
         return cell;
     }
     
@@ -241,6 +252,7 @@
         PersonSelectionCell *cell = [tableView dequeueReusableCellWithIdentifier: @"PersonSelectionCell"];
         self.numberOfPeopleTextField = cell.numberOfPeopleTextField;
         [self.numberOfPeopleTextField addTarget: self action: @selector(inputChanged) forControlEvents: UIControlEventEditingChanged];
+        [cell applyTheme];
         return cell;
     }
     
@@ -256,6 +268,7 @@
     } else if (indexPath.section == 4 || (self.isCustomTipEnabled && indexPath.section == 5)) {
         TotalAmountCell *cell = [tableView dequeueReusableCellWithIdentifier: @"TotalAmountCell"];
         self.checkTotalLabel = cell.checkTotalLabel;
+        [cell applyTheme];
         return cell;
     }
     
@@ -291,6 +304,20 @@
     
     settingsNavigationController.modalPresentationStyle = UIModalPresentationAutomatic;
     [self.navigationController presentViewController: settingsNavigationController animated: YES completion: nil];
+}
+
+- (void) applyTheme: (NSNotification *) notification {
+    ThemeColorType theme = [[SettingsManager sharedManager] currentTheme];
+    UIColor *color = [[SettingsManager sharedManager] colorForTheme: theme];
+    
+    self.navigationItem.rightBarButtonItem.tintColor = color;
+    self.checkAmountTextField.tintColor = color;
+    self.checkTotalLabel.tintColor = color;
+    self.tipPercentageSelector.tintColor = color;
+    self.customTipPercentageTextField.tintColor = color;
+    self.numberOfPeopleTextField.tintColor = color;
+    
+    [self.homeTableView reloadData];
 }
 
 
@@ -426,6 +453,7 @@
 #pragma mark - Dealloc
 
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver: self];
     [_homeTableView release];
     [_checkAmountTextField release];
     [_tipPercentageSelector release];

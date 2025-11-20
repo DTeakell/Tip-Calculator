@@ -6,6 +6,7 @@
 //
 
 #import "PersonSelectionCell.h"
+#import "SettingsManager.h"
 
 @implementation PersonSelectionCell
 
@@ -18,6 +19,13 @@
     }
     
     return self;
+}
+
+- (void)applyTheme {
+    ThemeColorType theme = [SettingsManager sharedManager].currentTheme;
+    UIColor *color = [[SettingsManager sharedManager] colorForTheme:theme];
+
+    self.numberOfPeopleTextField.tintColor = color;
 }
 
 

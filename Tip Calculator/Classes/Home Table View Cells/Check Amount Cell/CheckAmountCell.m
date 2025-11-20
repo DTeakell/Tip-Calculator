@@ -6,6 +6,7 @@
 //
 
 #import "CheckAmountCell.h"
+#import "SettingsManager.h"
 
 @implementation CheckAmountCell
 
@@ -16,6 +17,13 @@
         [self setConstraints];
     }
     return self;
+}
+
+- (void)applyTheme {
+    ThemeColorType theme = [SettingsManager sharedManager].currentTheme;
+    UIColor *color = [[SettingsManager sharedManager] colorForTheme:theme];
+
+    self.checkAmountTextField.tintColor = color;
 }
 
 - (void) setupView {

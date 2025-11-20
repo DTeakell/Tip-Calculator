@@ -12,6 +12,7 @@
 #import "AppIconViewController.h"
 #import "ShowRoundedTotalsCell.h"
 #import "SaveTipPercentageCell.h"
+#import "SettingsManager.h"
 
 #import <UIKit/UIKit.h>
 
@@ -31,6 +32,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(applyTheme:) name: @"ThemeDidChangeNotification" object: nil];
+    
     [self setupSettingsViewController];
     [self setupNavigationBarButtons];
     [self setupTableViewUI];
@@ -49,11 +53,15 @@
 
 /// Sets up the buttons in the navigation controller
 - (void) setupNavigationBarButtons {
+    
+    UIColor *color = [[SettingsManager sharedManager] colorForTheme: [SettingsManager sharedManager].currentTheme];
+    
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone  target: self action: @selector(doneButtonPressed)];
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemCancel target: self action: @selector(cancelButtonPressed)];
     
     self.navigationItem.leftBarButtonItem = cancelButton;
     self.navigationItem.rightBarButtonItem = doneButton;
+    self.navigationItem.rightBarButtonItem.tintColor = color;
     
     [cancelButton release];
     [doneButton release];
@@ -86,6 +94,14 @@
         [tableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
         [tableView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor]
     ]];
+}
+
+
+- (void) applyTheme: (NSNotification *) notification {
+    ThemeColorType theme = [[SettingsManager sharedManager] currentTheme];
+    UIColor *color = [[SettingsManager sharedManager] colorForTheme: theme];
+    
+    self.navigationItem.rightBarButtonItem.tintColor = color;
 }
 
 
@@ -160,12 +176,14 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath: indexPath animated: YES];
     
+    // MARK: Theme Selection
     if (indexPath.section == 0 && indexPath.row == 0) {
         ThemeSelectionViewController *themeSelectionViewController = [[ThemeSelectionViewController alloc] init];
         [self.navigationController pushViewController: themeSelectionViewController animated: YES];
         [themeSelectionViewController release];
     }
     
+    // MARK: App Icon Selection
     if (indexPath.section == 0 && indexPath.row == 1) {
         AppIconViewController *appIconViewController = [[AppIconViewController alloc] init];
         [self.navigationController pushViewController: appIconViewController animated: YES];
@@ -182,22 +200,8 @@
     return nil;
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    if (section == 2) {
-        UILabel *footerLabel = [[[UILabel alloc] init] autorelease];
-        footerLabel.text = @"This is a footer view. Please insert any text you want into it. This is supposed to be the main one";
-        footerLabel.numberOfLines = 0;
-        footerLabel.font = [UIFont preferredFontForTextStyle: UIFontTextStyleFootnote];
-        footerLabel.textColor = [UIColor systemGrayColor];
-        footerLabel.textAlignment = NSTextAlignmentLeft;
-        return footerLabel;
-    }
-    
-    return nil;
-}
-
-
 #pragma mark - Logic Methods
+
 /// Saves the user's data and dismisses the Settings screen
 - (void) doneButtonPressed {
     //TODO: Save user data
@@ -212,6 +216,7 @@
 
 #pragma mark - Dealloc
 - (void) dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver: self];
     [_themeSelectionViewController release];
     [_themeColorLabel release];
     [_appIcon release];

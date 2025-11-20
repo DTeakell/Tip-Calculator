@@ -29,6 +29,7 @@ typedef NS_ENUM(NSInteger, ThemeColorType) {
 // Theme Utilities
 - (UIColor *) colorForTheme: (ThemeColorType) theme;
 - (NSString *) nameForTheme: (ThemeColorType) theme;
+- (ThemeColorType) themeFromString: (NSString *) themeName;
 - (NSArray <NSString *> *) allThemeNames;
 
 // Load & Save Methods
@@ -36,6 +37,6 @@ typedef NS_ENUM(NSInteger, ThemeColorType) {
 - (void) loadCurrentTheme;
 
 // Apply to Window
-- (void) applyThemeToWindow: (UIWindow *) window;
+- (void) setCurrentTheme:(ThemeColorType)currentTheme;
 
 @end

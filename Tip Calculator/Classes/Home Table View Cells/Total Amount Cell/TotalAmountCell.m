@@ -23,6 +23,13 @@
     return self;
 }
 
+- (void)applyTheme {
+    ThemeColorType theme = [SettingsManager sharedManager].currentTheme;
+    UIColor *color = [[SettingsManager sharedManager] colorForTheme:theme];
+
+    self.checkTotalLabel.textColor = color;
+}
+
 
 - (UIFont *) setCustomFont {
     UIFont *baseFont = [UIFont systemFontOfSize: UIFont.labelFontSize weight: UIFontWeightSemibold];
@@ -31,14 +38,12 @@
 }
 
 - (void) setupView {
-    UIColor *accentColor = [[SettingsManager sharedManager] colorForTheme: [SettingsManager sharedManager].currentTheme];
     
     self.checkTotalLabel = [[[UILabel alloc] init] autorelease];
     self.checkTotalLabel.translatesAutoresizingMaskIntoConstraints = NO;
 
     self.checkTotalLabel.font = [self setCustomFont];
     self.checkTotalLabel.adjustsFontForContentSizeCategory = YES;
-    self.checkTotalLabel.textColor = accentColor;
     self.checkTotalLabel.text = [CurrencyFormatter localizedCurrencyStringFromDouble: 0];
     
     [self.contentView addSubview: self.checkTotalLabel];

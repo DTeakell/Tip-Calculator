@@ -6,12 +6,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SettingsManager.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface TotalAmountCell : UITableViewCell
 
 @property (nonatomic, retain) UILabel *checkTotalLabel;
+
+- (void) applyTheme;
 
 @end
 

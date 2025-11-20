@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, retain) UITextField *checkAmountTextField;
 
+- (void) applyTheme;
+
 @end
 
 NS_ASSUME_NONNULL_END

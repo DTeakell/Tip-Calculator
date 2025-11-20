@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, retain) UITextField *numberOfPeopleTextField;
 
+- (void) applyTheme;
+
 @end
 
 NS_ASSUME_NONNULL_END

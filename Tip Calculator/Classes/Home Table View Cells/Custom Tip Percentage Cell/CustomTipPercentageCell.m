@@ -20,6 +20,12 @@
     return self;
 }
 
+- (void)applyTheme {
+    ThemeColorType theme = [SettingsManager sharedManager].currentTheme;
+    UIColor *color = [[SettingsManager sharedManager] colorForTheme:theme];
+
+    self.customTipPercentageTextField.tintColor = color;
+}
 
 - (void) setupView {
     

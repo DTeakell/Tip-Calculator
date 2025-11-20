@@ -32,9 +32,6 @@
     // Assign root to the navigation controller
     self.window.rootViewController = navigationController;
     
-    // Test theme manager
-    [[SettingsManager sharedManager] applyThemeToWindow: self.window];
-    
     [self.window makeKeyAndVisible];
 }
 

@@ -21,13 +21,17 @@
     return self;
 }
 
+- (void)applyTheme {
+    ThemeColorType theme = [SettingsManager sharedManager].currentTheme;
+    UIColor *color = [[SettingsManager sharedManager] colorForTheme:theme];
+
+    self.tipPercentageSelector.selectedSegmentTintColor = color;
+}
+
 - (void) setupView {
-    
-    UIColor *accentColor = [[SettingsManager sharedManager] colorForTheme: [SettingsManager sharedManager].currentTheme];
     
     self.tipPercentageSelector = [[[UISegmentedControl alloc] initWithItems:@[@"0%", @"10%", @"15%", @"20%",
                                                                               NSLocalizedString(@"Any", @"Custom Tip Percentage")]] autorelease];
-    self.tipPercentageSelector.selectedSegmentTintColor = accentColor;
     self.tipPercentageSelector.translatesAutoresizingMaskIntoConstraints = NO;
     
     //Accessibility Labels
