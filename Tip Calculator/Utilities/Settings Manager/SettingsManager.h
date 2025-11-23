@@ -11,11 +11,17 @@
 // Theme Color Enum
 typedef NS_ENUM(NSInteger, ThemeColorType) {
     ThemeColorTypeRed,
-    ThemeColorTypeBlue,
-    ThemeColorTypeOrange,
-    ThemeColorTypePink,
+    ThemeColorTypeDefault,
+    ThemeColorTypeYellow,
+    ThemeColorTypeGreen,
+    ThemeColorTypeMint,
+    ThemeColorTypeTeal,
     ThemeColorTypeCyan,
-    ThemeColorTypePurple
+    ThemeColorTypeBlue,
+    ThemeColorTypeIndigo,
+    ThemeColorTypePurple,
+    ThemeColorTypePink,
+    ThemeColorTypeGray
 };
 
 

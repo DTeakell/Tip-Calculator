@@ -73,7 +73,7 @@
       }
     },
     "Blue" : {
-      "comment" : "Theme Name Blue"
+      "comment" : "Theme Name Purple"
     },
     "Check Amount" : {
       "comment" : "Check Amount Title",
@@ -290,7 +290,7 @@
       }
     },
     "Cyan" : {
-      "comment" : "Theme Name Cyan"
+      "comment" : "Theme Name Purple"
     },
     "Enter Check Amount" : {
       "comment" : "Check Amount Text Field Placeholder",
@@ -505,6 +505,18 @@
         }
       }
     },
+    "Gray" : {
+      "comment" : "Theme Name Purple"
+    },
+    "Green" : {
+      "comment" : "Theme Name Pink"
+    },
+    "Indigo" : {
+      "comment" : "Theme Name Purple"
+    },
+    "Mint" : {
+      "comment" : "Theme Name Purple"
+    },
     "Number of People" : {
       "comment" : "Number of People on Check",
       "localizations" : {
@@ -648,7 +660,7 @@
       }
     },
     "Orange" : {
-      "comment" : "Theme Name Default"
+      "comment" : "Theme Name Blue"
     },
     "per person" : {
       "comment" : "Label for amount per person",
@@ -722,7 +734,7 @@
       }
     },
     "Pink" : {
-      "comment" : "Theme Name Pink"
+      "comment" : "Theme Name Purple"
     },
     "Purple" : {
       "comment" : "Theme Name Purple"
@@ -732,6 +744,9 @@
     },
     "Settings" : {
       "comment" : "Settings Button\nSettings Title"
+    },
+    "Teal" : {
+      "comment" : "Theme Name Purple"
     },
     "Theme Color" : {
       "comment" : "Theme Color Title"
@@ -1019,6 +1034,9 @@
           }
         }
       }
+    },
+    "Yellow" : {
+      "comment" : "Theme Name Cyan"
     }
   },
   "version" : "1.1"

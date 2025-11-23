@@ -14,6 +14,7 @@
 // UI Properties
 // Accent Color UI
 @property (nonatomic, retain) UILabel *themeColorLabel;
+@property (nonatomic, retain) UILabel *selectedThemeLabel;
 
 // View Controllers
 @property (nonatomic, retain) UIViewController *themeSelectionViewController;

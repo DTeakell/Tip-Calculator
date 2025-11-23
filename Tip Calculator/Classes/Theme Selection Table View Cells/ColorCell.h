@@ -10,6 +10,7 @@
 
 @interface ColorCell : UITableViewCell
 
+@property (nonatomic, retain) UIImageView *colorCircle;
 @property (nonatomic, retain) UILabel *colorLabel;
 @property (nonatomic, assign) BOOL colorIsSelected;
 

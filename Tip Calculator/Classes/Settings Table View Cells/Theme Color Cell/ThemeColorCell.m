@@ -6,6 +6,7 @@
 //
 
 #import "ThemeColorCell.h"
+#import "SettingsManager.h"
 
 @implementation ThemeColorCell
 
@@ -31,17 +32,36 @@
     self.themeColorLabel.adjustsFontForContentSizeCategory = YES;
     [self.contentView addSubview: self.themeColorLabel];
 
+    
+    // Selected Theme Label
+    self.selectedColorLabel = [[[UILabel alloc] init] autorelease];
+    
+    ThemeColorType selectedTheme = [[SettingsManager sharedManager] currentTheme];
+    NSString *selectedThemeString = [[SettingsManager sharedManager] nameForTheme: selectedTheme];
+    
+    self.selectedColorLabel.text = selectedThemeString;
+    self.selectedColorLabel.font = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
+    self.selectedColorLabel.textColor = [UIColor systemGrayColor];
+    self.selectedColorLabel.numberOfLines = 0;
+    self.selectedColorLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    self.selectedColorLabel.adjustsFontForContentSizeCategory = YES;
+    [self.contentView addSubview: self.selectedColorLabel];
+    
 }
 
 - (void) setConstraints {
     
     [NSLayoutConstraint activateConstraints:@[
-        // Label
+        // Theme Color Label
         [self.themeColorLabel.leadingAnchor constraintEqualToAnchor:self.contentView.layoutMarginsGuide.leadingAnchor],
         [self.themeColorLabel.trailingAnchor constraintEqualToAnchor:self.contentView.layoutMarginsGuide.trailingAnchor],
         [self.themeColorLabel.topAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.topAnchor],
-        [self.themeColorLabel.bottomAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.bottomAnchor]
-
+        [self.themeColorLabel.bottomAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.bottomAnchor],
+        
+        // Selected Color Label
+        [self.selectedColorLabel.trailingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.trailingAnchor],
+        [self.selectedColorLabel.topAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.topAnchor],
+        [self.selectedColorLabel.bottomAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.bottomAnchor],
     ]];
 }
 

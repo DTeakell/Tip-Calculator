@@ -32,24 +32,35 @@ static NSString *const selectedThemeKey = @"selectedTheme";
 - (UIColor *) colorForTheme:(ThemeColorType)theme {
     switch (theme) {
         case ThemeColorTypeRed: return [UIColor systemRedColor];
-        case ThemeColorTypeBlue: return [UIColor systemBlueColor];
+        case ThemeColorTypeDefault: return [UIColor systemOrangeColor];
+        case ThemeColorTypeYellow: return [UIColor systemYellowColor];
+        case ThemeColorTypeGreen: return [UIColor systemGreenColor];
+        case ThemeColorTypeMint: return [UIColor systemMintColor];
+        case ThemeColorTypeTeal: return [UIColor systemTealColor];
         case ThemeColorTypeCyan: return [UIColor systemCyanColor];
-        case ThemeColorTypePink: return [UIColor systemPinkColor];
-        case ThemeColorTypeOrange: return [UIColor systemOrangeColor];
+        case ThemeColorTypeBlue: return [UIColor systemBlueColor];
+        case ThemeColorTypeIndigo: return [UIColor systemIndigoColor];
         case ThemeColorTypePurple: return [UIColor systemPurpleColor];
-        default: return [UIColor systemBlueColor];
+        case ThemeColorTypePink: return [UIColor systemPinkColor];
+        case ThemeColorTypeGray: return [UIColor systemGrayColor];
     }
 }
 
 /// Gets the string value of the theme
 - (NSString *) nameForTheme:(ThemeColorType)theme {
     switch (theme) {
-        case ThemeColorTypeRed: return NSLocalizedString(@"Red", @"Theme Name Red");
-        case ThemeColorTypeBlue: return NSLocalizedString(@"Blue", @"Theme Name Blue");
-        case ThemeColorTypeCyan: return NSLocalizedString(@"Cyan", @"Theme Name Cyan");
-        case ThemeColorTypePink: return NSLocalizedString(@"Pink", @"Theme Name Pink");
-        case ThemeColorTypePurple: return NSLocalizedString(@"Purple", @"Theme Name Purple");
-        default: return NSLocalizedString(@"Orange", @"Theme Name Default");
+        case ThemeColorTypeRed: return NSLocalizedString(@"Red", @"");
+        case ThemeColorTypeDefault: return NSLocalizedString(@"Orange", @"");
+        case ThemeColorTypeYellow: return NSLocalizedString(@"Yellow", @"");
+        case ThemeColorTypeGreen: return NSLocalizedString(@"Green", @"");
+        case ThemeColorTypeMint: return NSLocalizedString(@"Mint", @"");
+        case ThemeColorTypeTeal: return NSLocalizedString(@"Teal", @"");
+        case ThemeColorTypeCyan: return NSLocalizedString(@"Cyan", @"");
+        case ThemeColorTypeBlue: return NSLocalizedString(@"Blue", @"");
+        case ThemeColorTypeIndigo: return NSLocalizedString(@"Indigo", @"");
+        case ThemeColorTypePurple: return NSLocalizedString(@"Purple", @"");
+        case ThemeColorTypePink: return NSLocalizedString(@"Pink", @"");
+        case ThemeColorTypeGray: return NSLocalizedString(@"Gray", @"");
     }
 }
 
@@ -57,17 +68,31 @@ static NSString *const selectedThemeKey = @"selectedTheme";
 - (ThemeColorType) themeFromString:(NSString *)themeName {
     if ([themeName isEqualToString: NSLocalizedString(@"Red", @"Theme Name Red")]) {
         return ThemeColorTypeRed;
-    } else if ([themeName isEqualToString: NSLocalizedString(@"Blue", @"Theme Name Blue")]) {
-        return ThemeColorTypeBlue;
-    } else if ([themeName isEqualToString: NSLocalizedString(@"Cyan", @"Theme Name Cyan")]) {
+    } else if ([themeName isEqualToString: NSLocalizedString(@"Orange", @"Theme Name Blue")]) {
+        return ThemeColorTypeDefault;
+    } else if ([themeName isEqualToString: NSLocalizedString(@"Yellow", @"Theme Name Cyan")]) {
+        return ThemeColorTypeYellow;
+    } else if ([themeName isEqualToString: NSLocalizedString(@"Green", @"Theme Name Pink")])  {
+        return ThemeColorTypeGreen;
+    } else if ([themeName isEqualToString: NSLocalizedString(@"Mint", @"Theme Name Purple")]) {
+        return ThemeColorTypeMint;
+    } else if ([themeName isEqualToString: NSLocalizedString(@"Teal", @"Theme Name Purple")]) {
+        return ThemeColorTypeTeal;
+    } else if ([themeName isEqualToString: NSLocalizedString(@"Cyan", @"Theme Name Purple")]) {
         return ThemeColorTypeCyan;
-    } else if ([themeName isEqualToString: NSLocalizedString(@"Pink", @"Theme Name Pink")])  {
-        return ThemeColorTypePink;
+    } else if ([themeName isEqualToString: NSLocalizedString(@"Blue", @"Theme Name Purple")]) {
+        return ThemeColorTypeBlue;
+    } else if ([themeName isEqualToString: NSLocalizedString(@"Indigo", @"Theme Name Purple")]) {
+        return ThemeColorTypeIndigo;
     } else if ([themeName isEqualToString: NSLocalizedString(@"Purple", @"Theme Name Purple")]) {
         return ThemeColorTypePurple;
+    } else if ([themeName isEqualToString: NSLocalizedString(@"Pink", @"Theme Name Purple")]) {
+        return ThemeColorTypePink;
+    } else if ([themeName isEqualToString: NSLocalizedString(@"Gray", @"Theme Name Purple")]) {
+        return ThemeColorTypeGray;
+    } else {
+        return ThemeColorTypeDefault;
     }
-    // Default fallback
-    return ThemeColorTypeOrange;
 }
 
 
@@ -75,7 +100,7 @@ static NSString *const selectedThemeKey = @"selectedTheme";
 - (NSArray <NSString *> *) allThemeNames {
     NSMutableArray *colorNames = [NSMutableArray array];
     
-    for (NSInteger i = ThemeColorTypeRed; i <= ThemeColorTypePurple; i++) {
+    for (NSInteger i = ThemeColorTypeRed; i <= ThemeColorTypeGray; i++) {
         [colorNames addObject: [self nameForTheme: i]];
     }
     return [colorNames copy];

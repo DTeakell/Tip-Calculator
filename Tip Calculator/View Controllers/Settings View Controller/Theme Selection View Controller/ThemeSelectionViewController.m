@@ -44,12 +44,6 @@
     
 }
 
--(void) applyTheme: (NSNotification *) notification {
-    
-}
-
-
-
 #pragma mark - Life Cycle Methods
 
 - (void)loadView {
@@ -60,8 +54,6 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(applyTheme:) name: @"ThemeDidChangeNotification" object: nil];
     [self setupTableViewUI];
     [self setupThemeSelectionViewController];
 }
@@ -72,9 +64,16 @@
     
     ColorCell *cell = [tableView dequeueReusableCellWithIdentifier: @"ColorCell" forIndexPath: indexPath];
     
+    
     NSArray *colors = [[SettingsManager sharedManager] allThemeNames];
     NSString *colorName = colors[indexPath.row];
+    ThemeColorType cellTheme = [[SettingsManager sharedManager] themeFromString: colorName];
+    UIColor *color = [[SettingsManager sharedManager] colorForTheme: cellTheme];
+    
+    
     cell.colorLabel.text = colorName;
+    cell.colorCircle.tintColor = color;
+    
     
     return cell;
     
@@ -107,7 +106,6 @@
 
 #pragma mark - Dealloc
 - (void) dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver: self];
     [_themeSelectionTableView release];
     [super dealloc];
 }

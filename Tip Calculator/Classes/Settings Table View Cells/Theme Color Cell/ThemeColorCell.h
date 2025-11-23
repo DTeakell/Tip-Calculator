@@ -11,6 +11,7 @@
 @interface ThemeColorCell : UITableViewCell
 
 @property (nonatomic, retain) UILabel *themeColorLabel;
+@property (nonatomic, retain) UILabel *selectedColorLabel;
 
 @end
 

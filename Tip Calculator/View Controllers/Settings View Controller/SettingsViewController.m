@@ -54,14 +54,12 @@
 /// Sets up the buttons in the navigation controller
 - (void) setupNavigationBarButtons {
     
-    UIColor *color = [[SettingsManager sharedManager] colorForTheme: [SettingsManager sharedManager].currentTheme];
-    
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone  target: self action: @selector(doneButtonPressed)];
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemCancel target: self action: @selector(cancelButtonPressed)];
     
     self.navigationItem.leftBarButtonItem = cancelButton;
     self.navigationItem.rightBarButtonItem = doneButton;
-    self.navigationItem.rightBarButtonItem.tintColor = color;
+    self.navigationItem.rightBarButtonItem.tintColor = [[SettingsManager sharedManager] colorForTheme: [SettingsManager sharedManager].currentTheme];
     
     [cancelButton release];
     [doneButton release];
@@ -99,9 +97,8 @@
 
 - (void) applyTheme: (NSNotification *) notification {
     ThemeColorType theme = [[SettingsManager sharedManager] currentTheme];
-    UIColor *color = [[SettingsManager sharedManager] colorForTheme: theme];
-    
-    self.navigationItem.rightBarButtonItem.tintColor = color;
+    self.navigationItem.rightBarButtonItem.tintColor = [[SettingsManager sharedManager] colorForTheme: theme];
+    self.selectedThemeLabel.text = [[SettingsManager sharedManager] nameForTheme: theme];
 }
 
 
@@ -142,6 +139,7 @@
     if (indexPath.section == 0 && indexPath.row == 0) {
         ThemeColorCell *cell = [tableView dequeueReusableCellWithIdentifier: @"ThemeColorCell"];
         self.themeColorLabel = cell.themeColorLabel;
+        cell.selectedColorLabel = self.selectedThemeLabel;
         return cell;
     }
     

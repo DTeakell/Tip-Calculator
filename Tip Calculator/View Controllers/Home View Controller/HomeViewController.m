@@ -204,7 +204,6 @@
     // Set up TableView cells
     if (!cell) {
         cell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: cellID] autorelease];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     } else {
         while ([cell.contentView.subviews count] > 0) {
             [[[cell.contentView subviews] lastObject] removeFromSuperview];
@@ -218,6 +217,7 @@
         self.checkAmountTextField = cell.checkAmountTextField;
         self.checkAmountTextField.enabled = YES;
         [self.checkAmountTextField addTarget: self action: @selector(inputChanged) forControlEvents: UIControlEventEditingChanged];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell applyTheme];
         return cell;
     }
@@ -230,6 +230,7 @@
         self.tipPercentageSelector.selectedSegmentIndex = self.selectedTipIndex;
         [self.tipPercentageSelector addTarget: self action: @selector(segmentChanged:) forControlEvents: UIControlEventValueChanged];
         [cell applyTheme];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
     
@@ -240,7 +241,7 @@
         self.customTipPercentageTextField = cell.customTipPercentageTextField;
         
         [self.customTipPercentageTextField addTarget: self action: @selector(customTipChanged) forControlEvents: UIControlEventEditingChanged];
-        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell applyTheme];
         
         return cell;
@@ -252,6 +253,7 @@
         PersonSelectionCell *cell = [tableView dequeueReusableCellWithIdentifier: @"PersonSelectionCell"];
         self.numberOfPeopleTextField = cell.numberOfPeopleTextField;
         [self.numberOfPeopleTextField addTarget: self action: @selector(inputChanged) forControlEvents: UIControlEventEditingChanged];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell applyTheme];
         return cell;
     }
@@ -261,6 +263,7 @@
     else if (indexPath.section == 3 || (self.isCustomTipEnabled && indexPath.section == 4)) {
         TipAmountCell *cell = [tableView dequeueReusableCellWithIdentifier: @"TipAmountCell"];
         self.tipAmountLabel = cell.tipAmountLabel;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
         
         
@@ -269,6 +272,7 @@
         TotalAmountCell *cell = [tableView dequeueReusableCellWithIdentifier: @"TotalAmountCell"];
         self.checkTotalLabel = cell.checkTotalLabel;
         [cell applyTheme];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
     
