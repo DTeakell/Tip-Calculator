@@ -25,3 +25,6 @@ A basic tip calculator app that lets a user input their bill and choose their ti
 - Translating Swift to Objective-C
 - SceneDelegate
 - Runtime Availability Checks
+- NSUserDefaults
+- Objective-C Singletons
+- NSNotificationCenter
