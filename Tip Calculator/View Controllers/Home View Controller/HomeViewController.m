@@ -55,7 +55,7 @@
         [clearScreenButtonItem release];
         self.clearScreenButton.tintColor = color;
     } else {
-        UIBarButtonItem *clearScreenButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage systemImageNamed: @"arrow.counterclockwise"] style: UIBarButtonItemStylePlain target: self action: @selector(clearScreenTapped)];
+        UIBarButtonItem *clearScreenButtonItem = [[UIBarButtonItem alloc] initWithTitle: NSLocalizedString(@"Clear", @"Clear Screen Button") style: UIBarButtonItemStylePlain target: self action: @selector(clearScreenTapped)];
         self.clearScreenButton = clearScreenButtonItem;
         [clearScreenButtonItem release];
         self.clearScreenButton.tintColor = color;
@@ -71,6 +71,7 @@
         self.settingsButton = settingsButtonItem;
         [settingsButtonItem release];
         self.settingsButton.tintColor = [UIColor labelColor];
+        self.settingsButton.style = UIBarButtonItemStylePlain;
     }
     
     
@@ -197,19 +198,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *cellID = @"CellID";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: cellID];
-    
-    // Set up TableView cells
-    if (!cell) {
-        cell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: cellID] autorelease];
-    } else {
-        while ([cell.contentView.subviews count] > 0) {
-            [[[cell.contentView subviews] lastObject] removeFromSuperview];
-        }
-    }
-    
     
     // Check Amount Text Field
     if (indexPath.section == 0) {
@@ -276,8 +264,7 @@
         return cell;
     }
     
-    return cell;
-    
+    return nil;
 }
 
 // Customize headers

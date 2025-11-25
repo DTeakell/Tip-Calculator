@@ -56,10 +56,15 @@
     
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone  target: self action: @selector(doneButtonPressed)];
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemCancel target: self action: @selector(cancelButtonPressed)];
+    UIColor *color = [[SettingsManager sharedManager] colorForTheme: [SettingsManager sharedManager].currentTheme];
     
     self.navigationItem.leftBarButtonItem = cancelButton;
+    if (@available(iOS 26.0, *)) {}
+    else {
+        self.navigationItem.leftBarButtonItem.tintColor = color;
+    }
     self.navigationItem.rightBarButtonItem = doneButton;
-    self.navigationItem.rightBarButtonItem.tintColor = [[SettingsManager sharedManager] colorForTheme: [SettingsManager sharedManager].currentTheme];
+    self.navigationItem.rightBarButtonItem.tintColor = color;
     
     [cancelButton release];
     [doneButton release];
@@ -99,6 +104,11 @@
     ThemeColorType theme = [[SettingsManager sharedManager] currentTheme];
     self.navigationItem.rightBarButtonItem.tintColor = [[SettingsManager sharedManager] colorForTheme: theme];
     self.selectedThemeLabel.text = [[SettingsManager sharedManager] nameForTheme: theme];
+    
+    if (@available(iOS 26.0, *)) {}
+    else {
+        self.navigationItem.leftBarButtonItem.tintColor = [[SettingsManager sharedManager] colorForTheme: theme];
+    }
 }
 
 
@@ -122,24 +132,12 @@
 
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    static NSString *cellID = @"CellID";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: cellID];
-    
-    if (!cell) {
-        cell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: cellID] autorelease];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    } else {
-        while ([cell.contentView.subviews count] > 0) {
-            [[[cell.contentView subviews] lastObject] removeFromSuperview];
-        }
-    }
     
     //MARK: Theme Color Cell
     if (indexPath.section == 0 && indexPath.row == 0) {
         ThemeColorCell *cell = [tableView dequeueReusableCellWithIdentifier: @"ThemeColorCell"];
         self.themeColorLabel = cell.themeColorLabel;
-        cell.selectedColorLabel = self.selectedThemeLabel;
+        self.selectedThemeLabel = cell.selectedColorLabel;
         return cell;
     }
     
@@ -165,9 +163,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
-    
-    
-    return cell;
+    return nil;
 }
 
 

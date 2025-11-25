@@ -147,8 +147,7 @@
       }
     },
     "Clear" : {
-      "comment" : "Clear Button",
-      "extractionState" : "stale",
+      "comment" : "Clear Screen Button",
       "localizations" : {
         "ar" : {
           "stringUnit" : {

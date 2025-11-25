@@ -12,6 +12,7 @@
 
 @property (nonatomic, retain) UITableView *themeSelectionTableView;
 
+- (void) applyTheme API_AVAILABLE(ios(17.618.6));
 
 @end
 
