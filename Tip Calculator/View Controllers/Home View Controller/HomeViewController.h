@@ -15,6 +15,12 @@
 @property (nonatomic, retain) UISelectionFeedbackGenerator *tipPercentageFeedbackGenerator;
 @property (nonatomic, retain) NSNumberFormatter *numberFormatter;
 
+// Data Properties
+@property (nonatomic, assign) NSString *checkAmountValue;
+@property (nonatomic, assign) NSString *customTipPercentageValue;
+@property (nonatomic, assign) NSString *numberOfPeopleValue;
+
+
 // UI Properties
 @property (nonatomic, strong) UIViewController *settingsViewController;
 @property (nonatomic, retain) UITableView *homeTableView;
@@ -33,6 +39,7 @@
 // Index Property and Custom Tip Boolean
 @property (nonatomic, assign) NSInteger selectedTipIndex;
 @property (nonatomic, assign) BOOL isCustomTipEnabled;
+
 
 
 @end

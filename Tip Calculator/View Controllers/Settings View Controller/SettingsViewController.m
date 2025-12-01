@@ -108,6 +108,7 @@
     if (@available(iOS 26.0, *)) {}
     else {
         self.navigationItem.leftBarButtonItem.tintColor = [[SettingsManager sharedManager] colorForTheme: theme];
+        self.navigationController.navigationBar.tintColor = [[SettingsManager sharedManager] colorForTheme: theme];
     }
 }
 

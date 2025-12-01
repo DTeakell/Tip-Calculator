@@ -15,6 +15,7 @@
 
 - (void) setupThemeSelectionViewController {
     self.view.backgroundColor = [UIColor systemGroupedBackgroundColor];
+    self.navigationController.navigationBar.tintColor = [[SettingsManager sharedManager] colorForTheme: [SettingsManager sharedManager].currentTheme];
     self.title = @"Theme Color";
 }
 
@@ -60,14 +61,13 @@
         [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(applyTheme:) name: @"ThemeDidChangeNotification" object: nil];
     }
     
-    
     [self setupTableViewUI];
     [self setupThemeSelectionViewController];
 }
 
 - (void) applyTheme: (NSNotification *) notification {
     ThemeColorType theme = [[SettingsManager sharedManager] currentTheme];
-    self.navigationItem.leftBarButtonItem.tintColor = [[SettingsManager sharedManager] colorForTheme: theme];
+    self.navigationController.navigationItem.backBarButtonItem.tintColor = [[SettingsManager sharedManager] colorForTheme: theme];
 }
 
 #pragma mark - Table View Methods
@@ -120,9 +120,6 @@
 - (void) dealloc {
     [_themeSelectionTableView release];
     [super dealloc];
-}
-
-- (void)applyTheme __attribute__((availability(ios, introduced=17.6))) {
 }
 
 @end

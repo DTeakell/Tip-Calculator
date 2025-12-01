@@ -18,7 +18,7 @@
 #import "TotalAmountCell.h"
 #import "SettingsManager.h"
 
-@interface HomeViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface HomeViewController () <UITableViewDelegate, UITableViewDataSource, UITraitChangeObservable>
 
 @end
 
@@ -203,6 +203,7 @@
     if (indexPath.section == 0) {
         CheckAmountCell *cell = [tableView dequeueReusableCellWithIdentifier: @"CheckAmountCell"];
         self.checkAmountTextField = cell.checkAmountTextField;
+        self.checkAmountValue = cell.checkAmountTextField.text;
         self.checkAmountTextField.enabled = YES;
         [self.checkAmountTextField addTarget: self action: @selector(inputChanged) forControlEvents: UIControlEventEditingChanged];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -227,7 +228,7 @@
     else if (self.isCustomTipEnabled && indexPath.section == 2) {
         CustomTipPercentageCell *cell = [tableView dequeueReusableCellWithIdentifier: @"CustomTipPercentageCell"];
         self.customTipPercentageTextField = cell.customTipPercentageTextField;
-        
+        self.customTipPercentageValue = cell.customTipPercentageTextField.text;
         [self.customTipPercentageTextField addTarget: self action: @selector(customTipChanged) forControlEvents: UIControlEventEditingChanged];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell applyTheme];
@@ -240,6 +241,7 @@
     else if (indexPath.section == 2 || (self.isCustomTipEnabled && indexPath.section == 3 )) {
         PersonSelectionCell *cell = [tableView dequeueReusableCellWithIdentifier: @"PersonSelectionCell"];
         self.numberOfPeopleTextField = cell.numberOfPeopleTextField;
+        self.numberOfPeopleValue = cell.numberOfPeopleTextField.text;
         [self.numberOfPeopleTextField addTarget: self action: @selector(inputChanged) forControlEvents: UIControlEventEditingChanged];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell applyTheme];
@@ -308,7 +310,16 @@
     self.customTipPercentageTextField.tintColor = color;
     self.numberOfPeopleTextField.tintColor = color;
     
-    [self.homeTableView reloadData];
+    // Go through and apply the theme to all cells
+    for (UITableViewCell *cell in self.homeTableView.visibleCells) {
+        if ([cell respondsToSelector: @selector(applyTheme)]) {
+            [(id) cell applyTheme];
+        }
+    }
+    
+    [self.homeTableView beginUpdates];
+    [self.homeTableView endUpdates];
+    
 }
 
 
@@ -350,6 +361,7 @@
 - (void) dismissKeyboard {
     [self.view endEditing: YES];
 }
+
 
 /// Updates the tip value based on the selected tip percentage segment
 - (void) segmentChanged: (UISegmentedControl *)sender {
@@ -439,7 +451,6 @@
         self.checkTotalLabel.accessibilityValue = [CurrencyFormatter localizedCurrencyStringFromDouble: total];
     }
 }
-
 
 #pragma mark - Dealloc
 
