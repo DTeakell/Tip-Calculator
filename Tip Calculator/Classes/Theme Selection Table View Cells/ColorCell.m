@@ -23,28 +23,41 @@
 
 
 - (void) setupView {
-    //TODO: Color Circle Image
+    
+    // Circle Image
     UIImageView *circle = [[UIImageView alloc] initWithImage: [UIImage systemImageNamed: @"circle.fill"]];
     
     // Make config for the circle image
-    UIImageSymbolConfiguration *colorConfiguration = [UIImageSymbolConfiguration configurationPreferringMulticolor];
+    UIImageSymbolConfiguration *multicolorConfiguration = [UIImageSymbolConfiguration configurationPreferringMulticolor];
     UIImageSymbolConfiguration *sizeConfiguration = [UIImageSymbolConfiguration configurationWithScale: UIImageSymbolScaleSmall];
+    UIImageSymbolConfiguration *colorCircleConfiguration = [multicolorConfiguration configurationByApplyingConfiguration: sizeConfiguration];
+    circle.preferredSymbolConfiguration = colorCircleConfiguration;
     
-    UIImageSymbolConfiguration *configuration = [colorConfiguration configurationByApplyingConfiguration: sizeConfiguration];
-    
-    circle.preferredSymbolConfiguration = configuration;
     circle.translatesAutoresizingMaskIntoConstraints = NO;
     self.colorCircle = circle;
     [circle release];
     
-    //MARK: Theme Color Cell Label
+    // Theme Color Label
     self.colorLabel = [[[UILabel alloc] init] autorelease];
     self.colorLabel.font = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
     self.colorLabel.numberOfLines = 0;
     self.colorLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.colorLabel.adjustsFontForContentSizeCategory = YES;
+    
+    
+    // TODO: Checkmark
+    UIImageView *checkmark = [[UIImageView alloc] initWithImage: [UIImage systemImageNamed: @"checkmark"]];
+    UIImageSymbolConfiguration *monochromeConfiguration = [UIImageSymbolConfiguration configurationPreferringMonochrome];
+    UIImageSymbolConfiguration *checkmarkConfiguration = [monochromeConfiguration configurationByApplyingConfiguration: sizeConfiguration];
+    
+    checkmark.preferredSymbolConfiguration = checkmarkConfiguration;
+    checkmark.translatesAutoresizingMaskIntoConstraints = NO;
+    self.checkmark = checkmark;
+    [checkmark release];
+    
     [self.contentView addSubview: self.colorCircle];
     [self.contentView addSubview: self.colorLabel];
+    [self.contentView addSubview: self.checkmark];
 }
 
 - (void) setConstraints {
@@ -57,12 +70,16 @@
         [self.colorLabel.bottomAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.bottomAnchor],
         
         [self.colorCircle.firstBaselineAnchor constraintEqualToAnchor: self.colorLabel.firstBaselineAnchor],
-        [self.colorCircle.leadingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.leadingAnchor]
+        [self.colorCircle.leadingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.leadingAnchor],
+        
+        [self.checkmark.trailingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.trailingAnchor],
+        [self.checkmark.centerYAnchor constraintEqualToAnchor: self.contentView.centerYAnchor]
 
     ]];
 }
 
 - (void) dealloc {
+    [_checkmark release];
     [_colorCircle release];
     [_colorLabel release];
     [super dealloc];

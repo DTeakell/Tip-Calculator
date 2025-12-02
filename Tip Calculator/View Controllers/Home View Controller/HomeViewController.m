@@ -18,7 +18,7 @@
 #import "TotalAmountCell.h"
 #import "SettingsManager.h"
 
-@interface HomeViewController () <UITableViewDelegate, UITableViewDataSource, UITraitChangeObservable>
+@interface HomeViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
 

@@ -86,6 +86,12 @@
     cell.colorLabel.text = colorName;
     cell.colorCircle.tintColor = color;
     
+    if (cellTheme == [SettingsManager sharedManager].currentTheme) {
+        cell.checkmark.tintColor = color;
+    } else {
+        cell.checkmark.tintColor = [UIColor clearColor];
+    }
+    
     
     return cell;
     
@@ -105,12 +111,29 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    [tableView deselectRowAtIndexPath: indexPath animated: YES];
+    ColorCell *cell = [tableView cellForRowAtIndexPath: indexPath];
+
     NSArray *colors = [[SettingsManager sharedManager] allThemeNames];
     NSString *colorName = colors[indexPath.row];
+    
+    // Get previous color
+    ThemeColorType previousTheme = [[SettingsManager sharedManager] currentTheme];
+    NSString *previousColorName = [[SettingsManager sharedManager] nameForTheme: previousTheme];
+    NSInteger previousRow = [colors indexOfObject: previousColorName];
+    
+    if (previousRow != NSNotFound) {
+        NSIndexPath *previousIndexPath = [NSIndexPath indexPathForRow: previousRow inSection: 0];
+        ColorCell *previousCell = [self.themeSelectionTableView cellForRowAtIndexPath: previousIndexPath];
+        previousCell.checkmark.tintColor = [UIColor clearColor];
+    }
+    
     
     ThemeColorType selectedTheme = [[SettingsManager sharedManager] themeFromString: colorName];
     
     [SettingsManager sharedManager].currentTheme = selectedTheme;
+    
+    cell.checkmark.tintColor = [[SettingsManager sharedManager] colorForTheme: selectedTheme];
     
     [[SettingsManager sharedManager] saveCurrentTheme];
 }

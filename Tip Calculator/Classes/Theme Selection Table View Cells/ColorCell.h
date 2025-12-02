@@ -12,6 +12,6 @@
 
 @property (nonatomic, retain) UIImageView *colorCircle;
 @property (nonatomic, retain) UILabel *colorLabel;
-@property (nonatomic, assign) BOOL colorIsSelected;
+@property (nonatomic, retain) UIImageView *checkmark;
 
 @end
