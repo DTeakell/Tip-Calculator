@@ -50,7 +50,8 @@
     // iOS 26 Liquid Glass style
     // Sets up 'Clear' button
     if (@available(iOS 26.0, *)) {
-        UIBarButtonItem *clearScreenButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage systemImageNamed: @"arrow.counterclockwise"] style: UIBarButtonItemStyleProminent target: self action: @selector(clearScreenTapped)];
+        UIBarButtonItem *clearScreenButtonItem = [[UIBarButtonItem alloc] initWithTitle: NSLocalizedString(@"Clear", @"Clear Screen Button") style: UIBarButtonItemStyleProminent target: self action: @selector(clearScreenTapped)];
+        
         self.clearScreenButton = clearScreenButtonItem;
         [clearScreenButtonItem release];
         self.clearScreenButton.tintColor = color;
