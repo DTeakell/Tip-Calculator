@@ -5,6 +5,7 @@
 //  Created by Dillon Teakell on 5/20/25.
 //
 
+#import <Foundation/Foundation.h>
 #import "HomeViewController.h"
 #import "SettingsViewController.h"
 #import "TipCalculator.h"
@@ -15,6 +16,7 @@
 #import "TipAmountCell.h"
 #import "CurrencyFormatter.h"
 #import "TotalAmountCell.h"
+#import "SettingsManager.h"
 
 @interface HomeViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -42,17 +44,21 @@
 /// Sets up the buttons on the navigation bar.
 - (void) setupNavigationBarButtons {
     
-    // iOS 26 Liquid Glass style
-    // Sets up 'Clear' button
+    // Get color from Settings Manager
+    UIColor *color = [[SettingsManager sharedManager] colorForTheme: [SettingsManager sharedManager].currentTheme];
+    
+    // Sets up 'Clear' Button
     if (@available(iOS 26.0, *)) {
-        UIBarButtonItem *clearScreenButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage systemImageNamed: @"arrow.counterclockwise"] style: UIBarButtonItemStyleProminent target: self action: @selector(clearScreenTapped)];
+        UIBarButtonItem *clearScreenButtonItem = [[UIBarButtonItem alloc] initWithTitle: NSLocalizedString(@"Clear", @"Clear Screen Button") style: UIBarButtonItemStyleProminent target: self action: @selector(clearScreenTapped)];
+        
         self.clearScreenButton = clearScreenButtonItem;
         [clearScreenButtonItem release];
+        self.clearScreenButton.tintColor = color;
     } else {
-        UIBarButtonItem *clearScreenButtonItem = [[UIBarButtonItem alloc] initWithImage: [UIImage systemImageNamed: @"arrow.counterclockwise"] style: UIBarButtonItemStylePlain target: self action: @selector(clearScreenTapped)];
+        UIBarButtonItem *clearScreenButtonItem = [[UIBarButtonItem alloc] initWithTitle: NSLocalizedString(@"Clear", @"Clear Screen Button") style: UIBarButtonItemStylePlain target: self action: @selector(clearScreenTapped)];
         self.clearScreenButton = clearScreenButtonItem;
         [clearScreenButtonItem release];
-        self.clearScreenButton.tintColor = [UIColor colorNamed: @"AccentColor"];
+        self.clearScreenButton.tintColor = color;
     }
     
     // Sets up 'Settings' button
@@ -65,8 +71,8 @@
         self.settingsButton = settingsButtonItem;
         [settingsButtonItem release];
         self.settingsButton.tintColor = [UIColor labelColor];
+        self.settingsButton.style = UIBarButtonItemStylePlain;
     }
-    
     
     self.navigationItem.rightBarButtonItem = self.clearScreenButton;
     self.navigationItem.leftBarButtonItem = self.settingsButton;
@@ -157,6 +163,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(applyTheme:) name: @"ThemeDidChangeNotification" object: nil];
+    
     [self setupTipCalculator];
     
     [self setupNumberFormatter];
@@ -189,27 +197,16 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *cellID = @"CellID";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: cellID];
-    
-    // Set up TableView cells
-    if (!cell) {
-        cell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: cellID] autorelease];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    } else {
-        while ([cell.contentView.subviews count] > 0) {
-            [[[cell.contentView subviews] lastObject] removeFromSuperview];
-        }
-    }
-    
     
     // Check Amount Text Field
     if (indexPath.section == 0) {
         CheckAmountCell *cell = [tableView dequeueReusableCellWithIdentifier: @"CheckAmountCell"];
         self.checkAmountTextField = cell.checkAmountTextField;
+        self.checkAmountValue = cell.checkAmountTextField.text;
         self.checkAmountTextField.enabled = YES;
         [self.checkAmountTextField addTarget: self action: @selector(inputChanged) forControlEvents: UIControlEventEditingChanged];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        [cell applyTheme];
         return cell;
     }
     
@@ -220,6 +217,8 @@
         self.tipPercentageSelector = cell.tipPercentageSelector;
         self.tipPercentageSelector.selectedSegmentIndex = self.selectedTipIndex;
         [self.tipPercentageSelector addTarget: self action: @selector(segmentChanged:) forControlEvents: UIControlEventValueChanged];
+        [cell applyTheme];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
     
@@ -228,8 +227,10 @@
     else if (self.isCustomTipEnabled && indexPath.section == 2) {
         CustomTipPercentageCell *cell = [tableView dequeueReusableCellWithIdentifier: @"CustomTipPercentageCell"];
         self.customTipPercentageTextField = cell.customTipPercentageTextField;
-        
+        self.customTipPercentageValue = cell.customTipPercentageTextField.text;
         [self.customTipPercentageTextField addTarget: self action: @selector(customTipChanged) forControlEvents: UIControlEventEditingChanged];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        [cell applyTheme];
         
         return cell;
     }
@@ -239,7 +240,10 @@
     else if (indexPath.section == 2 || (self.isCustomTipEnabled && indexPath.section == 3 )) {
         PersonSelectionCell *cell = [tableView dequeueReusableCellWithIdentifier: @"PersonSelectionCell"];
         self.numberOfPeopleTextField = cell.numberOfPeopleTextField;
+        self.numberOfPeopleValue = cell.numberOfPeopleTextField.text;
         [self.numberOfPeopleTextField addTarget: self action: @selector(inputChanged) forControlEvents: UIControlEventEditingChanged];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        [cell applyTheme];
         return cell;
     }
     
@@ -248,6 +252,7 @@
     else if (indexPath.section == 3 || (self.isCustomTipEnabled && indexPath.section == 4)) {
         TipAmountCell *cell = [tableView dequeueReusableCellWithIdentifier: @"TipAmountCell"];
         self.tipAmountLabel = cell.tipAmountLabel;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
         
         
@@ -255,11 +260,13 @@
     } else if (indexPath.section == 4 || (self.isCustomTipEnabled && indexPath.section == 5)) {
         TotalAmountCell *cell = [tableView dequeueReusableCellWithIdentifier: @"TotalAmountCell"];
         self.checkTotalLabel = cell.checkTotalLabel;
+        self.roundedCheckTotal = cell.roundedTotalLabel;
+        [cell applyTheme];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
     
-    return cell;
-    
+    return nil;
 }
 
 // Customize headers
@@ -292,10 +299,32 @@
     [self.navigationController presentViewController: settingsNavigationController animated: YES completion: nil];
 }
 
+- (void) applyTheme: (NSNotification *) notification {
+    ThemeColorType theme = [[SettingsManager sharedManager] currentTheme];
+    UIColor *color = [[SettingsManager sharedManager] colorForTheme: theme];
+    
+    self.navigationItem.rightBarButtonItem.tintColor = color;
+    self.checkAmountTextField.tintColor = color;
+    self.checkTotalLabel.tintColor = color;
+    self.tipPercentageSelector.tintColor = color;
+    self.customTipPercentageTextField.tintColor = color;
+    self.numberOfPeopleTextField.tintColor = color;
+    
+    // Go through and apply the theme to all cells
+    for (UITableViewCell *cell in self.homeTableView.visibleCells) {
+        if ([cell respondsToSelector: @selector(applyTheme)]) {
+            [(id) cell applyTheme];
+        }
+    }
+    
+    [self.homeTableView beginUpdates];
+    [self.homeTableView endUpdates];
+    
+}
+
 
 /// Clears inputs and resets calculated labels
 - (void) clearScreenTapped {
-    
     [self.tipCalculator reset];
     
     // Clear text fields
@@ -332,6 +361,7 @@
 - (void) dismissKeyboard {
     [self.view endEditing: YES];
 }
+
 
 /// Updates the tip value based on the selected tip percentage segment
 - (void) segmentChanged: (UISegmentedControl *)sender {
@@ -410,9 +440,11 @@
     } else {
         double tip = [self.tipCalculator calculateTip];
         double total = [self.tipCalculator calculateTotal];
+        double roundedTotal = [self.tipCalculator roundUp: total];
         
         self.tipAmountLabel.text = [CurrencyFormatter localizedCurrencyStringFromDouble: tip];
         self.checkTotalLabel.text = [CurrencyFormatter localizedCurrencyStringFromDouble: total];
+        self.roundedCheckTotal.text = [CurrencyFormatter localizedCurrencyStringFromDouble: roundedTotal];
         
         self.tipAmountLabel.accessibilityLabel = NSLocalizedString(@"Tip Amount", @"Accessibility Label for Tip");
         self.tipAmountLabel.accessibilityValue = [CurrencyFormatter localizedCurrencyStringFromDouble: tip];
@@ -422,10 +454,10 @@
     }
 }
 
-
 #pragma mark - Dealloc
 
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver: self];
     [_homeTableView release];
     [_checkAmountTextField release];
     [_tipPercentageSelector release];

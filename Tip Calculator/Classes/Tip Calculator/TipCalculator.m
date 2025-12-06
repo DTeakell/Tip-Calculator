@@ -15,18 +15,20 @@
 }
 
 - (double) calculateTotal {
-    double total = ((self.checkAmount + [self calculateTip]));
-    return total;
+    return ((self.checkAmount + [self calculateTip]));
 }
 
 - (double) calculateTipWithMultiplePeople {
-    double tipSplit = ((self.checkAmount * (self.tipPercentage / 100)) / self.numberOfPeopleOnCheck);
-    return tipSplit;
+    return ((self.checkAmount * (self.tipPercentage / 100)) / self.numberOfPeopleOnCheck);
 }
 
 - (double) calculateTotalWithMultiplePeople {
-    double totalSplit = ((self.checkAmount + [self calculateTip]) / self.numberOfPeopleOnCheck);
-    return totalSplit;
+    return ((self.checkAmount + [self calculateTip]) / self.numberOfPeopleOnCheck);
+}
+
+
+- (double) roundUp: (double) x {
+    return ceil(x);
 }
 
 - (void) reset {

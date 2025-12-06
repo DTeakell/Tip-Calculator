@@ -8,6 +8,7 @@
 #import "SceneDelegate.h"
 #import <UIKit/UIKit.h>
 #import "HomeViewController.h"
+#import "SettingsManager.h"
 
 @implementation SceneDelegate
 
@@ -27,8 +28,10 @@
     HomeViewController *homeViewController = [[[HomeViewController alloc] init] autorelease];
     UINavigationController *navigationController = [[[UINavigationController alloc] initWithRootViewController: homeViewController] autorelease];
     
+    
     // Assign root to the navigation controller
     self.window.rootViewController = navigationController;
+    
     [self.window makeKeyAndVisible];
 }
 

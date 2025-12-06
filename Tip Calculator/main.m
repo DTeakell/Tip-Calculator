@@ -1,6 +1,6 @@
 //
 //  main.m
-//  Tip Calculator
+//  Tip
 //
 //  Created by Dillon Teakell on 5/20/25.
 //

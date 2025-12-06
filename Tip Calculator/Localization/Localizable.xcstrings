@@ -1,9 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "Accent Color" : {
-      "comment" : "Accent Color Label"
-    },
     "Any" : {
       "comment" : "Custom Tip Percentage",
       "localizations" : {
@@ -74,6 +71,9 @@
           }
         }
       }
+    },
+    "Blue" : {
+      "comment" : "Theme Name Purple"
     },
     "Check Amount" : {
       "comment" : "Check Amount Title",
@@ -147,8 +147,7 @@
       }
     },
     "Clear" : {
-      "comment" : "Clear Button",
-      "extractionState" : "stale",
+      "comment" : "Clear Screen Button",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -288,6 +287,9 @@
           }
         }
       }
+    },
+    "Cyan" : {
+      "comment" : "Theme Name Purple"
     },
     "Enter Check Amount" : {
       "comment" : "Check Amount Text Field Placeholder",
@@ -502,6 +504,18 @@
         }
       }
     },
+    "Gray" : {
+      "comment" : "Theme Name Purple"
+    },
+    "Green" : {
+      "comment" : "Theme Name Pink"
+    },
+    "Indigo" : {
+      "comment" : "Theme Name Purple"
+    },
+    "Mint" : {
+      "comment" : "Theme Name Purple"
+    },
     "Number of People" : {
       "comment" : "Number of People on Check",
       "localizations" : {
@@ -644,6 +658,9 @@
         }
       }
     },
+    "Orange" : {
+      "comment" : "Theme Name Blue"
+    },
     "per person" : {
       "comment" : "Label for amount per person",
       "localizations" : {
@@ -715,8 +732,23 @@
         }
       }
     },
+    "Pink" : {
+      "comment" : "Theme Name Purple"
+    },
+    "Purple" : {
+      "comment" : "Theme Name Purple"
+    },
+    "Red" : {
+      "comment" : "Theme Name Red"
+    },
     "Settings" : {
       "comment" : "Settings Button\nSettings Title"
+    },
+    "Teal" : {
+      "comment" : "Theme Name Purple"
+    },
+    "Theme Color" : {
+      "comment" : "Theme Color Title"
     },
     "Tip Amount" : {
       "comment" : "Accessibility Label for Tip\nTip Amount Title",
@@ -1001,6 +1033,9 @@
           }
         }
       }
+    },
+    "Yellow" : {
+      "comment" : "Theme Name Cyan"
     }
   },
   "version" : "1.1"

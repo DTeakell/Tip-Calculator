@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, retain) UISegmentedControl *tipPercentageSelector;
 @property (nonatomic, assign) NSInteger selectedTipIndex;
 
+- (void) applyTheme;
+
 @end
 
 NS_ASSUME_NONNULL_END

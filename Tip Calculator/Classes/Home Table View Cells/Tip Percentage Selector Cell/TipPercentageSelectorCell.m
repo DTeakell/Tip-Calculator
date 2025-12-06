@@ -6,6 +6,7 @@
 //
 
 #import "TipPercentageSelectorCell.h"
+#import "SettingsManager.h"
 
 @implementation TipPercentageSelectorCell
 
@@ -20,7 +21,15 @@
     return self;
 }
 
+- (void)applyTheme {
+    ThemeColorType theme = [SettingsManager sharedManager].currentTheme;
+    UIColor *color = [[SettingsManager sharedManager] colorForTheme:theme];
+
+    self.tipPercentageSelector.selectedSegmentTintColor = color;
+}
+
 - (void) setupView {
+    
     self.tipPercentageSelector = [[[UISegmentedControl alloc] initWithItems:@[@"0%", @"10%", @"15%", @"20%",
                                                                               NSLocalizedString(@"Any", @"Custom Tip Percentage")]] autorelease];
     self.tipPercentageSelector.translatesAutoresizingMaskIntoConstraints = NO;
@@ -29,17 +38,15 @@
     self.tipPercentageSelector.accessibilityLabel = @"Tip Percentage selector";
     self.tipPercentageSelector.accessibilityTraits = UIAccessibilityTraitAdjustable;
     
-    self.tipPercentageSelector.selectedSegmentTintColor = [UIColor colorNamed: @"AccentColor"];
-    
     [self.contentView addSubview: self.tipPercentageSelector];
 }
 
 - (void) setConstraints {
     [NSLayoutConstraint activateConstraints: @[
-        [self.tipPercentageSelector.leadingAnchor constraintEqualToAnchor: self.contentView.leadingAnchor constant: 20],
-        [self.tipPercentageSelector.trailingAnchor constraintEqualToAnchor: self.contentView.trailingAnchor constant: -20],
-        [self.tipPercentageSelector.topAnchor constraintEqualToAnchor: self.contentView.topAnchor constant: 15],
-        [self.tipPercentageSelector.bottomAnchor constraintEqualToAnchor: self.contentView.bottomAnchor constant: -15]
+        [self.tipPercentageSelector.leadingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.leadingAnchor],
+        [self.tipPercentageSelector.trailingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.trailingAnchor],
+        [self.tipPercentageSelector.topAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.topAnchor],
+        [self.tipPercentageSelector.bottomAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.bottomAnchor]
     ]];
 }
 

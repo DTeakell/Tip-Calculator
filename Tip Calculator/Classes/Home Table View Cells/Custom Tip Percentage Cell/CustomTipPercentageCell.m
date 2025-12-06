@@ -6,6 +6,7 @@
 //
 
 #import "CustomTipPercentageCell.h"
+#import "SettingsManager.h"
 
 @implementation CustomTipPercentageCell
 
@@ -19,8 +20,15 @@
     return self;
 }
 
+- (void)applyTheme {
+    ThemeColorType theme = [SettingsManager sharedManager].currentTheme;
+    UIColor *color = [[SettingsManager sharedManager] colorForTheme:theme];
+
+    self.customTipPercentageTextField.tintColor = color;
+}
 
 - (void) setupView {
+    
     self.customTipPercentageTextField = [[[UITextField alloc] init] autorelease];
     self.customTipPercentageTextField.translatesAutoresizingMaskIntoConstraints = NO;
     self.customTipPercentageTextField.font = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
@@ -36,7 +44,6 @@
     
     self.customTipPercentageTextField.placeholder = NSLocalizedString(@"Enter Custom Tip Percentage", @"Custom tip percentage text field");
     self.customTipPercentageTextField.keyboardType = UIKeyboardTypeNumberPad;
-    self.customTipPercentageTextField.tintColor = [UIColor colorNamed: @"AccentColor"];
     
     self.customTipPercentageTextField.accessibilityLabel = @"Custom tip percentage field";
     self.customTipPercentageTextField.accessibilityTraits = UIAccessibilityTraitKeyboardKey;
@@ -46,10 +53,10 @@
 
 - (void) setConstraints {
     [NSLayoutConstraint activateConstraints: @[
-        [self.customTipPercentageTextField.leadingAnchor constraintEqualToAnchor: self.contentView.leadingAnchor constant: 20],
-        [self.customTipPercentageTextField.trailingAnchor constraintEqualToAnchor: self.contentView.trailingAnchor constant: -20],
-        [self.customTipPercentageTextField.topAnchor constraintEqualToAnchor: self.contentView.topAnchor constant: 15],
-        [self.customTipPercentageTextField.bottomAnchor constraintEqualToAnchor: self.contentView.bottomAnchor constant: -15]
+        [self.customTipPercentageTextField.leadingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.leadingAnchor],
+        [self.customTipPercentageTextField.trailingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.trailingAnchor],
+        [self.customTipPercentageTextField.topAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.topAnchor],
+        [self.customTipPercentageTextField.bottomAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.bottomAnchor]
     ]];
 }
 

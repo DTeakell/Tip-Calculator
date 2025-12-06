@@ -6,6 +6,7 @@
 //
 
 #import "CheckAmountCell.h"
+#import "SettingsManager.h"
 
 @implementation CheckAmountCell
 
@@ -16,6 +17,13 @@
         [self setConstraints];
     }
     return self;
+}
+
+- (void)applyTheme {
+    ThemeColorType theme = [SettingsManager sharedManager].currentTheme;
+    UIColor *color = [[SettingsManager sharedManager] colorForTheme:theme];
+
+    self.checkAmountTextField.tintColor = color;
 }
 
 - (void) setupView {
@@ -34,7 +42,6 @@
     self.checkAmountTextField.placeholder = NSLocalizedString(@"Enter Check Amount", @"Check Amount Text Field Placeholder");
     self.checkAmountTextField.font = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
     self.checkAmountTextField.keyboardType = UIKeyboardTypeDecimalPad;
-    self.checkAmountTextField.tintColor = [UIColor colorNamed: @"AccentColor"];
     
     // Accessibility Labels
     self.checkAmountTextField.accessibilityLabel = @"Check amount input field";
@@ -45,10 +52,10 @@
 
 - (void) setConstraints {
     [NSLayoutConstraint activateConstraints: @[
-        [self.checkAmountTextField.leadingAnchor constraintEqualToAnchor: self.contentView.leadingAnchor constant: 20],
-        [self.checkAmountTextField.trailingAnchor constraintEqualToAnchor: self.contentView.trailingAnchor constant: -20],
-        [self.checkAmountTextField.topAnchor constraintEqualToAnchor: self.contentView.topAnchor constant: 15],
-        [self.checkAmountTextField.bottomAnchor constraintEqualToAnchor: self.contentView.bottomAnchor constant: -15]
+        [self.checkAmountTextField.leadingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.leadingAnchor],
+        [self.checkAmountTextField.trailingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.trailingAnchor],
+        [self.checkAmountTextField.topAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.topAnchor],
+        [self.checkAmountTextField.bottomAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.bottomAnchor]
     ]];
 }
 
