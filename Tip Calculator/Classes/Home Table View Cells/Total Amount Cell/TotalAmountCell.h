@@ -12,7 +12,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface TotalAmountCell : UITableViewCell
 
+@property (nonatomic, retain) UIStackView *totalStackView;
 @property (nonatomic, retain) UILabel *checkTotalLabel;
+@property (nonatomic, retain) UILabel *roundedTotalLabel;
+@property (nonatomic, retain) UIImageView *upArrowImageView;
+
+- (void) applyTheme;
 
 - (void) applyTheme;
 

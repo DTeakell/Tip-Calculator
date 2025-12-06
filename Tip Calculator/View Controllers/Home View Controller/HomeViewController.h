@@ -29,6 +29,7 @@
 @property (nonatomic, retain) UIBarButtonItem *settingsButton;
 @property (nonatomic, retain) UILabel *tipAmountLabel;
 @property (nonatomic, retain) UILabel *checkTotalLabel;
+@property (nonatomic, retain) UILabel *roundedCheckTotal;
 @property (nonatomic, retain) UISegmentedControl *tipPercentageSelector;
 @property (nonatomic, retain) UITextField *customTipPercentageTextField;
 @property (nonatomic, retain) UITextField *numberOfPeopleTextField;

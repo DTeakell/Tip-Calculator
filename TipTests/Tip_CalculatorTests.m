@@ -69,4 +69,12 @@
     XCTAssertEqualWithAccuracy(total, 110, 0.001);
 }
 
+- (void) testRound {
+    TipCalculator *tipCalculator = [[TipCalculator alloc] init];
+    tipCalculator.checkAmount = 198.03;
+    double roundedNumber = [tipCalculator roundUp: tipCalculator.checkAmount];
+    XCTAssertEqual(roundedNumber, 199);
+    
+}
+
 @end
