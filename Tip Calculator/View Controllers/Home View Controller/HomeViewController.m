@@ -261,7 +261,17 @@
     // Total Amount Label
     } else if (indexPath.section == 4 || (self.isCustomTipEnabled && indexPath.section == 5)) {
         TotalAmountCell *cell = [tableView dequeueReusableCellWithIdentifier: @"TotalAmountCell"];
+        self.roundedCheckTotal = cell.roundedTotalLabel;
         self.checkTotalLabel = cell.checkTotalLabel;
+        
+        if ([SettingsManager sharedManager].isRoundedTotalSwitchActive) {
+            self.roundedCheckTotal.textColor = [UIColor systemGrayColor];
+            cell.upArrowImageView.tintColor = [UIColor systemGrayColor];
+        } else {
+            self.roundedCheckTotal.textColor = [UIColor clearColor];
+            cell.upArrowImageView.tintColor = [UIColor clearColor];
+        }
+        
         [cell applyTheme];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
@@ -364,6 +374,9 @@
 }
 
 
+
+# pragma mark - Input Handling Methods
+
 /// Updates the tip value based on the selected tip percentage segment
 - (void) segmentChanged: (UISegmentedControl *)sender {
     self.selectedTipIndex = sender.selectedSegmentIndex;
@@ -400,9 +413,6 @@
     }
 }
 
-
-# pragma mark - Input Handling Methods
-
 /// Calculates the tip of the check with a custom tip percentage
 - (void) customTipChanged {
     double customTip = [self.customTipPercentageTextField.text doubleValue];
@@ -427,9 +437,11 @@
     if (numberOfPeople > 1) {
         double tipPerPerson = [self.tipCalculator calculateTipWithMultiplePeople];
         double totalPerPerson = [self.tipCalculator calculateTotalWithMultiplePeople];
+        double roundedTotalPerPerson = [self.tipCalculator roundUp: totalPerPerson];
         
         self.tipAmountLabel.text = [CurrencyFormatter localizedPerPersonStringFromDouble: tipPerPerson];
         self.checkTotalLabel.text = [CurrencyFormatter localizedPerPersonStringFromDouble: totalPerPerson];
+        self.roundedCheckTotal.text = [CurrencyFormatter localizedPerPersonStringFromDouble: roundedTotalPerPerson];
         
         // Accessibility Labels
         self.tipAmountLabel.accessibilityLabel = NSLocalizedString(@"Tip Amount", @"Accessibility Label for Tip");
@@ -441,9 +453,11 @@
     } else {
         double tip = [self.tipCalculator calculateTip];
         double total = [self.tipCalculator calculateTotal];
+        double roundedTotal = [self.tipCalculator roundUp: total];
         
         self.tipAmountLabel.text = [CurrencyFormatter localizedCurrencyStringFromDouble: tip];
         self.checkTotalLabel.text = [CurrencyFormatter localizedCurrencyStringFromDouble: total];
+        self.roundedCheckTotal.text = [CurrencyFormatter localizedCurrencyStringFromDouble: roundedTotal];
         
         self.tipAmountLabel.accessibilityLabel = NSLocalizedString(@"Tip Amount", @"Accessibility Label for Tip");
         self.tipAmountLabel.accessibilityValue = [CurrencyFormatter localizedCurrencyStringFromDouble: tip];

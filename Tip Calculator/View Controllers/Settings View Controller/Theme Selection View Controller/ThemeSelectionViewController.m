@@ -135,7 +135,7 @@
     
     cell.checkmark.tintColor = [[SettingsManager sharedManager] colorForTheme: selectedTheme];
     
-    [[SettingsManager sharedManager] saveCurrentTheme];
+    [[SettingsManager sharedManager] saveCurrentSettings];
 }
 
 

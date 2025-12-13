@@ -46,6 +46,7 @@
     self.checkTotalLabel.font = [self setCustomFont];
     self.checkTotalLabel.adjustsFontForContentSizeCategory = YES;
     self.checkTotalLabel.text = [CurrencyFormatter localizedCurrencyStringFromDouble: 0];
+    self.checkTotalLabel.numberOfLines = 0;
     
     // Rounded Total Label
     self.roundedTotalLabel = [[[UILabel alloc] init] autorelease];

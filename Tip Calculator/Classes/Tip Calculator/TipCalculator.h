@@ -12,6 +12,7 @@
 @property (nonatomic) double checkAmount;
 @property (nonatomic) double tipPercentage;
 @property (nonatomic) int numberOfPeopleOnCheck;
+@property (nonatomic) double roundedCheckTotalValue;
 
 /// Calculates the tip of the check
 - (double) calculateTip;

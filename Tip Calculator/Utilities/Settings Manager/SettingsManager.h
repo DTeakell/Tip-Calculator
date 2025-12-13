@@ -28,6 +28,7 @@ typedef NS_ENUM(NSInteger, ThemeColorType) {
 @interface SettingsManager : NSObject
 
 @property (nonatomic, assign) ThemeColorType currentTheme;
+@property (nonatomic, assign) BOOL isRoundedTotalSwitchActive;
 
 // A singleton so this manager is accessible everywhere
 + (instancetype) sharedManager;
@@ -39,8 +40,8 @@ typedef NS_ENUM(NSInteger, ThemeColorType) {
 - (NSArray <NSString *> *) allThemeNames;
 
 // Load & Save Methods
-- (void) saveCurrentTheme;
-- (void) loadCurrentTheme;
+- (void) saveCurrentSettings;
+- (void) loadCurrentSettings;
 
 // Apply to Window
 - (void) setCurrentTheme:(ThemeColorType)currentTheme;

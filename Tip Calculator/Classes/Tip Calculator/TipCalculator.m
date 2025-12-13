@@ -26,7 +26,6 @@
     return ((self.checkAmount + [self calculateTip]) / self.numberOfPeopleOnCheck);
 }
 
-
 - (double) roundUp: (double) x {
     return ceil(x);
 }

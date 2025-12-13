@@ -28,6 +28,7 @@
     
     self.tipAmountLabel.font = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
     self.tipAmountLabel.text = [CurrencyFormatter localizedCurrencyStringFromDouble: 0];
+    self.tipAmountLabel.numberOfLines = 0;
     
     // Accessibility Labels
     

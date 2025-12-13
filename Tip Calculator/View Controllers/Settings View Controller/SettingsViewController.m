@@ -153,7 +153,11 @@
     if (indexPath.section == 1 && indexPath.row == 0) {
         ShowRoundedTotalsCell *cell = [tableView dequeueReusableCellWithIdentifier: @"ShowRoundedTotalsCell"];
         self.showRoundedValuesLabel = cell.showRoundedTotalsLabel;
+        self.showRoundedValuesSwitch = cell.showRoundedTotalsSwitch;
+        self.showRoundedValuesSwitch.on = [SettingsManager sharedManager].isRoundedTotalSwitchActive;
+        [self.showRoundedValuesSwitch addTarget: self action: @selector(roundedTotalSwitchTapped) forControlEvents:UIControlEventValueChanged];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
         return cell;
     }
     
@@ -197,9 +201,16 @@
 
 #pragma mark - Logic Methods
 
+/// Toggles the state of the rounded total switch to on or off
+- (void) roundedTotalSwitchTapped {
+    // Update SettingsManager when the switch changes state
+    [SettingsManager sharedManager].isRoundedTotalSwitchActive = self.showRoundedValuesSwitch.isOn;
+}
+
 /// Saves the user's data and dismisses the Settings screen
 - (void) doneButtonPressed {
     //TODO: Save user data
+    [[SettingsManager sharedManager] saveCurrentSettings];
     [self dismissViewControllerAnimated: YES completion: nil];
 }
 
