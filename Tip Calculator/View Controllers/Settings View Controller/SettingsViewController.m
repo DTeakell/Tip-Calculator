@@ -205,11 +205,13 @@
 - (void) roundedTotalSwitchTapped {
     // Update SettingsManager when the switch changes state
     [SettingsManager sharedManager].isRoundedTotalSwitchActive = self.showRoundedValuesSwitch.isOn;
+    
+    // Post the notification when the switch is toggled to show the new total cell when the modal is dismissed
+    [[NSNotificationCenter defaultCenter] postNotificationName: @"RoundedTotalSwitchActivatedNotification" object: nil];
 }
 
 /// Saves the user's data and dismisses the Settings screen
 - (void) doneButtonPressed {
-    //TODO: Save user data
     [[SettingsManager sharedManager] saveCurrentSettings];
     [self dismissViewControllerAnimated: YES completion: nil];
 }

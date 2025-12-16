@@ -55,6 +55,7 @@
     self.roundedTotalLabel.font = [UIFont preferredFontForTextStyle: UIFontTextStyleCaption1];
     self.roundedTotalLabel.adjustsFontForContentSizeCategory = YES;
     self.roundedTotalLabel.text = [CurrencyFormatter localizedCurrencyStringFromDouble: 0];
+    self.roundedTotalLabel.numberOfLines = 0;
     self.roundedTotalLabel.textColor = [UIColor systemGrayColor];
     
     // Arrow Image
@@ -73,41 +74,48 @@
     // Inner stack for rounded total + arrow (tighter grouping)
     UIStackView *roundedGroupStack = [[UIStackView alloc] initWithArrangedSubviews:@[self.roundedTotalLabel, self.upArrowImageView]];
     roundedGroupStack.axis = UILayoutConstraintAxisHorizontal;
-    roundedGroupStack.alignment = UIStackViewAlignmentCenter;
+    roundedGroupStack.alignment = UIStackViewAlignmentLeading;
     roundedGroupStack.spacing = 2.0;
     roundedGroupStack.translatesAutoresizingMaskIntoConstraints = NO;
+    self.roundedStackView = roundedGroupStack;
+    [roundedGroupStack release];
 
     // Ensure the arrow hugs the rounded total
     [self.upArrowImageView setContentHuggingPriority: UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
     [self.upArrowImageView setContentCompressionResistancePriority: UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
 
     // Outer stack for total + (rounded total + arrow)
-    UIStackView *stackView = [[UIStackView alloc] initWithArrangedSubviews:@[self.checkTotalLabel, roundedGroupStack]];
-    stackView.axis = UILayoutConstraintAxisHorizontal;
-    stackView.spacing = 20.0;
+    UIStackView *stackView = [[UIStackView alloc] initWithArrangedSubviews:@[self.checkTotalLabel, self.roundedStackView]];
+    stackView.axis = UILayoutConstraintAxisVertical;
+    stackView.spacing = 2.5;
     stackView.translatesAutoresizingMaskIntoConstraints = NO;
 
     self.totalStackView = stackView;
-    [roundedGroupStack release];
     [stackView release];
 
     [self.contentView addSubview:self.totalStackView];
 }
 
 - (void) setConstraints {
-    [self.checkTotalLabel setContentHuggingPriority: UILayoutPriorityDefaultLow forAxis: UILayoutConstraintAxisHorizontal];
-    [self.checkTotalLabel setContentCompressionResistancePriority: UILayoutPriorityDefaultLow forAxis: UILayoutConstraintAxisHorizontal];
-    [self.roundedTotalLabel setContentHuggingPriority: UILayoutPriorityDefaultHigh forAxis: UILayoutConstraintAxisHorizontal];
-    [self.roundedTotalLabel setContentCompressionResistancePriority: UILayoutPriorityDefaultHigh forAxis: UILayoutConstraintAxisHorizontal];
+    [self.roundedTotalLabel setContentHuggingPriority: UILayoutPriorityDefaultLow forAxis: UILayoutConstraintAxisHorizontal];
+    [self.roundedTotalLabel setContentCompressionResistancePriority: UILayoutPriorityDefaultLow forAxis: UILayoutConstraintAxisHorizontal];
     
     [NSLayoutConstraint activateConstraints: @[
-        [self.totalStackView.leadingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.leadingAnchor],
-        [self.totalStackView.topAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.topAnchor],
-        [self.totalStackView.bottomAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.bottomAnchor],
-        [self.totalStackView.trailingAnchor constraintLessThanOrEqualToAnchor: self.contentView.layoutMarginsGuide.trailingAnchor],
-
+        [self.totalStackView.leadingAnchor constraintEqualToAnchor:self.contentView.layoutMarginsGuide.leadingAnchor],
+        [self.totalStackView.trailingAnchor constraintEqualToAnchor:self.contentView.layoutMarginsGuide.trailingAnchor],
+        [self.totalStackView.topAnchor constraintEqualToAnchor:self.contentView.layoutMarginsGuide.topAnchor],
+        [self.totalStackView.bottomAnchor constraintEqualToAnchor:self.contentView.layoutMarginsGuide.bottomAnchor]
     ]];
 }
+
+- (void)configureWithRoundedTotalActive: (BOOL) active {
+    if (!active) {
+        self.roundedStackView.hidden = YES;
+    } else {
+        self.roundedStackView.hidden = NO;
+    }
+}
+
 
 - (void) dealloc {
     [_checkTotalLabel release];

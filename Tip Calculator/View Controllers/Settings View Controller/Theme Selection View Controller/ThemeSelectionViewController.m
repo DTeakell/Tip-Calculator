@@ -125,7 +125,7 @@
     if (previousRow != NSNotFound) {
         NSIndexPath *previousIndexPath = [NSIndexPath indexPathForRow: previousRow inSection: 0];
         ColorCell *previousCell = [self.themeSelectionTableView cellForRowAtIndexPath: previousIndexPath];
-        previousCell.checkmark.tintColor = [UIColor clearColor];
+        previousCell.checkmark.hidden = YES;
     }
     
     
@@ -141,6 +141,7 @@
 
 #pragma mark - Dealloc
 - (void) dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver: self];
     [_themeSelectionTableView release];
     [super dealloc];
 }

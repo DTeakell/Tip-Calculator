@@ -165,7 +165,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // Notification for theme change
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(applyTheme:) name: @"ThemeDidChangeNotification" object: nil];
+    
+    // Notification for rounded total
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(activateRoundedTotal:) name: @"RoundedTotalSwitchActivatedNotification" object: nil];
     
     [self setupTipCalculator];
     
@@ -261,18 +265,10 @@
     // Total Amount Label
     } else if (indexPath.section == 4 || (self.isCustomTipEnabled && indexPath.section == 5)) {
         TotalAmountCell *cell = [tableView dequeueReusableCellWithIdentifier: @"TotalAmountCell"];
+        [cell applyTheme];
+        [cell configureWithRoundedTotalActive: [SettingsManager sharedManager].isRoundedTotalSwitchActive];
         self.roundedCheckTotal = cell.roundedTotalLabel;
         self.checkTotalLabel = cell.checkTotalLabel;
-        
-        if ([SettingsManager sharedManager].isRoundedTotalSwitchActive) {
-            self.roundedCheckTotal.textColor = [UIColor systemGrayColor];
-            cell.upArrowImageView.tintColor = [UIColor systemGrayColor];
-        } else {
-            self.roundedCheckTotal.textColor = [UIColor clearColor];
-            cell.upArrowImageView.tintColor = [UIColor clearColor];
-        }
-        
-        [cell applyTheme];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
@@ -331,6 +327,31 @@
     [self.homeTableView beginUpdates];
     [self.homeTableView endUpdates];
     
+}
+
+
+/// Applies the rounded total configuration to the `TotalAmountCell`
+- (void) activateRoundedTotal: (NSNotification *) notification {
+    // Update the cell’s rounded-toggle appearance
+    BOOL roundedActive = [SettingsManager sharedManager].isRoundedTotalSwitchActive;
+    
+    // Find the TotalAmountCell, and when found, apply the configuration
+    for (UITableViewCell *cell in self.homeTableView.visibleCells) {
+        if ([cell isKindOfClass:[TotalAmountCell class]]) {
+            TotalAmountCell *totalCell = (TotalAmountCell *)cell;
+            [totalCell configureWithRoundedTotalActive:roundedActive];
+            break;
+        }
+    }
+
+    // Recompute labels to reflect the new setting immediately
+    [self inputChanged];
+
+    // Since the heights change, the tableView will need to update the cell height respectively.
+    [UIView performWithoutAnimation:^{
+        [self.homeTableView beginUpdates];
+        [self.homeTableView endUpdates];
+    }];
 }
 
 
