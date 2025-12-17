@@ -128,7 +128,7 @@
         previousCell.checkmark.hidden = YES;
     }
     
-    
+    // Get the selected theme and apply it to the selected cell's checkmark
     ThemeColorType selectedTheme = [[SettingsManager sharedManager] themeFromString: colorName];
     
     [SettingsManager sharedManager].currentTheme = selectedTheme;

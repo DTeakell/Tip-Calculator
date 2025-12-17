@@ -59,35 +59,39 @@
     self.roundedTotalLabel.textColor = [UIColor systemGrayColor];
     
     // Arrow Image
+    // Arrow Image Configuration
     UIImageView *arrowImageView = [[UIImageView alloc] initWithImage: [UIImage systemImageNamed: @"arrow.up"]];
     UIImageSymbolConfiguration *colorConfiguration = [UIImageSymbolConfiguration configurationPreferringMonochrome];
-    UIImageSymbolConfiguration *sizeConfiguration = [UIImageSymbolConfiguration configurationWithScale: UIImageSymbolScaleSmall];
+    UIImageSymbolConfiguration *sizeConfiguration = [UIImageSymbolConfiguration configurationWithTextStyle: UIFontTextStyleCaption2 scale: UIImageSymbolScaleSmall];
     UIImageSymbolConfiguration *arrowConfiguration = [colorConfiguration configurationByApplyingConfiguration: sizeConfiguration];
     
+    // Arrow Image Properites
     arrowImageView.preferredSymbolConfiguration = arrowConfiguration;
     arrowImageView.contentMode = UIViewContentModeScaleAspectFill;
+    arrowImageView.adjustsImageSizeForAccessibilityContentSizeCategory = YES;
     arrowImageView.translatesAutoresizingMaskIntoConstraints = NO;
     arrowImageView.tintColor = [UIColor systemGrayColor];
     self.upArrowImageView = arrowImageView;
     [arrowImageView release];
     
-    // Inner stack for rounded total + arrow (tighter grouping)
+    // Rounded Total Stack (Rounded Total + Arrow Image)
     UIStackView *roundedGroupStack = [[UIStackView alloc] initWithArrangedSubviews:@[self.roundedTotalLabel, self.upArrowImageView]];
     roundedGroupStack.axis = UILayoutConstraintAxisHorizontal;
-    roundedGroupStack.alignment = UIStackViewAlignmentLeading;
-    roundedGroupStack.spacing = 2.0;
+    roundedGroupStack.alignment = UIStackViewAlignmentFirstBaseline;
+    roundedGroupStack.spacing = 3.0;
     roundedGroupStack.translatesAutoresizingMaskIntoConstraints = NO;
     self.roundedStackView = roundedGroupStack;
     [roundedGroupStack release];
 
     // Ensure the arrow hugs the rounded total
-    [self.upArrowImageView setContentHuggingPriority: UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
-    [self.upArrowImageView setContentCompressionResistancePriority: UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
+    [self.upArrowImageView setContentHuggingPriority: UILayoutPriorityDefaultHigh forAxis:UILayoutConstraintAxisHorizontal];
+    [self.upArrowImageView setContentCompressionResistancePriority: UILayoutPriorityDefaultHigh forAxis:UILayoutConstraintAxisHorizontal];
 
     // Outer stack for total + (rounded total + arrow)
     UIStackView *stackView = [[UIStackView alloc] initWithArrangedSubviews:@[self.checkTotalLabel, self.roundedStackView]];
     stackView.axis = UILayoutConstraintAxisVertical;
-    stackView.spacing = 2.5;
+    stackView.alignment = UIStackViewAlignmentFirstBaseline;
+    stackView.spacing = 2.25;
     stackView.translatesAutoresizingMaskIntoConstraints = NO;
 
     self.totalStackView = stackView;
@@ -97,8 +101,10 @@
 }
 
 - (void) setConstraints {
-    [self.roundedTotalLabel setContentHuggingPriority: UILayoutPriorityDefaultLow forAxis: UILayoutConstraintAxisHorizontal];
-    [self.roundedTotalLabel setContentCompressionResistancePriority: UILayoutPriorityDefaultLow forAxis: UILayoutConstraintAxisHorizontal];
+    [self.checkTotalLabel setContentHuggingPriority: UILayoutPriorityDefaultLow forAxis: UILayoutConstraintAxisHorizontal];
+    [self.checkTotalLabel setContentCompressionResistancePriority: UILayoutPriorityDefaultLow forAxis: UILayoutConstraintAxisHorizontal];
+    [self.roundedTotalLabel setContentHuggingPriority: UILayoutPriorityDefaultHigh forAxis: UILayoutConstraintAxisHorizontal];
+    [self.roundedTotalLabel setContentCompressionResistancePriority: UILayoutPriorityDefaultHigh forAxis: UILayoutConstraintAxisHorizontal];
     
     [NSLayoutConstraint activateConstraints: @[
         [self.totalStackView.leadingAnchor constraintEqualToAnchor:self.contentView.layoutMarginsGuide.leadingAnchor],
@@ -108,7 +114,7 @@
     ]];
 }
 
-- (void)configureWithRoundedTotalActive: (BOOL) active {
+- (void) configureWithRoundedTotalActive: (BOOL) active {
     if (!active) {
         self.roundedStackView.hidden = YES;
     } else {
@@ -118,6 +124,10 @@
 
 
 - (void) dealloc {
+    [_roundedStackView release];
+    [_totalStackView release];
+    [_roundedTotalLabel release];
+    [_upArrowImageView release];
     [_checkTotalLabel release];
     [super dealloc];
 }

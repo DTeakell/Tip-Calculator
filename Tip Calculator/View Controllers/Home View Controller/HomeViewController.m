@@ -33,7 +33,7 @@
     [self setupNavigationBarButtons];
 }
 
-
+/// Sets up the ViewController background and navigation title
 - (void) setupHomeViewController {
     self.view.backgroundColor = [UIColor systemGroupedBackgroundColor];
     self.title = NSLocalizedString(@"Tip Calculator", "Title");
@@ -44,11 +44,9 @@
 /// Sets up the buttons on the navigation bar.
 - (void) setupNavigationBarButtons {
     
-    // Get color from Settings Manager
     UIColor *color = [[SettingsManager sharedManager] colorForTheme: [SettingsManager sharedManager].currentTheme];
     
-    // iOS 26 Liquid Glass style
-    // Sets up 'Clear' button
+    // Clear Button
     if (@available(iOS 26.0, *)) {
         UIBarButtonItem *clearScreenButtonItem = [[UIBarButtonItem alloc] initWithTitle: NSLocalizedString(@"Clear", @"Clear Screen Button") style: UIBarButtonItemStyleProminent target: self action: @selector(clearScreenTapped)];
         
@@ -62,7 +60,7 @@
         self.clearScreenButton.tintColor = color;
     }
     
-    // Sets up 'Settings' button
+    // Settings Button
     UIBarButtonItem *settingsButtonItem = [[UIBarButtonItem alloc] initWithTitle: NSLocalizedString(@"Settings", @"Settings Button") image: [UIImage systemImageNamed: @"gear"] target: self action: @selector(presentSettingsModal) menu: nil];
     
     if (@available(iOS 26.0, *)) {
@@ -203,7 +201,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    
     // Check Amount Text Field
     if (indexPath.section == 0) {
         CheckAmountCell *cell = [tableView dequeueReusableCellWithIdentifier: @"CheckAmountCell"];
@@ -267,7 +264,7 @@
         TotalAmountCell *cell = [tableView dequeueReusableCellWithIdentifier: @"TotalAmountCell"];
         [cell applyTheme];
         [cell configureWithRoundedTotalActive: [SettingsManager sharedManager].isRoundedTotalSwitchActive];
-        self.roundedCheckTotal = cell.roundedTotalLabel;
+        self.roundedCheckTotalLabel = cell.roundedTotalLabel;
         self.checkTotalLabel = cell.checkTotalLabel;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
@@ -462,7 +459,7 @@
         
         self.tipAmountLabel.text = [CurrencyFormatter localizedPerPersonStringFromDouble: tipPerPerson];
         self.checkTotalLabel.text = [CurrencyFormatter localizedPerPersonStringFromDouble: totalPerPerson];
-        self.roundedCheckTotal.text = [CurrencyFormatter localizedPerPersonStringFromDouble: roundedTotalPerPerson];
+        self.roundedCheckTotalLabel.text = [CurrencyFormatter localizedPerPersonStringFromDouble: roundedTotalPerPerson];
         
         // Accessibility Labels
         self.tipAmountLabel.accessibilityLabel = NSLocalizedString(@"Tip Amount", @"Accessibility Label for Tip");
@@ -478,7 +475,7 @@
         
         self.tipAmountLabel.text = [CurrencyFormatter localizedCurrencyStringFromDouble: tip];
         self.checkTotalLabel.text = [CurrencyFormatter localizedCurrencyStringFromDouble: total];
-        self.roundedCheckTotal.text = [CurrencyFormatter localizedCurrencyStringFromDouble: roundedTotal];
+        self.roundedCheckTotalLabel.text = [CurrencyFormatter localizedCurrencyStringFromDouble: roundedTotal];
         
         self.tipAmountLabel.accessibilityLabel = NSLocalizedString(@"Tip Amount", @"Accessibility Label for Tip");
         self.tipAmountLabel.accessibilityValue = [CurrencyFormatter localizedCurrencyStringFromDouble: tip];
@@ -492,6 +489,7 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver: self];
+    [_roundedCheckTotalLabel release];
     [_homeTableView release];
     [_checkAmountTextField release];
     [_tipPercentageSelector release];

@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) applyTheme;
 
-- (void)configureWithRoundedTotalActive: (BOOL) active;
+- (void) configureWithRoundedTotalActive: (BOOL) active;
 
 @end
 

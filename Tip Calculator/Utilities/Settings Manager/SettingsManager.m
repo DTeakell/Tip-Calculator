@@ -120,10 +120,7 @@ static NSString *const roundedTotalKey = @"roundedTotalKey";
 - (void) saveCurrentSettings {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setInteger: self.currentTheme forKey: selectedThemeKey];
-    NSLog(@"Theme Saved");
-    
     [userDefaults setBool: self.isRoundedTotalSwitchActive forKey: roundedTotalKey];
-    NSLog(@"Rounded Total Settings Saved");
 }
 
 /// Loads the current theme from disk
