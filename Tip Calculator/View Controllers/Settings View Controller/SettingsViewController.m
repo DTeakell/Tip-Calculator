@@ -99,7 +99,7 @@
     ]];
 }
 
-
+/// Applies the current theme to the view controller
 - (void) applyTheme: (NSNotification *) notification {
     ThemeColorType theme = [[SettingsManager sharedManager] currentTheme];
     self.navigationItem.rightBarButtonItem.tintColor = [[SettingsManager sharedManager] colorForTheme: theme];
@@ -134,7 +134,7 @@
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     
-    //MARK: Theme Color Cell
+    // Theme Color Cell
     if (indexPath.section == 0 && indexPath.row == 0) {
         ThemeColorCell *cell = [tableView dequeueReusableCellWithIdentifier: @"ThemeColorCell"];
         self.themeColorLabel = cell.themeColorLabel;
@@ -142,22 +142,26 @@
         return cell;
     }
     
-    //MARK: App Icon Selection Cell
+    // App Icon Selection Cell
     if (indexPath.section == 0 && indexPath.row == 1) {
         AppIconCell *cell = [tableView dequeueReusableCellWithIdentifier: @"AppIconCell"];
         self.appIconMenuLabel = cell.appIconLabel;
         return cell;
     }
     
-    //MARK: Show Rounded Totals Cell
+    // Show Rounded Totals Cell
     if (indexPath.section == 1 && indexPath.row == 0) {
         ShowRoundedTotalsCell *cell = [tableView dequeueReusableCellWithIdentifier: @"ShowRoundedTotalsCell"];
         self.showRoundedValuesLabel = cell.showRoundedTotalsLabel;
+        self.showRoundedValuesSwitch = cell.showRoundedTotalsSwitch;
+        self.showRoundedValuesSwitch.on = [SettingsManager sharedManager].isRoundedTotalSwitchActive;
+        [self.showRoundedValuesSwitch addTarget: self action: @selector(roundedTotalSwitchTapped) forControlEvents:UIControlEventValueChanged];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
         return cell;
     }
     
-    //MARK: Save Tip Percentage Selection Cell
+    // Save Tip Percentage Selection Cell
     if (indexPath.section == 1 && indexPath.row == 1) {
         SaveTipPercentageCell *cell = [tableView dequeueReusableCellWithIdentifier: @"SaveTipPercentageCell"];
         self.saveTipPercentageLabel = cell.savePercentageLabel;
@@ -197,9 +201,18 @@
 
 #pragma mark - Logic Methods
 
+/// Toggles the state of the rounded total switch to on or off
+- (void) roundedTotalSwitchTapped {
+    // Update SettingsManager when the switch changes state
+    [SettingsManager sharedManager].isRoundedTotalSwitchActive = self.showRoundedValuesSwitch.isOn;
+    
+    // Post the notification when the switch is toggled to show the new total cell when the modal is dismissed
+    [[NSNotificationCenter defaultCenter] postNotificationName: @"RoundedTotalSwitchActivatedNotification" object: nil];
+}
+
 /// Saves the user's data and dismisses the Settings screen
 - (void) doneButtonPressed {
-    //TODO: Save user data
+    [[SettingsManager sharedManager] saveCurrentSettings];
     [self dismissViewControllerAnimated: YES completion: nil];
 }
 
@@ -212,6 +225,7 @@
 #pragma mark - Dealloc
 - (void) dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver: self];
+    [_selectedThemeLabel release];
     [_themeSelectionViewController release];
     [_themeColorLabel release];
     [_appIcon release];

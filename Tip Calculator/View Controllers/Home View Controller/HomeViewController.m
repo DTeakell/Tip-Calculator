@@ -33,7 +33,7 @@
     [self setupNavigationBarButtons];
 }
 
-
+/// Sets up the ViewController background and navigation title
 - (void) setupHomeViewController {
     self.view.backgroundColor = [UIColor systemGroupedBackgroundColor];
     self.title = NSLocalizedString(@"Tip Calculator", "Title");
@@ -44,11 +44,9 @@
 /// Sets up the buttons on the navigation bar.
 - (void) setupNavigationBarButtons {
     
-    // Get color from Settings Manager
     UIColor *color = [[SettingsManager sharedManager] colorForTheme: [SettingsManager sharedManager].currentTheme];
     
-    // iOS 26 Liquid Glass style
-    // Sets up 'Clear' button
+    // Clear Button
     if (@available(iOS 26.0, *)) {
         UIBarButtonItem *clearScreenButtonItem = [[UIBarButtonItem alloc] initWithTitle: NSLocalizedString(@"Clear", @"Clear Screen Button") style: UIBarButtonItemStyleProminent target: self action: @selector(clearScreenTapped)];
         
@@ -62,7 +60,7 @@
         self.clearScreenButton.tintColor = color;
     }
     
-    // Sets up 'Settings' button
+    // Settings Button
     UIBarButtonItem *settingsButtonItem = [[UIBarButtonItem alloc] initWithTitle: NSLocalizedString(@"Settings", @"Settings Button") image: [UIImage systemImageNamed: @"gear"] target: self action: @selector(presentSettingsModal) menu: nil];
     
     if (@available(iOS 26.0, *)) {
@@ -165,7 +163,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // Notification for theme change
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(applyTheme:) name: @"ThemeDidChangeNotification" object: nil];
+    
+    // Notification for rounded total
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(activateRoundedTotal:) name: @"RoundedTotalSwitchActivatedNotification" object: nil];
     
     [self setupTipCalculator];
     
@@ -198,7 +200,6 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     
     // Check Amount Text Field
     if (indexPath.section == 0) {
@@ -261,8 +262,10 @@
     // Total Amount Label
     } else if (indexPath.section == 4 || (self.isCustomTipEnabled && indexPath.section == 5)) {
         TotalAmountCell *cell = [tableView dequeueReusableCellWithIdentifier: @"TotalAmountCell"];
-        self.checkTotalLabel = cell.checkTotalLabel;
         [cell applyTheme];
+        [cell configureWithRoundedTotalActive: [SettingsManager sharedManager].isRoundedTotalSwitchActive];
+        self.roundedCheckTotalLabel = cell.roundedTotalLabel;
+        self.checkTotalLabel = cell.checkTotalLabel;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
@@ -324,6 +327,31 @@
 }
 
 
+/// Applies the rounded total configuration to the `TotalAmountCell`
+- (void) activateRoundedTotal: (NSNotification *) notification {
+    // Update the cell’s rounded-toggle appearance
+    BOOL roundedActive = [SettingsManager sharedManager].isRoundedTotalSwitchActive;
+    
+    // Find the TotalAmountCell, and when found, apply the configuration
+    for (UITableViewCell *cell in self.homeTableView.visibleCells) {
+        if ([cell isKindOfClass:[TotalAmountCell class]]) {
+            TotalAmountCell *totalCell = (TotalAmountCell *)cell;
+            [totalCell configureWithRoundedTotalActive:roundedActive];
+            break;
+        }
+    }
+
+    // Recompute labels to reflect the new setting immediately
+    [self inputChanged];
+
+    // Since the heights change, the tableView will need to update the cell height respectively.
+    [UIView performWithoutAnimation:^{
+        [self.homeTableView beginUpdates];
+        [self.homeTableView endUpdates];
+    }];
+}
+
+
 /// Clears inputs and resets calculated labels
 - (void) clearScreenTapped {
     [self.tipCalculator reset];
@@ -364,6 +392,9 @@
 }
 
 
+
+# pragma mark - Input Handling Methods
+
 /// Updates the tip value based on the selected tip percentage segment
 - (void) segmentChanged: (UISegmentedControl *)sender {
     self.selectedTipIndex = sender.selectedSegmentIndex;
@@ -400,9 +431,6 @@
     }
 }
 
-
-# pragma mark - Input Handling Methods
-
 /// Calculates the tip of the check with a custom tip percentage
 - (void) customTipChanged {
     double customTip = [self.customTipPercentageTextField.text doubleValue];
@@ -427,9 +455,11 @@
     if (numberOfPeople > 1) {
         double tipPerPerson = [self.tipCalculator calculateTipWithMultiplePeople];
         double totalPerPerson = [self.tipCalculator calculateTotalWithMultiplePeople];
+        double roundedTotalPerPerson = [self.tipCalculator roundUp: totalPerPerson];
         
         self.tipAmountLabel.text = [CurrencyFormatter localizedPerPersonStringFromDouble: tipPerPerson];
         self.checkTotalLabel.text = [CurrencyFormatter localizedPerPersonStringFromDouble: totalPerPerson];
+        self.roundedCheckTotalLabel.text = [CurrencyFormatter localizedPerPersonStringFromDouble: roundedTotalPerPerson];
         
         // Accessibility Labels
         self.tipAmountLabel.accessibilityLabel = NSLocalizedString(@"Tip Amount", @"Accessibility Label for Tip");
@@ -441,9 +471,11 @@
     } else {
         double tip = [self.tipCalculator calculateTip];
         double total = [self.tipCalculator calculateTotal];
+        double roundedTotal = [self.tipCalculator roundUp: total];
         
         self.tipAmountLabel.text = [CurrencyFormatter localizedCurrencyStringFromDouble: tip];
         self.checkTotalLabel.text = [CurrencyFormatter localizedCurrencyStringFromDouble: total];
+        self.roundedCheckTotalLabel.text = [CurrencyFormatter localizedCurrencyStringFromDouble: roundedTotal];
         
         self.tipAmountLabel.accessibilityLabel = NSLocalizedString(@"Tip Amount", @"Accessibility Label for Tip");
         self.tipAmountLabel.accessibilityValue = [CurrencyFormatter localizedCurrencyStringFromDouble: tip];
@@ -457,6 +489,7 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver: self];
+    [_roundedCheckTotalLabel release];
     [_homeTableView release];
     [_checkAmountTextField release];
     [_tipPercentageSelector release];

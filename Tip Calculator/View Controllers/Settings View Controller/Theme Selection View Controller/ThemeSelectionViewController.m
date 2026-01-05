@@ -125,22 +125,23 @@
     if (previousRow != NSNotFound) {
         NSIndexPath *previousIndexPath = [NSIndexPath indexPathForRow: previousRow inSection: 0];
         ColorCell *previousCell = [self.themeSelectionTableView cellForRowAtIndexPath: previousIndexPath];
-        previousCell.checkmark.tintColor = [UIColor clearColor];
+        previousCell.checkmark.hidden = YES;
     }
     
-    
+    // Get the selected theme and apply it to the selected cell's checkmark
     ThemeColorType selectedTheme = [[SettingsManager sharedManager] themeFromString: colorName];
     
     [SettingsManager sharedManager].currentTheme = selectedTheme;
     
     cell.checkmark.tintColor = [[SettingsManager sharedManager] colorForTheme: selectedTheme];
     
-    [[SettingsManager sharedManager] saveCurrentTheme];
+    [[SettingsManager sharedManager] saveCurrentSettings];
 }
 
 
 #pragma mark - Dealloc
 - (void) dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver: self];
     [_themeSelectionTableView release];
     [super dealloc];
 }

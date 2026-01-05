@@ -9,6 +9,7 @@
 #import "SettingsManager.h"
 
 static NSString *const selectedThemeKey = @"selectedTheme";
+static NSString *const roundedTotalKey = @"roundedTotalKey";
 
 @implementation SettingsManager
 
@@ -20,7 +21,7 @@ static NSString *const selectedThemeKey = @"selectedTheme";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedInstance = [[self alloc] init];
-        [sharedInstance loadCurrentTheme];
+        [sharedInstance loadCurrentSettings];
     });
     
     return sharedInstance;
@@ -68,7 +69,7 @@ static NSString *const selectedThemeKey = @"selectedTheme";
 - (ThemeColorType) themeFromString:(NSString *)themeName {
     if ([themeName isEqualToString: NSLocalizedString(@"Red", @"Theme Name Red")]) {
         return ThemeColorTypeRed;
-    } else if ([themeName isEqualToString: NSLocalizedString(@"Orange", @"Theme Name Blue")]) {
+    } else if ([themeName isEqualToString: NSLocalizedString(@"Orange", @"Theme Name Default")]) {
         return ThemeColorTypeDefault;
     } else if ([themeName isEqualToString: NSLocalizedString(@"Yellow", @"Theme Name Cyan")]) {
         return ThemeColorTypeYellow;
@@ -95,7 +96,6 @@ static NSString *const selectedThemeKey = @"selectedTheme";
     }
 }
 
-
 /// Gets an array of all theme color names
 - (NSArray <NSString *> *) allThemeNames {
     NSMutableArray *colorNames = [NSMutableArray array];
@@ -106,11 +106,10 @@ static NSString *const selectedThemeKey = @"selectedTheme";
     return [colorNames copy];
 }
 
-#pragma mark - Setting Theme
 
+/// Sets the current theme and sends a notification to `NSNotificationCenter` to change the theme.
 - (void) setCurrentTheme:(ThemeColorType)currentTheme {
     _currentTheme = currentTheme;
-    
     [[NSNotificationCenter defaultCenter] postNotificationName: @"ThemeDidChangeNotification" object: self];
 }
 
@@ -118,22 +117,25 @@ static NSString *const selectedThemeKey = @"selectedTheme";
 #pragma mark - Load & Save Methods
 
 /// Saves the current theme to disk
-- (void) saveCurrentTheme {
+- (void) saveCurrentSettings {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setInteger: self.currentTheme forKey: selectedThemeKey];
+    [userDefaults setBool: self.isRoundedTotalSwitchActive forKey: roundedTotalKey];
 }
 
 /// Loads the current theme from disk
-- (void) loadCurrentTheme {
+- (void) loadCurrentSettings {
     // Create the User Defaults store
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSInteger storedValue = [userDefaults integerForKey:selectedThemeKey];
-    ThemeColorType loaded = (ThemeColorType)storedValue;
+    NSInteger storedThemeValue = [userDefaults integerForKey:selectedThemeKey];
+    BOOL storedRoundedTotalValue = [userDefaults boolForKey: roundedTotalKey];
+    ThemeColorType loadedTheme = (ThemeColorType)storedThemeValue;
     // Validate range (assuming enum is contiguous from Red to Purple)
-    if (loaded < ThemeColorTypeRed || loaded > ThemeColorTypePurple) {
-        loaded = ThemeColorTypeBlue;
+    if (loadedTheme < ThemeColorTypeRed || loadedTheme > ThemeColorTypeGray) {
+        loadedTheme = ThemeColorTypeDefault;
     }
-    _currentTheme = loaded;
+    _isRoundedTotalSwitchActive = storedRoundedTotalValue;
+    _currentTheme = loadedTheme;
 }
 
 
