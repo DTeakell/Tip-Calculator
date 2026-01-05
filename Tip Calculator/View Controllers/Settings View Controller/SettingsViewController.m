@@ -54,20 +54,17 @@
 /// Sets up the buttons in the navigation controller
 - (void) setupNavigationBarButtons {
     
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone  target: self action: @selector(doneButtonPressed)];
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemCancel target: self action: @selector(cancelButtonPressed)];
+    UIBarButtonItem *exitButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemCancel target: self action: @selector(exitButtonPressed)];
     UIColor *color = [[SettingsManager sharedManager] colorForTheme: [SettingsManager sharedManager].currentTheme];
     
-    self.navigationItem.leftBarButtonItem = cancelButton;
+    self.navigationItem.leftBarButtonItem = exitButton;
     if (@available(iOS 26.0, *)) {}
     else {
         self.navigationItem.leftBarButtonItem.tintColor = color;
     }
-    self.navigationItem.rightBarButtonItem = doneButton;
     self.navigationItem.rightBarButtonItem.tintColor = color;
     
-    [cancelButton release];
-    [doneButton release];
+    [exitButton release];
 }
 
 
@@ -219,14 +216,9 @@
     [[NSNotificationCenter defaultCenter] postNotificationName: @"SaveLastTipPercentageSwitchActivatedNotification" object: nil];
 }
 
-/// Saves the user's data and dismisses the Settings screen
-- (void) doneButtonPressed {
+/// Dismisses the Settings screen and saves data
+- (void) exitButtonPressed {
     [[SettingsManager sharedManager] saveCurrentSettings];
-    [self dismissViewControllerAnimated: YES completion: nil];
-}
-
-/// Dismisses the Settings screen without saving any data
-- (void) cancelButtonPressed {
     [self dismissViewControllerAnimated: YES completion: nil];
 }
 

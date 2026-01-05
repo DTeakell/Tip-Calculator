@@ -130,8 +130,6 @@ static NSString *const tipPercentageIndexKey = @"tipPercentageKey";
     [userDefaults setBool: self.isRoundedTotalSwitchActive forKey: roundedTotalKey];
     [userDefaults setBool: self.isSaveLastTipPercentageSwitchActive forKey: saveTipPercentageKey];
     [userDefaults setInteger: self.tipPercentageIndex forKey: tipPercentageIndexKey];
-    
-    NSLog(@"Custom Tip Percentage Saved: %f", self.customTipPercentage);
 }
 
 /// Loads the current settings from disk
@@ -155,7 +153,6 @@ static NSString *const tipPercentageIndexKey = @"tipPercentageKey";
     // First assign flags from stored values
     _isSaveLastTipPercentageSwitchActive = saveTipPercentageValue;
     _customTipPercentage = customTipPercentageValue;
-    NSLog(@"Custom Tip Percentage Value: %f", customTipPercentageValue);
     _isRoundedTotalSwitchActive = storedRoundedTotalValue;
     _currentTheme = loadedTheme;
 

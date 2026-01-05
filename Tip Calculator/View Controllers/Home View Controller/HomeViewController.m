@@ -186,6 +186,8 @@
 }
 
 - (void) viewWillAppear: (BOOL) animated {
+    
+    [super viewWillAppear: animated];
     if ([SettingsManager sharedManager].isSaveLastTipPercentageSwitchActive && [SettingsManager sharedManager].tipPercentageIndex == self.tipPercentages.count - 1) {
         self.isCustomTipEnabled = YES;
     }
@@ -266,7 +268,7 @@
         
         if ([SettingsManager sharedManager].isSaveLastTipPercentageSwitchActive) {
             double initialTipPercentage = [SettingsManager sharedManager].customTipPercentage;
-            NSString *tipPercentageString = [NSString stringWithFormat: @"%.2f", initialTipPercentage];
+            NSString *tipPercentageString = [NSString stringWithFormat: @"%.0f", initialTipPercentage];
             self.customTipPercentageValue = tipPercentageString;
             self.customTipPercentageTextField.text = self.customTipPercentageValue;
             
@@ -305,8 +307,8 @@
     // Total Amount Label
     } else if (indexPath.section == 4 || (self.isCustomTipEnabled && indexPath.section == 5)) {
         TotalAmountCell *cell = [tableView dequeueReusableCellWithIdentifier: @"TotalAmountCell"];
-        [cell applyTheme];
         [cell configureWithRoundedTotalActive: [SettingsManager sharedManager].isRoundedTotalSwitchActive];
+        [cell applyTheme];
         self.roundedCheckTotalLabel = cell.roundedTotalLabel;
         self.checkTotalLabel = cell.checkTotalLabel;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
