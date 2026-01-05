@@ -165,6 +165,9 @@
     if (indexPath.section == 1 && indexPath.row == 1) {
         SaveTipPercentageCell *cell = [tableView dequeueReusableCellWithIdentifier: @"SaveTipPercentageCell"];
         self.saveTipPercentageLabel = cell.savePercentageLabel;
+        self.saveTipPercentageSwitch = cell.saveTipPercentageSwitch;
+        self.saveTipPercentageSwitch.on = [SettingsManager sharedManager].isSaveLastTipPercentageSwitchActive;
+        [self.saveTipPercentageSwitch addTarget: self action: @selector(saveTipPercentageSwitchTapped) forControlEvents: UIControlEventValueChanged];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
@@ -208,6 +211,12 @@
     
     // Post the notification when the switch is toggled to show the new total cell when the modal is dismissed
     [[NSNotificationCenter defaultCenter] postNotificationName: @"RoundedTotalSwitchActivatedNotification" object: nil];
+}
+
+- (void) saveTipPercentageSwitchTapped {
+    [SettingsManager sharedManager].isSaveLastTipPercentageSwitchActive = self.saveTipPercentageSwitch.isOn;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName: @"SaveLastTipPercentageSwitchActivatedNotification" object: nil];
 }
 
 /// Saves the user's data and dismisses the Settings screen

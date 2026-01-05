@@ -74,7 +74,6 @@
     tipCalculator.checkAmount = 198.03;
     double roundedNumber = [tipCalculator roundUp: tipCalculator.checkAmount];
     XCTAssertEqual(roundedNumber, 199);
-    
 }
 
 @end

@@ -7,9 +7,15 @@
 
 #import <Foundation/Foundation.h>
 #import "SettingsManager.h"
+#import "TipCalculator.h"
 
+#pragma mark - UserDefaults Keys
 static NSString *const selectedThemeKey = @"selectedTheme";
 static NSString *const roundedTotalKey = @"roundedTotalKey";
+static NSString *const customTipPercentageKey = @"customTipPercentageKey";
+static NSString *const saveTipPercentageKey = @"saveTipPercentageKey";
+static NSString *const tipPercentageIndexKey = @"tipPercentageKey";
+
 
 @implementation SettingsManager
 
@@ -116,26 +122,54 @@ static NSString *const roundedTotalKey = @"roundedTotalKey";
 
 #pragma mark - Load & Save Methods
 
-/// Saves the current theme to disk
+/// Saves the current settings
 - (void) saveCurrentSettings {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setInteger: self.currentTheme forKey: selectedThemeKey];
+    [userDefaults setDouble: self.customTipPercentage forKey: customTipPercentageKey];
     [userDefaults setBool: self.isRoundedTotalSwitchActive forKey: roundedTotalKey];
+    [userDefaults setBool: self.isSaveLastTipPercentageSwitchActive forKey: saveTipPercentageKey];
+    [userDefaults setInteger: self.tipPercentageIndex forKey: tipPercentageIndexKey];
+    
+    NSLog(@"Custom Tip Percentage Saved: %f", self.customTipPercentage);
 }
 
-/// Loads the current theme from disk
+/// Loads the current settings from disk
 - (void) loadCurrentSettings {
     // Create the User Defaults store
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
     NSInteger storedThemeValue = [userDefaults integerForKey:selectedThemeKey];
     BOOL storedRoundedTotalValue = [userDefaults boolForKey: roundedTotalKey];
+    BOOL saveTipPercentageValue = [userDefaults boolForKey: saveTipPercentageKey];
+    NSInteger saveTipPercentageIndexValue = [userDefaults integerForKey: tipPercentageIndexKey];
+    double customTipPercentageValue = [userDefaults doubleForKey: customTipPercentageKey];
+    
     ThemeColorType loadedTheme = (ThemeColorType)storedThemeValue;
+    
     // Validate range (assuming enum is contiguous from Red to Purple)
     if (loadedTheme < ThemeColorTypeRed || loadedTheme > ThemeColorTypeGray) {
         loadedTheme = ThemeColorTypeDefault;
     }
+    
+    // First assign flags from stored values
+    _isSaveLastTipPercentageSwitchActive = saveTipPercentageValue;
+    _customTipPercentage = customTipPercentageValue;
+    NSLog(@"Custom Tip Percentage Value: %f", customTipPercentageValue);
     _isRoundedTotalSwitchActive = storedRoundedTotalValue;
     _currentTheme = loadedTheme;
+
+    // Then load the last tip percentage if the switch is on; clamp to non-negative
+    NSInteger restoredIndex = saveTipPercentageIndexValue;
+    if (restoredIndex < 0) {
+        restoredIndex = 0;
+    }
+    
+    if (_isSaveLastTipPercentageSwitchActive) {
+        _tipPercentageIndex = restoredIndex;
+    } else {
+        _tipPercentageIndex = 0;
+    }
 }
 
 
