@@ -167,8 +167,9 @@
         [self.saveTipPercentageSwitch addTarget: self action: @selector(saveTipPercentageSwitchTapped) forControlEvents: UIControlEventValueChanged];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
+    } else {
+        return nil;
     }
-    return nil;
 }
 
 

@@ -313,9 +313,9 @@
         self.checkTotalLabel = cell.checkTotalLabel;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
+    } else {
+        return nil;
     }
-    
-    return nil;
 }
 
 // Customize headers
