@@ -54,17 +54,15 @@
 /// Sets up the buttons in the navigation controller
 - (void) setupNavigationBarButtons {
     
-    UIBarButtonItem *exitButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemCancel target: self action: @selector(exitButtonPressed)];
     UIColor *color = [[SettingsManager sharedManager] colorForTheme: [SettingsManager sharedManager].currentTheme];
-    
+    UIBarButtonItem *exitButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemClose target: self action: @selector(exitButtonPressed)];
     self.navigationItem.leftBarButtonItem = exitButton;
-    if (@available(iOS 26.0, *)) {}
+    [exitButton release];
+    
+    if (@available (iOS 26.0, *)) {}
     else {
         self.navigationItem.leftBarButtonItem.tintColor = color;
     }
-    self.navigationItem.rightBarButtonItem.tintColor = color;
-    
-    [exitButton release];
 }
 
 

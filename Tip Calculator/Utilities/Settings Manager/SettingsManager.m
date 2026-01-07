@@ -119,6 +119,9 @@ static NSString *const tipPercentageIndexKey = @"tipPercentageKey";
     [[NSNotificationCenter defaultCenter] postNotificationName: @"ThemeDidChangeNotification" object: self];
 }
 
+#pragma mark - App Icon Methods
+
+
 
 #pragma mark - Load & Save Methods
 
