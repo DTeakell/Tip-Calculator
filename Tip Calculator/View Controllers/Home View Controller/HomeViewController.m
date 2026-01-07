@@ -129,8 +129,33 @@
     // Setup the array for tip percentages
     NSArray *tipOptions = [[NSArray alloc] initWithObjects: @0, @10, @15, @20, @0, nil];
     self.tipPercentages = tipOptions;
-    self.selectedTipIndex = 0;
+    
+    // Restore from the saved index
+    NSInteger restoredIndex = [SettingsManager sharedManager].tipPercentageIndex;
+    BOOL shouldRestore = [SettingsManager sharedManager].isSaveLastTipPercentageSwitchActive;
+    
+    // Clamp to available preset segments (exclude the last slot which is reserved for Custom)
+    NSInteger maxPresetIndex = (NSInteger) self.tipPercentages.count - 1;
+    NSInteger clampedIndex = 0;
+    if (shouldRestore && restoredIndex >= 0 && restoredIndex <= maxPresetIndex) {
+        clampedIndex = restoredIndex;
+    }
+    self.selectedTipIndex = clampedIndex;
+    
+    // Apply to calculator so values are correct before the cell is created
+    NSNumber *selectedTip = self.tipPercentages [self.selectedTipIndex];
+    
+    // Custom Tip Logic
+    if (self.selectedTipIndex == self.tipPercentages.count - 1) {
+        self.tipCalculator.tipPercentage = [SettingsManager sharedManager].customTipPercentage;
+    } else {
+        self.tipCalculator.tipPercentage = [selectedTip doubleValue];
+    }
+
     [tipOptions release];
+
+    // Ensure the table shows the restored index in the segmented control
+    [self.homeTableView reloadData];
 }
 
 /// Creates a feedback generator to generate haptics for the tip percentage picker
@@ -160,6 +185,14 @@
     [view release];
 }
 
+- (void) viewWillAppear: (BOOL) animated {
+    
+    [super viewWillAppear: animated];
+    if ([SettingsManager sharedManager].isSaveLastTipPercentageSwitchActive && [SettingsManager sharedManager].tipPercentageIndex == self.tipPercentages.count - 1) {
+        self.isCustomTipEnabled = YES;
+    }
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -181,6 +214,8 @@
     
     [self setupUI];
 }
+
+
 
 
 
@@ -230,7 +265,17 @@
     else if (self.isCustomTipEnabled && indexPath.section == 2) {
         CustomTipPercentageCell *cell = [tableView dequeueReusableCellWithIdentifier: @"CustomTipPercentageCell"];
         self.customTipPercentageTextField = cell.customTipPercentageTextField;
-        self.customTipPercentageValue = cell.customTipPercentageTextField.text;
+        
+        if ([SettingsManager sharedManager].isSaveLastTipPercentageSwitchActive) {
+            double initialTipPercentage = [SettingsManager sharedManager].customTipPercentage;
+            NSString *tipPercentageString = [NSString stringWithFormat: @"%.0f", initialTipPercentage];
+            self.customTipPercentageValue = tipPercentageString;
+            self.customTipPercentageTextField.text = self.customTipPercentageValue;
+            
+        } else {
+            self.customTipPercentageValue = cell.customTipPercentageTextField.text;
+        }
+        
         [self.customTipPercentageTextField addTarget: self action: @selector(customTipChanged) forControlEvents: UIControlEventEditingChanged];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell applyTheme];
@@ -262,15 +307,15 @@
     // Total Amount Label
     } else if (indexPath.section == 4 || (self.isCustomTipEnabled && indexPath.section == 5)) {
         TotalAmountCell *cell = [tableView dequeueReusableCellWithIdentifier: @"TotalAmountCell"];
-        [cell applyTheme];
         [cell configureWithRoundedTotalActive: [SettingsManager sharedManager].isRoundedTotalSwitchActive];
+        [cell applyTheme];
         self.roundedCheckTotalLabel = cell.roundedTotalLabel;
         self.checkTotalLabel = cell.checkTotalLabel;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
+    } else {
+        return nil;
     }
-    
-    return nil;
 }
 
 // Customize headers
@@ -311,6 +356,7 @@
     self.checkAmountTextField.tintColor = color;
     self.checkTotalLabel.tintColor = color;
     self.tipPercentageSelector.tintColor = color;
+    self.tipPercentageSelector.selectedSegmentTintColor = color;
     self.customTipPercentageTextField.tintColor = color;
     self.numberOfPeopleTextField.tintColor = color;
     
@@ -429,12 +475,28 @@
         self.tipCalculator.tipPercentage = [selectedTip doubleValue];
         [self inputChanged];
     }
+    
+    // Save tip percentage if the switch is toggled and custom tip is disabled
+    if ([SettingsManager sharedManager].isSaveLastTipPercentageSwitchActive && !self.isCustomTipEnabled) {
+        [SettingsManager sharedManager].tipPercentageIndex = self.selectedTipIndex;
+        [[SettingsManager sharedManager] saveCurrentSettings];
+    } else if ([SettingsManager sharedManager].isSaveLastTipPercentageSwitchActive && self.isCustomTipEnabled) {
+        [SettingsManager sharedManager].tipPercentageIndex = self.selectedTipIndex;
+        [SettingsManager sharedManager].customTipPercentage = [self.customTipPercentageValue doubleValue];
+        [[SettingsManager sharedManager] saveCurrentSettings];
+    }
 }
 
 /// Calculates the tip of the check with a custom tip percentage
 - (void) customTipChanged {
     double customTip = [self.customTipPercentageTextField.text doubleValue];
     self.tipCalculator.tipPercentage = customTip;
+    
+    if ([SettingsManager sharedManager].isSaveLastTipPercentageSwitchActive) {
+        [SettingsManager sharedManager].customTipPercentage = customTip;
+        [[SettingsManager sharedManager] saveCurrentSettings];
+    }
+    
     [self inputChanged];
 }
 

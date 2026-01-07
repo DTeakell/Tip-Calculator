@@ -29,6 +29,9 @@ typedef NS_ENUM(NSInteger, ThemeColorType) {
 
 @property (nonatomic, assign) ThemeColorType currentTheme;
 @property (nonatomic, assign) BOOL isRoundedTotalSwitchActive;
+@property (nonatomic, assign) BOOL isSaveLastTipPercentageSwitchActive;
+@property (nonatomic, assign) double tipPercentageIndex;
+@property (nonatomic, assign) double customTipPercentage;
 
 // A singleton so this manager is accessible everywhere
 + (instancetype) sharedManager;
@@ -38,12 +41,15 @@ typedef NS_ENUM(NSInteger, ThemeColorType) {
 - (NSString *) nameForTheme: (ThemeColorType) theme;
 - (ThemeColorType) themeFromString: (NSString *) themeName;
 - (NSArray <NSString *> *) allThemeNames;
+- (void) setCurrentTheme: (ThemeColorType) currentTheme;
+
+// Last Tip Percentage Utilities
+
 
 // Load & Save Methods
 - (void) saveCurrentSettings;
 - (void) loadCurrentSettings;
 
-// Apply to Window
-- (void) setCurrentTheme:(ThemeColorType)currentTheme;
+
 
 @end

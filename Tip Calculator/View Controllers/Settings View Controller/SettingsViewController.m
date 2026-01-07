@@ -54,20 +54,15 @@
 /// Sets up the buttons in the navigation controller
 - (void) setupNavigationBarButtons {
     
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemDone  target: self action: @selector(doneButtonPressed)];
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemCancel target: self action: @selector(cancelButtonPressed)];
     UIColor *color = [[SettingsManager sharedManager] colorForTheme: [SettingsManager sharedManager].currentTheme];
+    UIBarButtonItem *exitButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemClose target: self action: @selector(exitButtonPressed)];
+    self.navigationItem.leftBarButtonItem = exitButton;
+    [exitButton release];
     
-    self.navigationItem.leftBarButtonItem = cancelButton;
-    if (@available(iOS 26.0, *)) {}
+    if (@available (iOS 26.0, *)) {}
     else {
         self.navigationItem.leftBarButtonItem.tintColor = color;
     }
-    self.navigationItem.rightBarButtonItem = doneButton;
-    self.navigationItem.rightBarButtonItem.tintColor = color;
-    
-    [cancelButton release];
-    [doneButton release];
 }
 
 
@@ -165,10 +160,14 @@
     if (indexPath.section == 1 && indexPath.row == 1) {
         SaveTipPercentageCell *cell = [tableView dequeueReusableCellWithIdentifier: @"SaveTipPercentageCell"];
         self.saveTipPercentageLabel = cell.savePercentageLabel;
+        self.saveTipPercentageSwitch = cell.saveTipPercentageSwitch;
+        self.saveTipPercentageSwitch.on = [SettingsManager sharedManager].isSaveLastTipPercentageSwitchActive;
+        [self.saveTipPercentageSwitch addTarget: self action: @selector(saveTipPercentageSwitchTapped) forControlEvents: UIControlEventValueChanged];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
+    } else {
+        return nil;
     }
-    return nil;
 }
 
 
@@ -210,14 +209,15 @@
     [[NSNotificationCenter defaultCenter] postNotificationName: @"RoundedTotalSwitchActivatedNotification" object: nil];
 }
 
-/// Saves the user's data and dismisses the Settings screen
-- (void) doneButtonPressed {
-    [[SettingsManager sharedManager] saveCurrentSettings];
-    [self dismissViewControllerAnimated: YES completion: nil];
+- (void) saveTipPercentageSwitchTapped {
+    [SettingsManager sharedManager].isSaveLastTipPercentageSwitchActive = self.saveTipPercentageSwitch.isOn;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName: @"SaveLastTipPercentageSwitchActivatedNotification" object: nil];
 }
 
-/// Dismisses the Settings screen without saving any data
-- (void) cancelButtonPressed {
+/// Dismisses the Settings screen and saves data
+- (void) exitButtonPressed {
+    [[SettingsManager sharedManager] saveCurrentSettings];
     [self dismissViewControllerAnimated: YES completion: nil];
 }
 

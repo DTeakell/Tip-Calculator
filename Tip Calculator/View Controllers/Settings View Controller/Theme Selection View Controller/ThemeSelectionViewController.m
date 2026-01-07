@@ -88,17 +88,21 @@
     
     if (cellTheme == [SettingsManager sharedManager].currentTheme) {
         cell.checkmark.tintColor = color;
+        [color release];
     } else {
         cell.checkmark.tintColor = [UIColor clearColor];
     }
+    
+    [colors release];
+    [colorName release];
     
     
     return cell;
     
 }
 
-- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section { 
-    return [[[SettingsManager sharedManager] allThemeNames] count];
+- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 12;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -136,6 +140,10 @@
     cell.checkmark.tintColor = [[SettingsManager sharedManager] colorForTheme: selectedTheme];
     
     [[SettingsManager sharedManager] saveCurrentSettings];
+    
+    [colors release];
+    [colorName release];
+    [previousColorName release];
 }
 
 
