@@ -72,6 +72,9 @@
         }
       }
     },
+    "App Icon" : {
+      "comment" : "App Icon View Title"
+    },
     "Blue" : {
       "comment" : "Theme Name Purple"
     },
@@ -510,6 +513,15 @@
     "Green" : {
       "comment" : "Theme Name Pink"
     },
+    "Icon Change Failed" : {
+      "comment" : "Error Message Title"
+    },
+    "Icon Changed" : {
+      "comment" : "Alert Message Title"
+    },
+    "Icon has been changed successfully." : {
+      "comment" : "Alert Message"
+    },
     "Indigo" : {
       "comment" : "Theme Name Purple"
     },
@@ -659,7 +671,7 @@
       }
     },
     "Orange" : {
-      "comment" : "Theme Name Default"
+      "comment" : "App Icon Color Orange\nTheme Name Default"
     },
     "per person" : {
       "comment" : "Label for amount per person",
@@ -739,7 +751,7 @@
       "comment" : "Theme Name Purple"
     },
     "Red" : {
-      "comment" : "Theme Name Red"
+      "comment" : "App Icon Color Red\nTheme Name Red"
     },
     "Settings" : {
       "comment" : "Settings Button\nSettings Title"

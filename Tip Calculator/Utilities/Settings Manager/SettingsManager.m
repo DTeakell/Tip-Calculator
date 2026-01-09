@@ -121,6 +121,45 @@ static NSString *const tipPercentageIndexKey = @"tipPercentageKey";
 
 #pragma mark - App Icon Methods
 
+/// Returns the name of the app icon to be used with `setAlternateIcon`
+- (NSString *) nameForAppIcon: (AppIconType) appIcon {
+    switch (appIcon) {
+        case AppIconTypeRed: return @"Tip-Red";
+        case AppIconTypeDefault: return @"Tip";
+    }
+}
+
+/// Returns the display name for the app icon
+- (NSString *) displayNameForAppIcon: (AppIconType) appIcon {
+    switch (appIcon) {
+        case AppIconTypeRed: return NSLocalizedString(@"Red", @"App Icon Color Red");
+        case AppIconTypeDefault: return NSLocalizedString(@"Orange", @"App Icon Color Orange");
+    }
+}
+
+/// Sets the alternate app icon and sends an alert to the user based on the result
+- (void) setAlternateAppIcon: (AppIconType) appIcon {
+    // Get the icon name
+    NSString *appIconName = [self nameForAppIcon: appIcon];
+    
+    // Set the alternate icon name to the new icon name
+    [UIApplication.sharedApplication setAlternateIconName: appIconName
+                                        completionHandler:^(NSError * _Nullable error) {
+        
+        // Error Handling with Completion Handler
+        if (error) {
+            NSLog(@"App Icon Change Unsuccessful: %@", error);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"Icon Change Failed", @"Error Message Title") message: error.localizedDescription preferredStyle: UIAlertControllerStyleAlert];
+            });
+        } else {
+            NSLog(@"App Icon Changed Successfully!");
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"Icon Changed", @"Alert Message Title") message: NSLocalizedString(@"Icon has been changed successfully.", @"Alert Message") preferredStyle: UIAlertControllerStyleAlert];
+            });
+        }
+    }];
+}
 
 
 #pragma mark - Load & Save Methods

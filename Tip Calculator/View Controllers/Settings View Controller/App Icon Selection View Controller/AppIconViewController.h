@@ -8,6 +8,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@interface AppIconViewController : UIViewController
+@interface AppIconViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+
+@property (nonatomic, retain) UITableView *appIconTableView;
 
 @end
