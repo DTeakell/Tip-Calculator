@@ -7,7 +7,7 @@
 
 #import "AppIconViewController.h"
 #import "SettingsManager.h"
-#import "AppIconCell.h"
+#import "AppIconTableViewCell.h"
 
 @implementation AppIconViewController
 
@@ -32,6 +32,8 @@
     
     self.appIconTableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
+    
+    [self.appIconTableView registerClass: [AppIconTableViewCell class] forCellReuseIdentifier: @"AppIconTableViewCell"];
     [self.view addSubview: self.appIconTableView];
     
     // Constraints
@@ -53,7 +55,6 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    
     [self setupTableViewUI];
     [self setupAppIconViewController];
     
@@ -74,13 +75,19 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    AppIconCell *cell = [tableView dequeueReusableCellWithIdentifier: @"AppIconCell"];
+    AppIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: @"AppIconTableViewCell" forIndexPath: indexPath];
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath: indexPath animated: YES];
+    [[SettingsManager sharedManager] setAlternateAppIcon: AppIconTypeRed];
 }
 
 
 #pragma mark - Dealloc
 - (void) dealloc {
+    [_appIconTableView release];
     [super dealloc];
 }
 

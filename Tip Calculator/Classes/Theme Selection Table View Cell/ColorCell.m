@@ -69,9 +69,11 @@
         [self.colorLabel.topAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.topAnchor],
         [self.colorLabel.bottomAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.bottomAnchor],
         
+        // Color Circle Image
         [self.colorCircle.firstBaselineAnchor constraintEqualToAnchor: self.colorLabel.firstBaselineAnchor],
         [self.colorCircle.leadingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.leadingAnchor],
         
+        // Checkmark
         [self.checkmark.trailingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.trailingAnchor],
         [self.checkmark.centerYAnchor constraintEqualToAnchor: self.contentView.centerYAnchor]
 

@@ -124,8 +124,8 @@ static NSString *const tipPercentageIndexKey = @"tipPercentageKey";
 /// Returns the name of the app icon to be used with `setAlternateIcon`
 - (NSString *) nameForAppIcon: (AppIconType) appIcon {
     switch (appIcon) {
-        case AppIconTypeRed: return @"Tip-Red";
-        case AppIconTypeDefault: return @"Tip";
+        case AppIconTypeRed: return @"AppIcon-Red";
+        case AppIconTypeDefault: return @"AppIcon";
     }
 }
 
