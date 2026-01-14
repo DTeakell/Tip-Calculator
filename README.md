@@ -1,12 +1,20 @@
 # Tip Calculator
 ## About
-A basic tip calculator app that lets a user input their bill and choose their tip percentage from a segmented control (similar to the one used in SwiftUI). Made using UIKit and Objective-C, a programmatic UI, manual memory management, and incorperates UITableView and UINavigationController for a native iOS look and feel.
+A basic tip calculator app that lets a user input their bill and select their tip. Made using UIKit and Objective-C, a programmatic UI, MRR (Manual Retain Release), and incorperates UITableView and UINavigationController for a native iOS look and feel.
+
+## Features Being Worked On
+The following features are being worked on.
+- Settings Screen (Complete)
+- Changing Theme Color (Complete)
+- Changing App Icon (In Development)
+- Save Last Tip Percentage (Complete)
+- Round Total (Complete)
 
 ## Screenshots
 
 <p align="left">
-  <img src="/Screenshots/iOS/English/Simulator Screenshot - iPhone 17 Pro Max - 2025-10-17 at 11.35.57.png" alt="Main View" width="250"/>
-  <img src="/Screenshots/iOS/English/Simulator Screenshot - iPhone 17 Pro Max - 2025-10-17 at 11.36.35.png" alt="Main View" width="250"/>
+  <img src="/Screenshots/Main-Light.png" alt="Main View" width="250"/>
+  <img src="/Screenshots/Settings-Light.png" alt="Main View" width="250"/>
 </p>
 
 ## Things Learned
