@@ -50,9 +50,8 @@ typedef NS_ENUM(NSInteger, AppIconType) {
 - (void) setCurrentTheme: (ThemeColorType) currentTheme;
 
 // App Icon Utilities
+- (AppIconType) appIconFromTheme: (ThemeColorType) theme;
 - (NSString *) nameForAppIcon: (AppIconType) appIcon;
-- (NSString *) displayNameForAppIcon: (AppIconType) appIcon;
-- (void) setAlternateAppIcon: (AppIconType) appIcon;
 
 
 

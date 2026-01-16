@@ -516,12 +516,6 @@
     "Icon Change Failed" : {
       "comment" : "Error Message Title"
     },
-    "Icon Changed" : {
-      "comment" : "Alert Message Title"
-    },
-    "Icon has been changed successfully." : {
-      "comment" : "Alert Message"
-    },
     "Indigo" : {
       "comment" : "Theme Name Purple"
     },
@@ -671,7 +665,7 @@
       }
     },
     "Orange" : {
-      "comment" : "App Icon Color Orange\nTheme Name Default"
+      "comment" : "Theme Name Default"
     },
     "per person" : {
       "comment" : "Label for amount per person",
@@ -751,7 +745,7 @@
       "comment" : "Theme Name Purple"
     },
     "Red" : {
-      "comment" : "App Icon Color Red\nTheme Name Red"
+      "comment" : "Theme Name Red"
     },
     "Settings" : {
       "comment" : "Settings Button\nSettings Title"

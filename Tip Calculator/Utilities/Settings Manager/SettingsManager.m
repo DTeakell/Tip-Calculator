@@ -121,45 +121,32 @@ static NSString *const tipPercentageIndexKey = @"tipPercentageKey";
 
 #pragma mark - App Icon Methods
 
+/// Returns the `AppIconType` with the corrosponding `ThemeColorType`
+- (AppIconType) appIconFromTheme: (ThemeColorType) theme {
+    switch (theme) {
+        case ThemeColorTypeRed: return AppIconTypeRed;
+        case ThemeColorTypeDefault: return AppIconTypeDefault;
+        case ThemeColorTypeYellow: return AppIconTypeDefault;
+        case ThemeColorTypeGreen: return AppIconTypeDefault;
+        case ThemeColorTypeMint: return AppIconTypeDefault;
+        case ThemeColorTypeTeal: return AppIconTypeDefault;
+        case ThemeColorTypeCyan: return AppIconTypeDefault;
+        case ThemeColorTypeBlue: return AppIconTypeDefault;
+        case ThemeColorTypeIndigo: return AppIconTypeDefault;
+        case ThemeColorTypePurple: return AppIconTypeDefault;
+        case ThemeColorTypePink: return AppIconTypeDefault;
+        case ThemeColorTypeGray: return AppIconTypeDefault;
+    }
+}
+
 /// Returns the name of the app icon to be used with `setAlternateIcon`
 - (NSString *) nameForAppIcon: (AppIconType) appIcon {
     switch (appIcon) {
         case AppIconTypeRed: return @"AppIcon-Red";
-        case AppIconTypeDefault: return @"AppIcon";
+        case AppIconTypeDefault: return nil;
     }
 }
 
-/// Returns the display name for the app icon
-- (NSString *) displayNameForAppIcon: (AppIconType) appIcon {
-    switch (appIcon) {
-        case AppIconTypeRed: return NSLocalizedString(@"Red", @"App Icon Color Red");
-        case AppIconTypeDefault: return NSLocalizedString(@"Orange", @"App Icon Color Orange");
-    }
-}
-
-/// Sets the alternate app icon and sends an alert to the user based on the result
-- (void) setAlternateAppIcon: (AppIconType) appIcon {
-    // Get the icon name
-    NSString *appIconName = [self nameForAppIcon: appIcon];
-    
-    // Set the alternate icon name to the new icon name
-    [UIApplication.sharedApplication setAlternateIconName: appIconName
-                                        completionHandler:^(NSError * _Nullable error) {
-        
-        // Error Handling with Completion Handler
-        if (error) {
-            NSLog(@"App Icon Change Unsuccessful: %@", error);
-            dispatch_async(dispatch_get_main_queue(), ^{
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"Icon Change Failed", @"Error Message Title") message: error.localizedDescription preferredStyle: UIAlertControllerStyleAlert];
-            });
-        } else {
-            NSLog(@"App Icon Changed Successfully!");
-            dispatch_async(dispatch_get_main_queue(), ^{
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"Icon Changed", @"Alert Message Title") message: NSLocalizedString(@"Icon has been changed successfully.", @"Alert Message") preferredStyle: UIAlertControllerStyleAlert];
-            });
-        }
-    }];
-}
 
 
 #pragma mark - Load & Save Methods

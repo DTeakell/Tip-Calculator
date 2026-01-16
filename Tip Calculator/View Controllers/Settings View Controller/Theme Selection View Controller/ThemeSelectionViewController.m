@@ -42,7 +42,6 @@
        [self.themeSelectionTableView.leadingAnchor constraintEqualToAnchor: self.view.leadingAnchor],
        [self.themeSelectionTableView.trailingAnchor constraintEqualToAnchor: self.view.trailingAnchor]
     ]];
-    
 }
 
 #pragma mark - Life Cycle Methods
@@ -76,12 +75,10 @@
     
     ColorCell *cell = [tableView dequeueReusableCellWithIdentifier: @"ColorCell" forIndexPath: indexPath];
     
-    
     NSArray *colors = [[SettingsManager sharedManager] allThemeNames];
     NSString *colorName = colors[indexPath.row];
     ThemeColorType cellTheme = [[SettingsManager sharedManager] themeFromString: colorName];
     UIColor *color = [[SettingsManager sharedManager] colorForTheme: cellTheme];
-    
     
     cell.colorLabel.text = colorName;
     cell.colorCircle.tintColor = color;
@@ -96,9 +93,7 @@
     [colors release];
     [colorName release];
     
-    
     return cell;
-    
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
