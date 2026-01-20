@@ -11,7 +11,6 @@
 @interface AppIconColorCell : UITableViewCell
 
 @property (nonatomic, retain) UIImageView *appIconImage;
-@property (nonatomic, retain) NSString *appIconImageName;
 @property (nonatomic, retain) UILabel *colorLabel;
 @property (nonatomic, retain) UIImageView *checkmark;
 

@@ -30,12 +30,11 @@
     self.showRoundedTotalsLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.showRoundedTotalsLabel.numberOfLines = 0;
     
-    [self.contentView addSubview: self.showRoundedTotalsLabel];
-    
     // Switch
     self.showRoundedTotalsSwitch = [[[UISwitch alloc] init] autorelease];
     self.showRoundedTotalsSwitch.translatesAutoresizingMaskIntoConstraints = NO;
     
+    [self.contentView addSubview: self.showRoundedTotalsLabel];
     [self.contentView addSubview: self.showRoundedTotalsSwitch];
 }
 

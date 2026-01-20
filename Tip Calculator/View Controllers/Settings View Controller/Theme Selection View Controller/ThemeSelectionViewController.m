@@ -85,7 +85,6 @@
     
     if (cellTheme == [SettingsManager sharedManager].currentTheme) {
         cell.checkmark.tintColor = color;
-        [color release];
     } else {
         cell.checkmark.tintColor = [UIColor clearColor];
     }
@@ -137,8 +136,8 @@
     [[SettingsManager sharedManager] saveCurrentSettings];
     
     [colors release];
-    [colorName release];
     [previousColorName release];
+    [colorName release];
 }
 
 

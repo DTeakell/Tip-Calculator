@@ -27,7 +27,17 @@ typedef NS_ENUM(NSInteger, ThemeColorType) {
 // App Icon Enum
 typedef NS_ENUM(NSInteger, AppIconType) {
     AppIconTypeRed,
-    AppIconTypeDefault
+    AppIconTypeDefault,
+    AppIconTypeYellow,
+    AppIconTypeGreen,
+    AppIconTypeMint,
+    AppIconTypeTeal,
+    AppIconTypeCyan,
+    AppIconTypeBlue,
+    AppIconTypeIndigo,
+    AppIconTypePurple,
+    AppIconTypePink,
+    AppIconTypeGray
 };
 
 
@@ -52,8 +62,6 @@ typedef NS_ENUM(NSInteger, AppIconType) {
 // App Icon Utilities
 - (AppIconType) appIconFromTheme: (ThemeColorType) theme;
 - (NSString *) nameForAppIcon: (AppIconType) appIcon;
-
-
 
 // Load & Save Methods
 - (void) saveCurrentSettings;

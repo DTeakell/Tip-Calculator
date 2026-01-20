@@ -126,16 +126,16 @@ static NSString *const tipPercentageIndexKey = @"tipPercentageKey";
     switch (theme) {
         case ThemeColorTypeRed: return AppIconTypeRed;
         case ThemeColorTypeDefault: return AppIconTypeDefault;
-        case ThemeColorTypeYellow: return AppIconTypeDefault;
-        case ThemeColorTypeGreen: return AppIconTypeDefault;
-        case ThemeColorTypeMint: return AppIconTypeDefault;
-        case ThemeColorTypeTeal: return AppIconTypeDefault;
-        case ThemeColorTypeCyan: return AppIconTypeDefault;
-        case ThemeColorTypeBlue: return AppIconTypeDefault;
-        case ThemeColorTypeIndigo: return AppIconTypeDefault;
-        case ThemeColorTypePurple: return AppIconTypeDefault;
-        case ThemeColorTypePink: return AppIconTypeDefault;
-        case ThemeColorTypeGray: return AppIconTypeDefault;
+        case ThemeColorTypeYellow: return AppIconTypeYellow;
+        case ThemeColorTypeGreen: return AppIconTypeGreen;
+        case ThemeColorTypeMint: return AppIconTypeMint;
+        case ThemeColorTypeTeal: return AppIconTypeTeal;
+        case ThemeColorTypeCyan: return AppIconTypeCyan;
+        case ThemeColorTypeBlue: return AppIconTypeBlue;
+        case ThemeColorTypeIndigo: return AppIconTypeIndigo;
+        case ThemeColorTypePurple: return AppIconTypePurple;
+        case ThemeColorTypePink: return AppIconTypePink;
+        case ThemeColorTypeGray: return AppIconTypeGray;
     }
 }
 
@@ -144,6 +144,16 @@ static NSString *const tipPercentageIndexKey = @"tipPercentageKey";
     switch (appIcon) {
         case AppIconTypeRed: return @"AppIcon-Red";
         case AppIconTypeDefault: return nil;
+        case AppIconTypeYellow: return @"AppIcon-Yellow";
+        case AppIconTypeGreen: return @"AppIcon-Green";
+        case AppIconTypeMint: return @"AppIcon-Mint";
+        case AppIconTypeTeal: return @"AppIcon-Teal";
+        case AppIconTypeCyan: return @"AppIcon-Cyan";
+        case AppIconTypeBlue: return @"AppIcon-Blue";
+        case AppIconTypeIndigo: return @"AppIcon-Indigo";
+        case AppIconTypePurple: return @"AppIcon-Purple";
+        case AppIconTypePink: return @"AppIcon-Pink";
+        case AppIconTypeGray: return @"AppIcon-Gray";
     }
 }
 
@@ -166,6 +176,7 @@ static NSString *const tipPercentageIndexKey = @"tipPercentageKey";
     // Create the User Defaults store
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
+    // Get values from keys
     NSInteger storedThemeValue = [userDefaults integerForKey:selectedThemeKey];
     BOOL storedRoundedTotalValue = [userDefaults boolForKey: roundedTotalKey];
     BOOL saveTipPercentageValue = [userDefaults boolForKey: saveTipPercentageKey];
@@ -174,7 +185,7 @@ static NSString *const tipPercentageIndexKey = @"tipPercentageKey";
     
     ThemeColorType loadedTheme = (ThemeColorType)storedThemeValue;
     
-    // Validate range (assuming enum is contiguous from Red to Purple)
+    // Validate Range
     if (loadedTheme < ThemeColorTypeRed || loadedTheme > ThemeColorTypeGray) {
         loadedTheme = ThemeColorTypeDefault;
     }

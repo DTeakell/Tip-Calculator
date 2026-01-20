@@ -1,0 +1,35 @@
+{
+  "fill" : {
+    "linear-gradient" : [
+      "display-p3:0.77445,0.77047,0.79395,1.00000",
+      "display-p3:0.55766,0.55905,0.58008,1.00000"
+    ]
+  },
+  "groups" : [
+    {
+      "blend-mode" : "normal",
+      "layers" : [
+        {
+          "glass" : true,
+          "image-name" : "17A40D99-AC17-4AA3-B3C7-9E130B7EB488.svg",
+          "name" : "17A40D99-AC17-4AA3-B3C7-9E130B7EB488"
+        }
+      ],
+      "lighting" : "combined",
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}

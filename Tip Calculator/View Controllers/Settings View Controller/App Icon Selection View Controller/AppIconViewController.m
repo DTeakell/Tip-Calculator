@@ -45,14 +45,14 @@
     ]];
 }
 
-#pragma mark - App Icon Selection Methods
+#pragma mark - App Icon Selection Method
 /// Sets the alternate app icon and sends an alert to the user based on the result
 - (void) setAlternateAppIcon: (AppIconType) appIcon {
     // Get the icon name
     NSString *appIconName = [[SettingsManager sharedManager] nameForAppIcon: appIcon];
     
     // Set the alternate icon name to the new icon name
-    [UIApplication.sharedApplication setAlternateIconName: appIconName completionHandler:^(NSError *error) {
+    [UIApplication.sharedApplication setAlternateIconName: appIconName completionHandler: ^(NSError *error) {
         if (error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 UIAlertController *appIconErrorAlert = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"Icon Change Failed", @"Error Message Title")
@@ -86,7 +86,7 @@
 #pragma mark - Table View Methods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 2;
+    return 12;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -104,9 +104,35 @@
     NSString *colorName = colors[indexPath.row];
     UIColor *currentThemeColor = [[SettingsManager sharedManager] colorForTheme: [SettingsManager sharedManager].currentTheme];
     
+    if (indexPath.row == 0) {
+        cell.appIconImage.image = [UIImage imageNamed: @"AppIcon-Red.png"];
+    } else if (indexPath.row == 1) {
+        cell.appIconImage.image = [UIImage imageNamed: @"AppIcon.png"];
+    } else if (indexPath.row == 2) {
+        cell.appIconImage.image = [UIImage imageNamed: @"AppIcon-Yellow.png"];
+    } else if (indexPath.row == 3) {
+        cell.appIconImage.image = [UIImage imageNamed: @"AppIcon-Green.png"];
+    } else if (indexPath.row == 4) {
+        cell.appIconImage.image = [UIImage imageNamed: @"AppIcon-Mint.png"];
+    } else if (indexPath.row == 5) {
+        cell.appIconImage.image = [UIImage imageNamed: @"AppIcon-Teal.png"];
+    } else if (indexPath.row == 6) {
+        cell.appIconImage.image = [UIImage imageNamed: @"AppIcon-Cyan.png"];
+    } else if (indexPath.row == 7) {
+        cell.appIconImage.image = [UIImage imageNamed: @"AppIcon-Blue.png"];
+    } else if (indexPath.row == 8) {
+        cell.appIconImage.image = [UIImage imageNamed: @"AppIcon-Indigo.png"];
+    } else if (indexPath.row == 9) {
+        cell.appIconImage.image = [UIImage imageNamed: @"AppIcon-Purple.png"];
+    } else if (indexPath.row == 10) {
+        cell.appIconImage.image = [UIImage imageNamed: @"AppIcon-Pink.png"];
+    } else if (indexPath.row == 11) {
+        cell.appIconImage.image = [UIImage imageNamed: @"AppIcon-Gray.png"];
+    }
+    
     cell.colorLabel.text = colorName;
     cell.checkmark.tintColor = currentThemeColor;
-
+    
     [colors release];
     [colorName release];
     
@@ -123,6 +149,9 @@
     ThemeColorType cellTheme = [[SettingsManager sharedManager] themeFromString: colorName];
     
     AppIconType cellIcon = [[SettingsManager sharedManager] appIconFromTheme: cellTheme];
+    
+    [colors release];
+    [colorName release];
     
     [self setAlternateAppIcon: cellIcon];
 }

@@ -307,10 +307,10 @@
     // Total Amount Label
     } else if (indexPath.section == 4 || (self.isCustomTipEnabled && indexPath.section == 5)) {
         TotalAmountCell *cell = [tableView dequeueReusableCellWithIdentifier: @"TotalAmountCell"];
-        [cell configureWithRoundedTotalActive: [SettingsManager sharedManager].isRoundedTotalSwitchActive];
-        [cell applyTheme];
         self.roundedCheckTotalLabel = cell.roundedTotalLabel;
         self.checkTotalLabel = cell.checkTotalLabel;
+        [cell configureWithRoundedTotalActive: [SettingsManager sharedManager].isRoundedTotalSwitchActive];
+        [cell applyTheme];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     } else {

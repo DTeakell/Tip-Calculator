@@ -25,13 +25,13 @@
 - (void) setupView {
     
     // App Icon Image
-    UIImageView *appIconImageView = [[UIImageView alloc] initWithFrame: CGRectMake(0, 0, 20, 40)];
-    appIconImageView.image = [UIImage imageNamed: @"AppIcon"];
+    UIImageView *appIconImageView = [[UIImageView alloc] initWithFrame: CGRectMake(7.5, 17, 20, 20)];
     
     // Make configuration
     UIImageSymbolConfiguration *multicolorConfiguration = [UIImageSymbolConfiguration configurationPreferringMulticolor];
     UIImageSymbolConfiguration *sizeConfiguration = [UIImageSymbolConfiguration configurationWithScale: UIImageSymbolScaleSmall];
     UIImageSymbolConfiguration *appIconConfiguration = [multicolorConfiguration configurationByApplyingConfiguration: sizeConfiguration];
+    
     appIconImageView.preferredSymbolConfiguration = appIconConfiguration;
     appIconImageView.contentMode = UIViewContentModeScaleAspectFit;
     
@@ -71,8 +71,8 @@
         [self.colorLabel.bottomAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.bottomAnchor],
         
         // Color Circle Image
-        [self.appIconImage.leadingAnchor constraintEqualToAnchor: self.contentView.leadingAnchor constant: 2.5],
-        [self.appIconImage.bottomAnchor constraintEqualToAnchor: self.contentView.bottomAnchor],
+        [self.appIconImage.firstBaselineAnchor constraintEqualToAnchor: self.contentView.firstBaselineAnchor constant: 5.0],
+        [self.appIconImage.leadingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.leadingAnchor],
 
         // Checkmark
         [self.checkmark.trailingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.trailingAnchor],
