@@ -6,6 +6,7 @@
 //
 
 #import "SaveTipPercentageCell.h"
+#import "SettingsManager.h"
 
 @implementation SaveTipPercentageCell
 
@@ -18,6 +19,12 @@
     }
     
     return self;
+}
+
+- (void)applyTheme {
+    ThemeColorType theme = [SettingsManager sharedManager].currentTheme;
+    UIColor *color = [[SettingsManager sharedManager] colorForTheme:theme];
+    self.saveTipPercentageSwitch.onTintColor = color;
 }
 
 - (void) setupView {
@@ -34,6 +41,7 @@
     
     // Switch
     self.saveTipPercentageSwitch = [[[UISwitch alloc] init] autorelease];
+    [self applyTheme];
     self.saveTipPercentageSwitch.translatesAutoresizingMaskIntoConstraints = NO;
     [self.contentView addSubview: self.saveTipPercentageSwitch];
 }

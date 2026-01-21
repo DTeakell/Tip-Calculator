@@ -25,7 +25,7 @@
 - (void) setupView {
     
     // App Icon Image
-    UIImageView *appIconImageView = [[UIImageView alloc] initWithFrame: CGRectMake(7.5, 17, 20, 20)];
+    UIImageView *appIconImageView = [[UIImageView alloc] initWithFrame: CGRectMake(12.5, 17, 22.5, 22.5)];
     
     // Make configuration
     UIImageSymbolConfiguration *multicolorConfiguration = [UIImageSymbolConfiguration configurationPreferringMulticolor];
@@ -33,7 +33,7 @@
     UIImageSymbolConfiguration *appIconConfiguration = [multicolorConfiguration configurationByApplyingConfiguration: sizeConfiguration];
     
     appIconImageView.preferredSymbolConfiguration = appIconConfiguration;
-    appIconImageView.contentMode = UIViewContentModeScaleAspectFit;
+    appIconImageView.contentMode = UIViewContentModeScaleAspectFill;
     
     self.appIconImage = appIconImageView;
     [appIconImageView release];
@@ -64,15 +64,16 @@
 - (void) setConstraints {
     
     [NSLayoutConstraint activateConstraints:@[
+        
+        // App Icon Image
+        [self.appIconImage.firstBaselineAnchor constraintEqualToAnchor: self.contentView.firstBaselineAnchor constant: 5.0],
+        [self.appIconImage.leadingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.leadingAnchor],
+        
         // Label
-        [self.colorLabel.leadingAnchor constraintEqualToAnchor:self.appIconImage.trailingAnchor constant: 7.5],
+        [self.colorLabel.leadingAnchor constraintEqualToAnchor:self.appIconImage.trailingAnchor constant: 10],
         [self.colorLabel.trailingAnchor constraintEqualToAnchor:self.contentView.layoutMarginsGuide.trailingAnchor],
         [self.colorLabel.topAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.topAnchor],
         [self.colorLabel.bottomAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.bottomAnchor],
-        
-        // Color Circle Image
-        [self.appIconImage.firstBaselineAnchor constraintEqualToAnchor: self.contentView.firstBaselineAnchor constant: 5.0],
-        [self.appIconImage.leadingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.leadingAnchor],
 
         // Checkmark
         [self.checkmark.trailingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.trailingAnchor],

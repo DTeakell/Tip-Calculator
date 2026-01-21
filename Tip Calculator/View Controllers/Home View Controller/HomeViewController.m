@@ -215,7 +215,12 @@
     [self setupUI];
 }
 
-
+- (void) viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear: animated];
+    if ([SettingsManager sharedManager].isSaveLastTipPercentageSwitchActive) {
+        [SettingsManager sharedManager].tipPercentageIndex = self.tipCalculator.tipPercentage;
+    }
+}
 
 
 
@@ -400,29 +405,36 @@
 
 /// Clears inputs and resets calculated labels
 - (void) clearScreenTapped {
-    [self.tipCalculator reset];
-    
     // Clear text fields
     self.checkAmountTextField.text = @"";
-    self.customTipPercentageTextField.text = @"";
     self.numberOfPeopleTextField.text = @"";
     
     BOOL wasCustom = self.isCustomTipEnabled;
-
-    // Reset calculator values
-    [self.homeTableView beginUpdates];
-    self.tipPercentageSelector.selectedSegmentIndex = 0;
-    self.selectedTipIndex = 0;
-    self.isCustomTipEnabled = NO;
-    self.tipCalculator.checkAmount = 0.0;
-    self.tipCalculator.tipPercentage = 0.0;
-    self.tipCalculator.numberOfPeopleOnCheck = 0.0;
     
-    if (wasCustom && !self.isCustomTipEnabled) {
-        [self.homeTableView deleteSections: [NSIndexSet indexSetWithIndex: 2] withRowAnimation: UITableViewRowAnimationFade];
+    // Save only the tip percentage and clear everything else
+    if ([SettingsManager sharedManager].isSaveLastTipPercentageSwitchActive) {
+        [self.tipCalculator resetAndKeepTipPercentage];
+        self.tipCalculator.checkAmount = 0.0;
+        self.tipCalculator.numberOfPeopleOnCheck = 0.0;
+        
+    // Clear everything
+    } else {
+        self.customTipPercentageTextField.text = @"";
+        [self.tipCalculator reset];
+        [self.homeTableView beginUpdates];
+        self.tipPercentageSelector.selectedSegmentIndex = 0;
+        self.selectedTipIndex = 0;
+        self.isCustomTipEnabled = NO;
+        self.tipCalculator.checkAmount = 0.0;
+        self.tipCalculator.tipPercentage = 0.0;
+        self.tipCalculator.numberOfPeopleOnCheck = 0.0;
+        
+        if (wasCustom && !self.isCustomTipEnabled) {
+            [self.homeTableView deleteSections: [NSIndexSet indexSetWithIndex: 2] withRowAnimation: UITableViewRowAnimationFade];
+        }
+        
+        [self.homeTableView endUpdates];
     }
-    
-    [self.homeTableView endUpdates];
     
     [self inputChanged];
     

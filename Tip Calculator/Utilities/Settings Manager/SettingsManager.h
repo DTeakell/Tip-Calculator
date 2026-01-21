@@ -44,6 +44,7 @@ typedef NS_ENUM(NSInteger, AppIconType) {
 @interface SettingsManager : NSObject
 
 @property (nonatomic, assign) ThemeColorType currentTheme;
+@property (nonatomic, assign) AppIconType currentIcon;
 @property (nonatomic, assign) BOOL isRoundedTotalSwitchActive;
 @property (nonatomic, assign) BOOL isSaveLastTipPercentageSwitchActive;
 @property (nonatomic, assign) double tipPercentageIndex;

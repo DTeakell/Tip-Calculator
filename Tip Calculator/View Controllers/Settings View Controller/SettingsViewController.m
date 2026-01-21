@@ -97,13 +97,16 @@
 /// Applies the current theme to the view controller
 - (void) applyTheme: (NSNotification *) notification {
     ThemeColorType theme = [[SettingsManager sharedManager] currentTheme];
-    self.navigationItem.rightBarButtonItem.tintColor = [[SettingsManager sharedManager] colorForTheme: theme];
+    UIColor *color = [[SettingsManager sharedManager] colorForTheme: theme];
+    self.navigationItem.rightBarButtonItem.tintColor = color;
     self.selectedThemeLabel.text = [[SettingsManager sharedManager] nameForTheme: theme];
+    self.showRoundedValuesSwitch.onTintColor = color;
+    self.saveTipPercentageSwitch.onTintColor = color;
     
     if (@available(iOS 26.0, *)) {}
     else {
-        self.navigationItem.leftBarButtonItem.tintColor = [[SettingsManager sharedManager] colorForTheme: theme];
-        self.navigationController.navigationBar.tintColor = [[SettingsManager sharedManager] colorForTheme: theme];
+        self.navigationItem.leftBarButtonItem.tintColor = color;
+        self.navigationController.navigationBar.tintColor = color;
     }
 }
 

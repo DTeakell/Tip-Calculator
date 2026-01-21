@@ -146,8 +146,8 @@
     // Get theme colors
     NSArray *colors = [[SettingsManager sharedManager] allThemeNames];
     NSString *colorName = colors[indexPath.row];
-    ThemeColorType cellTheme = [[SettingsManager sharedManager] themeFromString: colorName];
     
+    ThemeColorType cellTheme = [[SettingsManager sharedManager] themeFromString: colorName];
     AppIconType cellIcon = [[SettingsManager sharedManager] appIconFromTheme: cellTheme];
     
     [colors release];

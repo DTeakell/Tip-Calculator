@@ -36,4 +36,7 @@
 /// Resets all properties to `0`.
 - (void) reset;
 
+/// Resets all properties to `0`, but keeps the tip percentage value.
+- (void) resetAndKeepTipPercentage;
+
 @end

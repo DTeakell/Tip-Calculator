@@ -11,6 +11,7 @@
 
 #pragma mark - UserDefaults Keys
 static NSString *const selectedThemeKey = @"selectedTheme";
+static NSString *const selectedIconKey = @"selectedIcon";
 static NSString *const roundedTotalKey = @"roundedTotalKey";
 static NSString *const customTipPercentageKey = @"customTipPercentageKey";
 static NSString *const saveTipPercentageKey = @"saveTipPercentageKey";
@@ -165,6 +166,7 @@ static NSString *const tipPercentageIndexKey = @"tipPercentageKey";
 - (void) saveCurrentSettings {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setInteger: self.currentTheme forKey: selectedThemeKey];
+    [userDefaults setInteger: self.currentIcon forKey: selectedIconKey];
     [userDefaults setDouble: self.customTipPercentage forKey: customTipPercentageKey];
     [userDefaults setBool: self.isRoundedTotalSwitchActive forKey: roundedTotalKey];
     [userDefaults setBool: self.isSaveLastTipPercentageSwitchActive forKey: saveTipPercentageKey];
@@ -177,7 +179,8 @@ static NSString *const tipPercentageIndexKey = @"tipPercentageKey";
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     // Get values from keys
-    NSInteger storedThemeValue = [userDefaults integerForKey:selectedThemeKey];
+    NSInteger storedThemeValue = [userDefaults integerForKey: selectedThemeKey];
+    NSInteger storedIconValue = [userDefaults integerForKey: selectedIconKey];
     BOOL storedRoundedTotalValue = [userDefaults boolForKey: roundedTotalKey];
     BOOL saveTipPercentageValue = [userDefaults boolForKey: saveTipPercentageKey];
     NSInteger saveTipPercentageIndexValue = [userDefaults integerForKey: tipPercentageIndexKey];
@@ -195,6 +198,7 @@ static NSString *const tipPercentageIndexKey = @"tipPercentageKey";
     _customTipPercentage = customTipPercentageValue;
     _isRoundedTotalSwitchActive = storedRoundedTotalValue;
     _currentTheme = loadedTheme;
+    _currentIcon = storedIconValue;
 
     // Then load the last tip percentage if the switch is on; clamp to non-negative
     NSInteger restoredIndex = saveTipPercentageIndexValue;
