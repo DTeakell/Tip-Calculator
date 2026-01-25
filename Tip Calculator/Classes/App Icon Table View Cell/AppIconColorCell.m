@@ -66,7 +66,7 @@
     [NSLayoutConstraint activateConstraints:@[
         
         // App Icon Image
-        [self.appIconImage.firstBaselineAnchor constraintEqualToAnchor: self.contentView.firstBaselineAnchor constant: 5.0],
+        [self.appIconImage.centerYAnchor constraintEqualToAnchor: self.colorLabel.centerYAnchor],
         [self.appIconImage.leadingAnchor constraintEqualToAnchor: self.contentView.layoutMarginsGuide.leadingAnchor],
         
         // Label

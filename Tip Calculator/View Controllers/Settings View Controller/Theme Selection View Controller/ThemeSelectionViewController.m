@@ -123,7 +123,11 @@
     if (previousRow != NSNotFound) {
         NSIndexPath *previousIndexPath = [NSIndexPath indexPathForRow: previousRow inSection: 0];
         ColorCell *previousCell = [self.themeSelectionTableView cellForRowAtIndexPath: previousIndexPath];
-        previousCell.checkmark.hidden = YES;
+        if (indexPath == previousIndexPath) {
+            previousCell.checkmark.hidden = NO;
+        } else {
+            previousCell.checkmark.hidden = YES;
+        }
     }
     
     // Get the selected theme and apply it to the selected cell's checkmark
