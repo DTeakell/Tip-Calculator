@@ -6,6 +6,7 @@
 //
 
 #import "SaveTipPercentageCell.h"
+#import "SettingsManager.h"
 
 @implementation SaveTipPercentageCell
 
@@ -20,11 +21,17 @@
     return self;
 }
 
+- (void)applyTheme {
+    ThemeColorType theme = [SettingsManager sharedManager].currentTheme;
+    UIColor *color = [[SettingsManager sharedManager] colorForTheme:theme];
+    self.saveTipPercentageSwitch.onTintColor = color;
+}
+
 - (void) setupView {
     
     // Label
     self.savePercentageLabel = [[[UILabel alloc] init] autorelease];
-    self.savePercentageLabel.text = @"Save Tip Percentage";
+    self.savePercentageLabel.text = NSLocalizedString(@"Save Tip Percentage", @"Save Tip Percentage Label");
     self.savePercentageLabel.font = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
     self.savePercentageLabel.numberOfLines = 0;
     self.savePercentageLabel.adjustsFontForContentSizeCategory = YES;
@@ -34,6 +41,7 @@
     
     // Switch
     self.saveTipPercentageSwitch = [[[UISwitch alloc] init] autorelease];
+    [self applyTheme];
     self.saveTipPercentageSwitch.translatesAutoresizingMaskIntoConstraints = NO;
     [self.contentView addSubview: self.saveTipPercentageSwitch];
 }

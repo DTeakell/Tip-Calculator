@@ -6,6 +6,7 @@
 //
 
 #import "ShowRoundedTotalsCell.h"
+#import "SettingsManager.h"
 
 @implementation ShowRoundedTotalsCell
 
@@ -21,21 +22,27 @@
     return self;
 }
 
+- (void)applyTheme {
+    ThemeColorType theme = [SettingsManager sharedManager].currentTheme;
+    UIColor *color = [[SettingsManager sharedManager] colorForTheme:theme];
+    self.showRoundedTotalsSwitch.onTintColor = color;
+}
+
 - (void) setupView {
     // Label
     self.showRoundedTotalsLabel = [[[UILabel alloc] init] autorelease];
-    self.showRoundedTotalsLabel.text = @"Show Rounded Total";
+    self.showRoundedTotalsLabel.text = NSLocalizedString(@"Show Rounded Total", @"Show Rounded Total Label");
     self.showRoundedTotalsLabel.font = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
     self.showRoundedTotalsLabel.adjustsFontForContentSizeCategory = YES;
     self.showRoundedTotalsLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.showRoundedTotalsLabel.numberOfLines = 0;
     
-    [self.contentView addSubview: self.showRoundedTotalsLabel];
-    
     // Switch
     self.showRoundedTotalsSwitch = [[[UISwitch alloc] init] autorelease];
+    [self applyTheme];
     self.showRoundedTotalsSwitch.translatesAutoresizingMaskIntoConstraints = NO;
     
+    [self.contentView addSubview: self.showRoundedTotalsLabel];
     [self.contentView addSubview: self.showRoundedTotalsSwitch];
 }
 

@@ -11,6 +11,7 @@
 
 #pragma mark - UserDefaults Keys
 static NSString *const selectedThemeKey = @"selectedTheme";
+static NSString *const selectedIconKey = @"selectedIcon";
 static NSString *const roundedTotalKey = @"roundedTotalKey";
 static NSString *const customTipPercentageKey = @"customTipPercentageKey";
 static NSString *const saveTipPercentageKey = @"saveTipPercentageKey";
@@ -121,6 +122,60 @@ static NSString *const tipPercentageIndexKey = @"tipPercentageKey";
 
 #pragma mark - App Icon Methods
 
+/// Returns the `AppIconType` with the corrosponding `ThemeColorType`
+- (AppIconType) appIconFromTheme: (ThemeColorType) theme {
+    switch (theme) {
+        case ThemeColorTypeRed: return AppIconTypeRed;
+        case ThemeColorTypeDefault: return AppIconTypeDefault;
+        case ThemeColorTypeYellow: return AppIconTypeYellow;
+        case ThemeColorTypeGreen: return AppIconTypeGreen;
+        case ThemeColorTypeMint: return AppIconTypeMint;
+        case ThemeColorTypeTeal: return AppIconTypeTeal;
+        case ThemeColorTypeCyan: return AppIconTypeCyan;
+        case ThemeColorTypeBlue: return AppIconTypeBlue;
+        case ThemeColorTypeIndigo: return AppIconTypeIndigo;
+        case ThemeColorTypePurple: return AppIconTypePurple;
+        case ThemeColorTypePink: return AppIconTypePink;
+        case ThemeColorTypeGray: return AppIconTypeGray;
+    }
+}
+
+/// Returns the name of the app icon to be used with `setAlternateIcon`
+- (NSString *) nameForAppIcon: (AppIconType) appIcon {
+    switch (appIcon) {
+        case AppIconTypeRed: return @"AppIcon-Red";
+        case AppIconTypeDefault: return nil;
+        case AppIconTypeYellow: return @"AppIcon-Yellow";
+        case AppIconTypeGreen: return @"AppIcon-Green";
+        case AppIconTypeMint: return @"AppIcon-Mint";
+        case AppIconTypeTeal: return @"AppIcon-Teal";
+        case AppIconTypeCyan: return @"AppIcon-Cyan";
+        case AppIconTypeBlue: return @"AppIcon-Blue";
+        case AppIconTypeIndigo: return @"AppIcon-Indigo";
+        case AppIconTypePurple: return @"AppIcon-Purple";
+        case AppIconTypePink: return @"AppIcon-Pink";
+        case AppIconTypeGray: return @"AppIcon-Gray";
+    }
+}
+
+/// Returns the filename of the app icon to be used throughout the app
+- (NSString *) fileNameForAppIcon: (AppIconType) appIcon {
+    switch (appIcon) {
+        case AppIconTypeRed: return @"AppIcon-Red.png";
+        case AppIconTypeDefault: return @"AppIcon.png";
+        case AppIconTypeYellow: return @"AppIcon-Yellow.png";
+        case AppIconTypeGreen: return @"AppIcon-Green.png";
+        case AppIconTypeMint: return @"AppIcon-Mint.png";
+        case AppIconTypeTeal: return @"AppIcon-Teal.png";
+        case AppIconTypeCyan: return @"AppIcon-Cyan.png";
+        case AppIconTypeBlue: return @"AppIcon-Blue.png";
+        case AppIconTypeIndigo: return @"AppIcon-Indigo.png";
+        case AppIconTypePurple: return @"AppIcon-Purple.png";
+        case AppIconTypePink: return @"AppIcon-Pink.png";
+        case AppIconTypeGray: return @"AppIcon-Gray.png";
+    }
+}
+
 
 
 #pragma mark - Load & Save Methods
@@ -129,6 +184,7 @@ static NSString *const tipPercentageIndexKey = @"tipPercentageKey";
 - (void) saveCurrentSettings {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setInteger: self.currentTheme forKey: selectedThemeKey];
+    [userDefaults setInteger: self.currentIcon forKey: selectedIconKey];
     [userDefaults setDouble: self.customTipPercentage forKey: customTipPercentageKey];
     [userDefaults setBool: self.isRoundedTotalSwitchActive forKey: roundedTotalKey];
     [userDefaults setBool: self.isSaveLastTipPercentageSwitchActive forKey: saveTipPercentageKey];
@@ -140,17 +196,24 @@ static NSString *const tipPercentageIndexKey = @"tipPercentageKey";
     // Create the User Defaults store
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    NSInteger storedThemeValue = [userDefaults integerForKey:selectedThemeKey];
+    // Get values from keys
+    NSInteger storedThemeValue = [userDefaults integerForKey: selectedThemeKey];
+    NSInteger storedIconValue = [userDefaults integerForKey: selectedIconKey];
     BOOL storedRoundedTotalValue = [userDefaults boolForKey: roundedTotalKey];
     BOOL saveTipPercentageValue = [userDefaults boolForKey: saveTipPercentageKey];
     NSInteger saveTipPercentageIndexValue = [userDefaults integerForKey: tipPercentageIndexKey];
     double customTipPercentageValue = [userDefaults doubleForKey: customTipPercentageKey];
     
     ThemeColorType loadedTheme = (ThemeColorType)storedThemeValue;
+    AppIconType loadedIcon = (AppIconType)storedIconValue;
     
-    // Validate range (assuming enum is contiguous from Red to Purple)
+    // Validate Range
     if (loadedTheme < ThemeColorTypeRed || loadedTheme > ThemeColorTypeGray) {
         loadedTheme = ThemeColorTypeDefault;
+    }
+    
+    if (loadedIcon < AppIconTypeRed || loadedIcon > AppIconTypeGray) {
+        loadedIcon = AppIconTypeDefault;
     }
     
     // First assign flags from stored values
@@ -158,6 +221,7 @@ static NSString *const tipPercentageIndexKey = @"tipPercentageKey";
     _customTipPercentage = customTipPercentageValue;
     _isRoundedTotalSwitchActive = storedRoundedTotalValue;
     _currentTheme = loadedTheme;
+    _currentIcon = loadedIcon;
 
     // Then load the last tip percentage if the switch is on; clamp to non-negative
     NSInteger restoredIndex = saveTipPercentageIndexValue;

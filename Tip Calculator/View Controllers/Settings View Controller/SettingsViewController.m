@@ -8,8 +8,6 @@
 #import "SettingsViewController.h"
 #import "ThemeColorCell.h"
 #import "ThemeSelectionViewController.h"
-#import "AppIconCell.h"
-#import "AppIconViewController.h"
 #import "ShowRoundedTotalsCell.h"
 #import "SaveTipPercentageCell.h"
 #import "SettingsManager.h"
@@ -82,7 +80,6 @@
     [self.view addSubview: self.settingsTableView];
     
     [self.settingsTableView registerClass: [ThemeColorCell class] forCellReuseIdentifier: @"ThemeColorCell"];
-    [self.settingsTableView registerClass: [AppIconCell class] forCellReuseIdentifier: @"AppIconCell"];
     [self.settingsTableView registerClass: [ShowRoundedTotalsCell class] forCellReuseIdentifier: @"ShowRoundedTotalsCell"];
     [self.settingsTableView registerClass: [SaveTipPercentageCell class] forCellReuseIdentifier: @"SaveTipPercentageCell"];
     
@@ -97,13 +94,16 @@
 /// Applies the current theme to the view controller
 - (void) applyTheme: (NSNotification *) notification {
     ThemeColorType theme = [[SettingsManager sharedManager] currentTheme];
-    self.navigationItem.rightBarButtonItem.tintColor = [[SettingsManager sharedManager] colorForTheme: theme];
+    UIColor *color = [[SettingsManager sharedManager] colorForTheme: theme];
+    self.navigationItem.rightBarButtonItem.tintColor = color;
     self.selectedThemeLabel.text = [[SettingsManager sharedManager] nameForTheme: theme];
+    self.showRoundedValuesSwitch.onTintColor = color;
+    self.saveTipPercentageSwitch.onTintColor = color;
     
     if (@available(iOS 26.0, *)) {}
     else {
-        self.navigationItem.leftBarButtonItem.tintColor = [[SettingsManager sharedManager] colorForTheme: theme];
-        self.navigationController.navigationBar.tintColor = [[SettingsManager sharedManager] colorForTheme: theme];
+        self.navigationItem.leftBarButtonItem.tintColor = color;
+        self.navigationController.navigationBar.tintColor = color;
     }
 }
 
@@ -123,7 +123,11 @@
 
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 2;
+    if (section == 0) {
+        return 1;
+    } else {
+        return 2;
+    }
 }
 
 
@@ -134,13 +138,6 @@
         ThemeColorCell *cell = [tableView dequeueReusableCellWithIdentifier: @"ThemeColorCell"];
         self.themeColorLabel = cell.themeColorLabel;
         self.selectedThemeLabel = cell.selectedColorLabel;
-        return cell;
-    }
-    
-    // App Icon Selection Cell
-    if (indexPath.section == 0 && indexPath.row == 1) {
-        AppIconCell *cell = [tableView dequeueReusableCellWithIdentifier: @"AppIconCell"];
-        self.appIconMenuLabel = cell.appIconLabel;
         return cell;
     }
     
@@ -174,26 +171,19 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath: indexPath animated: YES];
     
-    // MARK: Theme Selection
+    // Theme Selection
     if (indexPath.section == 0 && indexPath.row == 0) {
         ThemeSelectionViewController *themeSelectionViewController = [[ThemeSelectionViewController alloc] init];
         [self.navigationController pushViewController: themeSelectionViewController animated: YES];
         [themeSelectionViewController release];
     }
-    
-    // MARK: App Icon Selection
-    if (indexPath.section == 0 && indexPath.row == 1) {
-        AppIconViewController *appIconViewController = [[AppIconViewController alloc] init];
-        [self.navigationController pushViewController: appIconViewController animated: YES];
-        [appIconViewController release];
-    }
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        return @"App Appearance";
+        return NSLocalizedString(@"App Appearance", @"App Appearance Header");
     } else if (section == 1) {
-        return @"Calculation Settings";
+        return NSLocalizedString(@"Calculation Settings", @"Calculation Header");
     }
     return nil;
 }
@@ -211,7 +201,6 @@
 
 - (void) saveTipPercentageSwitchTapped {
     [SettingsManager sharedManager].isSaveLastTipPercentageSwitchActive = self.saveTipPercentageSwitch.isOn;
-    
     [[NSNotificationCenter defaultCenter] postNotificationName: @"SaveLastTipPercentageSwitchActivatedNotification" object: nil];
 }
 
@@ -228,9 +217,6 @@
     [_selectedThemeLabel release];
     [_themeSelectionViewController release];
     [_themeColorLabel release];
-    [_appIcon release];
-    [_appIconMenuLabel release];
-    [_appIconSelectionViewController release];
     [_navigationBar release];
     [_settingsTableView release];
     [_showRoundedValuesLabel release];

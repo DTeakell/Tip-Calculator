@@ -36,4 +36,9 @@
     self.tipPercentage = 0;
 }
 
+- (void) resetAndKeepTipPercentage {
+    self.checkAmount = 0;
+    self.numberOfPeopleOnCheck = 0;
+}
+
 @end

@@ -72,8 +72,56 @@
         }
       }
     },
+    "App Appearance" : {
+      "comment" : "App Appearance Header",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مظهر التطبيق"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "应用程序外观"
+          }
+        }
+      }
+    },
     "Blue" : {
-      "comment" : "Theme Name Purple"
+      "comment" : "Theme Name Purple",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أَزْرَق"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "蓝色"
+          }
+        }
+      }
+    },
+    "Calculation Settings" : {
+      "comment" : "Calculation Header",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تفضيلات الحساب"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "计算设置"
+          }
+        }
+      }
     },
     "Check Amount" : {
       "comment" : "Check Amount Title",
@@ -289,7 +337,21 @@
       }
     },
     "Cyan" : {
-      "comment" : "Theme Name Purple"
+      "comment" : "Theme Name Purple",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سماوي"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "青色"
+          }
+        }
+      }
     },
     "Enter Check Amount" : {
       "comment" : "Check Amount Text Field Placeholder",
@@ -505,16 +567,89 @@
       }
     },
     "Gray" : {
-      "comment" : "Theme Name Purple"
+      "comment" : "Theme Name Purple",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رمادي"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "灰色"
+          }
+        }
+      }
     },
     "Green" : {
-      "comment" : "Theme Name Pink"
+      "comment" : "Theme Name Pink",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أَخْضَر"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "绿色"
+          }
+        }
+      }
+    },
+    "Icon Change Failed" : {
+      "comment" : "Error Message Title",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فشل تغيير الرمز"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "图标更改失败"
+          }
+        }
+      }
     },
     "Indigo" : {
-      "comment" : "Theme Name Purple"
+      "comment" : "Theme Name Purple",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نيليّ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "靛青色"
+          }
+        }
+      }
     },
     "Mint" : {
-      "comment" : "Theme Name Purple"
+      "comment" : "Theme Name Purple",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نَعْناع"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "薄荷色"
+          }
+        }
+      }
     },
     "Number of People" : {
       "comment" : "Number of People on Check",
@@ -659,7 +794,21 @@
       }
     },
     "Orange" : {
-      "comment" : "Theme Name Default"
+      "comment" : "Theme Name Default",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بُرْتُقاليّ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "橙色"
+          }
+        }
+      }
     },
     "per person" : {
       "comment" : "Label for amount per person",
@@ -733,22 +882,140 @@
       }
     },
     "Pink" : {
-      "comment" : "Theme Name Purple"
+      "comment" : "Theme Name Purple",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وَرْديّ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "粉红色"
+          }
+        }
+      }
     },
     "Purple" : {
-      "comment" : "Theme Name Purple"
+      "comment" : "Theme Name Purple",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أُرْجُوانيّ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "紫色"
+          }
+        }
+      }
     },
     "Red" : {
-      "comment" : "Theme Name Red"
+      "comment" : "Theme Name Red",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أحمر"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "红色"
+          }
+        }
+      }
+    },
+    "Save Tip Percentage" : {
+      "comment" : "Save Tip Percentage Label",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حفظ نسبة البقشيش"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "节省小费百分比"
+          }
+        }
+      }
     },
     "Settings" : {
-      "comment" : "Settings Button\nSettings Title"
+      "comment" : "Settings Button\nSettings Title",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الإعدادات"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设置"
+          }
+        }
+      }
+    },
+    "Show Rounded Total" : {
+      "comment" : "Show Rounded Total Label",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عرض المجموع المدور"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "总计向上取整"
+          }
+        }
+      }
     },
     "Teal" : {
-      "comment" : "Theme Name Purple"
+      "comment" : "Theme Name Purple",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تيل"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "蓝绿色"
+          }
+        }
+      }
     },
     "Theme Color" : {
-      "comment" : "Theme Color Title"
+      "comment" : "Theme Color Title",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لون الموضوع"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "主题颜色"
+          }
+        }
+      }
     },
     "Tip Amount" : {
       "comment" : "Accessibility Label for Tip\nTip Amount Title",
@@ -1035,7 +1302,21 @@
       }
     },
     "Yellow" : {
-      "comment" : "Theme Name Cyan"
+      "comment" : "Theme Name Cyan",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أَصْفَر"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "黄色"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

@@ -24,10 +24,27 @@ typedef NS_ENUM(NSInteger, ThemeColorType) {
     ThemeColorTypeGray
 };
 
+// App Icon Enum
+typedef NS_ENUM(NSInteger, AppIconType) {
+    AppIconTypeRed,
+    AppIconTypeDefault,
+    AppIconTypeYellow,
+    AppIconTypeGreen,
+    AppIconTypeMint,
+    AppIconTypeTeal,
+    AppIconTypeCyan,
+    AppIconTypeBlue,
+    AppIconTypeIndigo,
+    AppIconTypePurple,
+    AppIconTypePink,
+    AppIconTypeGray
+};
+
 
 @interface SettingsManager : NSObject
 
 @property (nonatomic, assign) ThemeColorType currentTheme;
+@property (nonatomic, assign) AppIconType currentIcon;
 @property (nonatomic, assign) BOOL isRoundedTotalSwitchActive;
 @property (nonatomic, assign) BOOL isSaveLastTipPercentageSwitchActive;
 @property (nonatomic, assign) double tipPercentageIndex;
@@ -43,8 +60,10 @@ typedef NS_ENUM(NSInteger, ThemeColorType) {
 - (NSArray <NSString *> *) allThemeNames;
 - (void) setCurrentTheme: (ThemeColorType) currentTheme;
 
-// Last Tip Percentage Utilities
-
+// App Icon Utilities
+- (AppIconType) appIconFromTheme: (ThemeColorType) theme;
+- (NSString *) nameForAppIcon: (AppIconType) appIcon;
+- (NSString *) fileNameForAppIcon: (AppIconType) appIcon;
 
 // Load & Save Methods
 - (void) saveCurrentSettings;

@@ -7,6 +7,7 @@
 
 #import "AppDelegate.h"
 #import "HomeViewController.h"
+#import "SettingsManager.h"
 
 @interface AppDelegate ()
 
@@ -18,6 +19,11 @@
 #pragma mark - Application Configuration
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    // First time launch settings
+    if (![[NSUserDefaults standardUserDefaults] boolForKey: @"HasLaunchedOnce"]) {
+        [SettingsManager sharedManager].currentTheme = ThemeColorTypeDefault;
+        [[NSUserDefaults standardUserDefaults] setBool: YES forKey: @"HasLaunchedOnce"];
+    }
     return YES;
 }
 
@@ -30,6 +36,8 @@
     
     // Make a new configuration
     UISceneConfiguration *configuration = [[[UISceneConfiguration alloc] initWithName: configurationName sessionRole: connectingSceneSession.role] autorelease];
+    
+    [configurationName release];
     
     return configuration;
 }
