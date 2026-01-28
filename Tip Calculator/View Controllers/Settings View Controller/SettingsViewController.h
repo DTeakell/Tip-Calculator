@@ -18,14 +18,9 @@
 
 // View Controllers
 @property (nonatomic, retain) UIViewController *themeSelectionViewController;
-@property (nonatomic, retain) UIViewController *appIconSelectionViewController;
 
 // Navigation Bar
 @property (nonatomic, strong) UINavigationBar *navigationBar;
-
-// App Icon UI
-@property (nonatomic, retain) UILabel *appIconMenuLabel;
-@property (nonatomic, retain) NSString *appIcon;
 
 // Show Rounded Values UI
 @property (nonatomic, retain) UILabel *showRoundedValuesLabel;

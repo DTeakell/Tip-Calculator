@@ -16,7 +16,7 @@
 - (void) setupThemeSelectionViewController {
     self.view.backgroundColor = [UIColor systemGroupedBackgroundColor];
     self.navigationController.navigationBar.tintColor = [[SettingsManager sharedManager] colorForTheme: [SettingsManager sharedManager].currentTheme];
-    self.title = @"Theme Color";
+    self.title = NSLocalizedString(@"Theme Color", @"Theme Color Title");
 }
 
 
@@ -104,6 +104,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    tableView.estimatedRowHeight = 85;
     return UITableViewAutomaticDimension;
 }
 
@@ -133,15 +134,40 @@
     // Get the selected theme and apply it to the selected cell's checkmark
     ThemeColorType selectedTheme = [[SettingsManager sharedManager] themeFromString: colorName];
     
+    // Set the app icon to the corrosponding theme
+    AppIconType appIcon = [[SettingsManager sharedManager] appIconFromTheme: selectedTheme];
+    
     [SettingsManager sharedManager].currentTheme = selectedTheme;
-    
+    [self setAlternateAppIcon: appIcon];
     cell.checkmark.tintColor = [[SettingsManager sharedManager] colorForTheme: selectedTheme];
-    
     [[SettingsManager sharedManager] saveCurrentSettings];
     
     [colors release];
     [previousColorName release];
     [colorName release];
+}
+
+#pragma mark - App Icon Selection Method
+/// Sets the alternate app icon and sends an alert to the user based on the result
+- (void) setAlternateAppIcon: (AppIconType) appIcon {
+    // Get the icon name
+    NSString *appIconName = [[SettingsManager sharedManager] nameForAppIcon: appIcon];
+    
+    // Set the alternate icon name to the new icon name
+    [UIApplication.sharedApplication setAlternateIconName: appIconName completionHandler: ^(NSError *error) {
+        if (error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIAlertController *appIconErrorAlert = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"Icon Change Failed", @"Error Message Title")
+                                                                                        message: error.localizedDescription
+                                                                                        preferredStyle: UIAlertControllerStyleAlert];
+                
+                UIAlertAction *defaultAction = [UIAlertAction actionWithTitle: @"OK" style: UIAlertActionStyleDefault handler: ^(UIAlertAction *action) {}];
+                
+                [appIconErrorAlert addAction: defaultAction];
+                [self presentViewController: appIconErrorAlert animated: YES completion: ^(){}];
+            });
+        }
+    }];
 }
 
 

@@ -72,11 +72,14 @@
         }
       }
     },
-    "App Icon" : {
-      "comment" : "App Icon View Title"
+    "App Appearance" : {
+      "comment" : "App Appearance Header"
     },
     "Blue" : {
       "comment" : "Theme Name Purple"
+    },
+    "Calculation Settings" : {
+      "comment" : "Calculation Header"
     },
     "Check Amount" : {
       "comment" : "Check Amount Title",

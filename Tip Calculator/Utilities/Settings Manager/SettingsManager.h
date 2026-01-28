@@ -63,6 +63,7 @@ typedef NS_ENUM(NSInteger, AppIconType) {
 // App Icon Utilities
 - (AppIconType) appIconFromTheme: (ThemeColorType) theme;
 - (NSString *) nameForAppIcon: (AppIconType) appIcon;
+- (NSString *) fileNameForAppIcon: (AppIconType) appIcon;
 
 // Load & Save Methods
 - (void) saveCurrentSettings;

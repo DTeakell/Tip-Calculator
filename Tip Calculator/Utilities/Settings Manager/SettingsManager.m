@@ -158,6 +158,24 @@ static NSString *const tipPercentageIndexKey = @"tipPercentageKey";
     }
 }
 
+/// Returns the filename of the app icon to be used throughout the app
+- (NSString *) fileNameForAppIcon: (AppIconType) appIcon {
+    switch (appIcon) {
+        case AppIconTypeRed: return @"AppIcon-Red.png";
+        case AppIconTypeDefault: return @"AppIcon.png";
+        case AppIconTypeYellow: return @"AppIcon-Yellow.png";
+        case AppIconTypeGreen: return @"AppIcon-Green.png";
+        case AppIconTypeMint: return @"AppIcon-Mint.png";
+        case AppIconTypeTeal: return @"AppIcon-Teal.png";
+        case AppIconTypeCyan: return @"AppIcon-Cyan.png";
+        case AppIconTypeBlue: return @"AppIcon-Blue.png";
+        case AppIconTypeIndigo: return @"AppIcon-Indigo.png";
+        case AppIconTypePurple: return @"AppIcon-Purple.png";
+        case AppIconTypePink: return @"AppIcon-Pink.png";
+        case AppIconTypeGray: return @"AppIcon-Gray.png";
+    }
+}
+
 
 
 #pragma mark - Load & Save Methods
@@ -187,10 +205,15 @@ static NSString *const tipPercentageIndexKey = @"tipPercentageKey";
     double customTipPercentageValue = [userDefaults doubleForKey: customTipPercentageKey];
     
     ThemeColorType loadedTheme = (ThemeColorType)storedThemeValue;
+    AppIconType loadedIcon = (AppIconType)storedIconValue;
     
     // Validate Range
     if (loadedTheme < ThemeColorTypeRed || loadedTheme > ThemeColorTypeGray) {
         loadedTheme = ThemeColorTypeDefault;
+    }
+    
+    if (loadedIcon < AppIconTypeRed || loadedIcon > AppIconTypeGray) {
+        loadedIcon = AppIconTypeDefault;
     }
     
     // First assign flags from stored values
@@ -198,7 +221,7 @@ static NSString *const tipPercentageIndexKey = @"tipPercentageKey";
     _customTipPercentage = customTipPercentageValue;
     _isRoundedTotalSwitchActive = storedRoundedTotalValue;
     _currentTheme = loadedTheme;
-    _currentIcon = storedIconValue;
+    _currentIcon = loadedIcon;
 
     // Then load the last tip percentage if the switch is on; clamp to non-negative
     NSInteger restoredIndex = saveTipPercentageIndexValue;
