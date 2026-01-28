@@ -31,7 +31,7 @@
 - (void) setupView {
     // Label
     self.showRoundedTotalsLabel = [[[UILabel alloc] init] autorelease];
-    self.showRoundedTotalsLabel.text = @"Show Rounded Total";
+    self.showRoundedTotalsLabel.text = NSLocalizedString(@"Show Rounded Total", @"Show Rounded Total Label");
     self.showRoundedTotalsLabel.font = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
     self.showRoundedTotalsLabel.adjustsFontForContentSizeCategory = YES;
     self.showRoundedTotalsLabel.translatesAutoresizingMaskIntoConstraints = NO;

@@ -31,7 +31,7 @@
     
     // Label
     self.savePercentageLabel = [[[UILabel alloc] init] autorelease];
-    self.savePercentageLabel.text = @"Save Tip Percentage";
+    self.savePercentageLabel.text = NSLocalizedString(@"Save Tip Percentage", @"Save Tip Percentage Label");
     self.savePercentageLabel.font = [UIFont preferredFontForTextStyle: UIFontTextStyleBody];
     self.savePercentageLabel.numberOfLines = 0;
     self.savePercentageLabel.adjustsFontForContentSizeCategory = YES;
