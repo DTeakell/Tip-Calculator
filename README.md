@@ -2,13 +2,8 @@
 ## About
 A basic tip calculator app that lets a user input their bill and select their tip. Made using UIKit and Objective-C, a programmatic UI, MRR (Manual Retain Release), and incorperates UITableView and UINavigationController for a native iOS look and feel.
 
-## Features Being Worked On
-The following features are being worked on.
-- Settings Screen (Complete)
-- Changing Theme Color (Complete)
-- Changing App Icon (In Development)
-- Save Last Tip Percentage (Complete)
-- Round Total (Complete)
+### For Latest Features
+Go to the `dev` branch to see the latest features as they are built. Branches outside of `dev` are for development only and are still being worked on - they are to see the progress of a certain feature.
 
 ## Screenshots
 
