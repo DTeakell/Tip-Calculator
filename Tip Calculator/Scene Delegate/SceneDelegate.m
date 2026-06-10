@@ -7,7 +7,8 @@
 
 #import "SceneDelegate.h"
 #import <UIKit/UIKit.h>
-#import "ViewController.h"
+#import "HomeViewController.h"
+#import "SettingsManager.h"
 
 @implementation SceneDelegate
 
@@ -17,20 +18,26 @@
     if (![scene isKindOfClass: [UIWindowScene class]]) {
         return;
     }
-    UIWindowScene *windowScene = (UIWindowScene *) scene;
     
+    // Initialize a new window scene
+    UIWindowScene *windowScene = (UIWindowScene *) scene;
     self.window = [[[UIWindow alloc] initWithWindowScene: windowScene] autorelease];
     
+    
     // Create View Controller
-    ViewController *homeViewController = [[[ViewController alloc] init] autorelease];
+    HomeViewController *homeViewController = [[[HomeViewController alloc] init] autorelease];
     UINavigationController *navigationController = [[[UINavigationController alloc] initWithRootViewController: homeViewController] autorelease];
     
+    
+    // Assign root to the navigation controller
     self.window.rootViewController = navigationController;
+    
     [self.window makeKeyAndVisible];
 }
 
+
 - (void) dealloc {
-    [self.window release];
+    [_window release];
     [super dealloc];
 }
 

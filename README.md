@@ -8,8 +8,8 @@ Go to the `dev` branch to see the latest features as they are built. Branches ou
 ## Screenshots
 
 <p align="left">
-  <img src="/Screenshots/iOS/English/Simulator Screenshot - iPhone 17 Pro Max - 2025-10-17 at 11.35.57.png" alt="Main View" width="250"/>
-  <img src="/Screenshots/iOS/English/Simulator Screenshot - iPhone 17 Pro Max - 2025-10-17 at 11.36.35.png" alt="Main View" width="250"/>
+  <img src="/Screenshots/Main-Light.png" alt="Main View" width="250"/>
+  <img src="/Screenshots/Settings-Light.png" alt="Main View" width="250"/>
 </p>
 
 ## Things Learned
